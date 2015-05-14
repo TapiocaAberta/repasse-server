@@ -4,7 +4,7 @@
 	<groupId>org.jugvale.transparencia.transf</groupId>
 	<artifactId>transferencias-governo-federal</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1.Alpha</version>
 	<name>Transferências do Governo Federal para Municípios e Estados</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

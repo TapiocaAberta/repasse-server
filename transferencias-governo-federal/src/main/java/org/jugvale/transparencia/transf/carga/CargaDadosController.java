@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
@@ -24,6 +25,9 @@ import org.jugvale.transparencia.transf.service.impl.TransferenciaService;
 @Stateless
 @Asynchronous
 public class CargaDadosController {
+	
+	@Inject
+	Logger logger;
 
 	@Inject
 	MensagensCargaSingleton mensagens;
@@ -86,6 +90,12 @@ public class CargaDadosController {
 		mensagens.adicionar(ano, mes, "Carga terminada em " + new Date());
 	}
 
+	/**
+	 * 
+	 * Irá pegar cada dado do CSV e salvar no banco de dados
+	 * @param linha
+	 * @throws Exception
+	 */
 	public void salvarLinha(String linha) throws Exception {
 		String[] campos = linha.split("\\t");
 		for (int i = 0; i < campos.length; i++) {

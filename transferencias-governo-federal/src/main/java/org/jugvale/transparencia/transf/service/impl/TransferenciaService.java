@@ -2,21 +2,18 @@ package org.jugvale.transparencia.transf.service.impl;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.persistence.TypedQuery;
+
 import org.jugvale.transparencia.transf.model.base.Municipio;
 import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
 import org.jugvale.transparencia.transf.service.Service;
 
+@Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class TransferenciaService extends Service<Transferencia> {
-
-	/**
-	 * Faz a busca de transferência por ano e mês
-	 * 
-	 * @param ano
-	 * @param mes
-	 */
-	public void buscaTransferencias(int ano, int mes) {
-		// TODO
-	}
 
 	/**
 	 * Limpa todos os dados de transferencias para esse ano e mes
@@ -35,13 +32,19 @@ public class TransferenciaService extends Service<Transferencia> {
 	 * @param mes
 	 * @return
 	 */
-	public boolean temTranferencia(int ano, int mes) {
-		return false;
+	public boolean temTranferencia(int ano, int mes) {		
+		TypedQuery<Long> buscaTransferencia = em.createNamedQuery("Transferencia.quantidadePorMesEAno", Long.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		return buscaTransferencia.getSingleResult() > 0;
 	}
 
 	public List<Transferencia> buscarPorAnoMesMunicipio(int ano, int mes, Municipio municipio) {
-		// TODO implementar busca
-		return null;
+		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesMunicipio", Transferencia.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		buscaTransferencia.setParameter("municipio", municipio);
+		return buscaTransferencia.getResultList();
 	}
 
 }

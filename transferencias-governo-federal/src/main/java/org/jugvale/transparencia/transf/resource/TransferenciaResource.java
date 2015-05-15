@@ -13,6 +13,7 @@ import org.jugvale.transparencia.transf.model.base.Municipio;
 import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
 import org.jugvale.transparencia.transf.service.impl.MunicipioService;
 import org.jugvale.transparencia.transf.service.impl.TransferenciaService;
+import org.jugvale.transparencia.transf.utils.JaxrsUtils;
 
 @Path("transferencia")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -29,7 +30,7 @@ public class TransferenciaResource {
 	public List<Transferencia> porAnoMesMunicipio(@PathParam("ano") int ano,
 			@PathParam("mes") int mes,
 			@PathParam("municipioId") long municipioId) {
-		Municipio municipio = municipioService.buscarPorId(municipioId);
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);		
 		return transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
 	}
 

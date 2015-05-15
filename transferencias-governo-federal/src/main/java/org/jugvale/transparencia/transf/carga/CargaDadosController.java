@@ -6,11 +6,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.jugvale.transparencia.transf.model.base.Area;
+import org.jugvale.transparencia.transf.model.base.Estado;
+import org.jugvale.transparencia.transf.model.base.Municipio;
+import org.jugvale.transparencia.transf.model.transferencia.Acao;
+import org.jugvale.transparencia.transf.model.transferencia.Favorecido;
+import org.jugvale.transparencia.transf.model.transferencia.Programa;
+import org.jugvale.transparencia.transf.model.transferencia.SubFuncao;
+import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
 import org.jugvale.transparencia.transf.service.impl.AcaoService;
 import org.jugvale.transparencia.transf.service.impl.AreaService;
 import org.jugvale.transparencia.transf.service.impl.EstadoService;
@@ -24,6 +35,9 @@ import org.jugvale.transparencia.transf.service.impl.TransferenciaService;
 @Stateless
 @Asynchronous
 public class CargaDadosController {
+
+	@Inject
+	Logger logger;
 
 	@Inject
 	MensagensCargaSingleton mensagens;
@@ -72,11 +86,13 @@ public class CargaDadosController {
 		mensagens.adicionar(ano, mes, "Iniciando carga em " + new Date());
 		Files.lines(arquivoCSV, StandardCharsets.UTF_8).skip(1).forEach(linha -> {
 			try {
-				salvarLinha(linha);
+				salvarLinha(ano, mes, linha);
 				sucesso.incrementAndGet();
+				logger.fine(linha);
 			} catch (Exception e) {
 				falha.incrementAndGet();
-				mensagens.adicionar(ano, mes, "Error: " + e.getMessage());
+				mensagens.adicionar(ano, mes,"Error: " + e.getMessage());	
+				e.printStackTrace();
 			}
 		});
 		String relatorio = String.format("%d linhas adicionadas. %d erros",
@@ -86,13 +102,76 @@ public class CargaDadosController {
 		mensagens.adicionar(ano, mes, "Carga terminada em " + new Date());
 	}
 
-	public void salvarLinha(String linha) throws Exception {
+	/**
+	 * 
+	 * Irá pegar cada dado do CSV e salvar no banco de dados. Campos do CSV:
+	 * --
+	 * Sigla Unidade Federação
+	 * Codigo SIAFI Municipio
+	 * Nome Municipio
+	 * Codigo Funcao
+	 * Nome Funcao
+	 * Codigo Sub Funcao 
+	 * Nome Sub Funcao
+	 * Codigo Programa
+	 * Nome Programa
+	 * Codigo Acao
+	 * Nome Acao
+	 * Linguagem Cidadã
+	 * Codigo Favorecido
+	 * Nome Favorecido
+	 * Fonte-Finalidade
+	 * Modalidade Aplicação
+	 * Número Convênio
+	 * Valor Parcela
+	 * --
+	 * @param linha
+	 * @throws Exception
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void salvarLinha(int ano, int mes, String linha) throws Exception {
 		String[] campos = linha.split("\\t");
-		for (int i = 0; i < campos.length; i++) {
-			System.out.println("\"" + campos[i] + "\"");
+		if (campos.length != 18) {
+			return;
 		}
-		System.out.println("----------------");
+		String siglaEstado = campos[0];
+		String siafiMunicipio = campos[1];
+		String nomeMunicipio = campos[2];
+		long codigoFuncao = Long.parseLong(campos[3]);
+		String nomeFuncao = campos[4];
+		long codigoSubFuncao = Long.parseLong(campos[5]);
+		String nomeSubFuncao = campos[6];
+		long codigoPrograma = Long.parseLong(campos[7]);
+		String nomePrograma = campos[8];
+		String codigoAcao = campos[9];
+		String nomeAcao = campos[10];
+		String nomePopular = campos[11];		
+		String codigoFavorecido = campos[12];
+		String nomeFavorecido = campos[13];
+		// GAMBIARRA PARA EVITAR PROBLEMAS COM LOCALE DE FLOATS
+		float valor = Float.parseFloat(campos[17].replaceAll("\\,", "").replace("\\.", ","));
+		
+		Estado estado = estadoService.buscaEstadoPorSiglaOuCria(siglaEstado,
+				() -> new Estado(siglaEstado));
+		Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(estado, nomeMunicipio, siafiMunicipio, 
+				() -> new Municipio(siafiMunicipio, nomeMunicipio, estado));
+		Area area = areaService.buscaPorIdOuCria(codigoFuncao, () -> new Area(codigoFuncao, nomeFuncao));
+		SubFuncao subFuncao = subFuncaoService.buscaPorIdOuCria(codigoSubFuncao, () -> new SubFuncao(codigoSubFuncao, nomeSubFuncao, area));
+		Programa programa = programaService.buscaPorIdOuCria(codigoPrograma, () -> new Programa(codigoPrograma, nomePrograma));
+		Acao acao = acaoService.buscaPorCodigoOuCria(codigoAcao, () -> new Acao(codigoAcao, nomeAcao, nomePopular));
+		Favorecido favorecido = favorecidoService.buscaPorCodigoOuCria(
+				codigoFavorecido, () -> new Favorecido(codigoFavorecido,
+						nomeFavorecido));	
+		Transferencia transferencia = new Transferencia();
+		transferencia.setAno(ano);
+		transferencia.setMes(mes);
+		transferencia.setAcao(acao);
+		transferencia.setFavorecido(favorecido);
 
+		transferencia.setMunicipio(municipio);
+		transferencia.setPrograma(programa);
+		transferencia.setSubFuncao(subFuncao);
+		transferencia.setValor(valor);
+		transferenciaService.salvar(transferencia);
 	}
-
 }

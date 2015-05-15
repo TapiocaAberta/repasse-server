@@ -25,6 +25,16 @@ public class SubFuncao {
 	@ManyToOne
 	@JoinColumn(name = "area_area_id")
 	private Area area;
+	
+	public SubFuncao() {
+		super();
+	}
+
+	public SubFuncao(long codigoSubFuncao, String nomeSubFuncao, Area area) {
+		this.id = codigoSubFuncao;
+		this.nome = nomeSubFuncao;
+		this.area = area;
+	}
 
 	public long getId() {
 		return id;

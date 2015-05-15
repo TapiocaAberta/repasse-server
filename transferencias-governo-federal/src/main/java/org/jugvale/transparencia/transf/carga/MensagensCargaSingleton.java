@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 
 /**
  * 
@@ -20,6 +22,9 @@ import javax.ejb.Singleton;
 public class MensagensCargaSingleton {
 
 	private Map<String, List<String>> mensagensCarga;
+
+	@Inject
+	Logger logger;
 
 	@PostConstruct
 	public void inicializa() {
@@ -39,6 +44,7 @@ public class MensagensCargaSingleton {
 	}
 
 	public void adicionar(int ano, int mes, String valor) {
+		logger.warning(String.format("Carga %d/%d: %s", ano, mes, valor));
 		String chave = chave(ano, mes);
 		mensagensCarga.putIfAbsent(chave, new ArrayList<>());
 		mensagensCarga.get(chave).add(valor);

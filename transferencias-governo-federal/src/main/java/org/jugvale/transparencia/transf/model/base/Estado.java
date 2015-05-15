@@ -2,16 +2,21 @@ package org.jugvale.transparencia.transf.model.base;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @Entity
 @Table(name = "estado")
+@NamedQueries({ @NamedQuery(name = "Estado.porSigla", query = "SELECT e from Estado e WHERE e.sigla = :sigla") })
 public class Estado {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "est_id")
 	private long id;
 
@@ -23,6 +28,15 @@ public class Estado {
 
 	@Column(name = "est_regiao")
 	private String regiao;
+	
+	public Estado() {
+		super();
+	}
+
+	public Estado(String sigla) {
+		super();
+		this.sigla = sigla;
+	}
 
 	public long getId() {
 		return id;

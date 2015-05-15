@@ -10,13 +10,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "programa")
 @XmlRootElement
 public class Programa {
-	
+
 	@Id
-	@Column(name="pro_id")
+	@Column(name = "pro_id")
 	private long id;
-	
-	@Column(name="pro_nome")
+
+	@Column(name = "pro_nome")
 	private String nome;
+
+	public Programa() {
+	}
+
+	public Programa(long id, String nome) {
+		super();
+		this.id = id;
+		this.nome = nome;
+	}
 
 	public long getId() {
 		return id;

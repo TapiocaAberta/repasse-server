@@ -24,6 +24,15 @@ public class Area {
 	@Column(name = "area_nome")
 	private String nome;
 
+	public Area() {
+	}
+
+	public Area(long id, String nome) {
+		super();
+		this.id = id;
+		this.nome = nome;
+	}
+
 	public long getId() {
 		return id;
 	}

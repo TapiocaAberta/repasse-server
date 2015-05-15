@@ -1,6 +1,7 @@
 package org.jugvale.transparencia.transf.resource;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -37,8 +38,9 @@ import org.jugvale.transparencia.transf.utils.ArquivoTransfUtils;
 @Stateless
 public class CargaDadosResource {
 	
-	final String MSG_SUCESSO = "Dados para ano %d e mês %d agendados para carga. Acesse GET /carga/%d/%d para ver o andamento.";
+	final String MSG_SUCESSO = "Dados para ano %d e mês %d agendados para carga. Acesse GET /carga/%d/%d/mensagens para ver o andamento.";
 	final String MSG_CARGA_REPETIDA = "Já existem dados para ano %d  mes %d. Limpe os dados antes de tentar uma nova carga";
+	final String MSG_ERRO_BAIXAR = "Erro ao baixar dados. Verifique se o ano e mês estão disponíveis no portal da transparência. Mais detalhes no log do servidor";
 
 	@Inject
 	TransferenciaService transferenciaService;
@@ -56,15 +58,15 @@ public class CargaDadosResource {
 	@POST
 	@Path("{ano}/{mes}")
 	public Response baixaECarrega(@PathParam("ano") int ano, @PathParam("mes") int mes) throws IOException {
-		verificaSeJaFoiCarregado(ano, mes);
+		verificaSeJaFoiCarregado(ano, mes);				
 		java.nio.file.Path arquivoCSV = null;
 		try {
-			mensagens.adicionar(ano, mes, "Iniciando download de dados do portal da transparëncia");
+			mensagens.adicionar(ano, mes, "Iniciando download de dados do portal da transparência em " + new Date());
 			arquivoCSV = ArquivoTransfUtils.baixaDeszipaECriaCSV(ano, mes);
 		} catch (Exception e) {
 			mensagens.adicionar(ano, mes, "Problemas ao baixar e salvar dados, carga interrompida");
 			e.printStackTrace();
-			throw new WebApplicationException("Erro ao baixar dados do portal da transparência, veja logs do servidor para mais informações.", Status.INTERNAL_SERVER_ERROR);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(MSG_ERRO_BAIXAR).build();
 		}
 		cargaDadosController.carregarNoBanco(ano, mes, arquivoCSV);
 		return Response.ok(String.format(MSG_SUCESSO, ano, mes, ano, mes)).build();	
@@ -99,7 +101,7 @@ public class CargaDadosResource {
 	}
 
 	@GET
-	@Path("/{ano}/{mes}/mensages")
+	@Path("/{ano}/{mes}/mensagens")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<String> recuperaMensagensCarga(@PathParam("ano") int ano,
 			@PathParam("mes") int mes) {
@@ -107,7 +109,7 @@ public class CargaDadosResource {
 	}
 
 	@DELETE
-	@Path("/{ano}/{mes}/mensages")
+	@Path("/{ano}/{mes}/mensagens")
 	public void limpaMensages(@PathParam("ano") int ano,
 			@PathParam("mes") int mes) {
 		mensagens.limpar(ano, mes);
@@ -121,7 +123,7 @@ public class CargaDadosResource {
 	
 	private void verificaSeJaFoiCarregado(int ano, int mes) {
 		if (transferenciaService.temTranferencia(ano, mes)) 
-			throw new WebApplicationException(String.format(MSG_CARGA_REPETIDA, ano, mes), Status.CONFLICT);
+			throw new WebApplicationException(Response.status(Status.CONFLICT).entity(String.format(MSG_CARGA_REPETIDA, ano, mes)).build());
 	}
 
 }

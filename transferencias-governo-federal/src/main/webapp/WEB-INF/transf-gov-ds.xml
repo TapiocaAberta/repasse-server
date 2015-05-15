@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasources xmlns="http://www.jboss.org/ironjacamar/schema"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
-    <!-- The datasource is bound into JNDI at this location. We reference 
-        this in META-INF/persistence.xml -->
-    <datasource jndi-name="java:jboss/datasources/TransfGovDS"
-        pool-name="transf-gov" enabled="true"
-        use-java-context="true">
-        <connection-url>jdbc:h2:mem:transf-gov;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1</connection-url>
-        <driver>h2</driver>
-        <security>
-            <user-name>sa</user-name>
-            <password>sa</password>
-        </security>
-    </datasource>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
+	<datasource jta="true" jndi-name="java:jboss/datasources/TransfGovDS"
+		pool-name="transfGov" enabled="true" use-java-context="true" use-ccm="true">
+		<connection-url>jdbc:mysql://localhost:3306/transfgov</connection-url>
+		<driver>mysql</driver>
+		<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+		<pool>
+			<min-pool-size>10</min-pool-size>
+			<max-pool-size>100</max-pool-size>
+			<prefill>true</prefill>
+		</pool>
+		<security>
+			<user-name>root</user-name>
+			<password></password>
+		</security>
+		<statement>
+			<prepared-statement-cache-size>32</prepared-statement-cache-size>
+		</statement>
+	</datasource>
 </datasources>
  

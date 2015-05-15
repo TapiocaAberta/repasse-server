@@ -2,20 +2,32 @@ package org.jugvale.transparencia.transf.model.base;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @Entity
 @Table(name = "municipio")
+@NamedQueries({
+		@NamedQuery(name = "Municipio.porEstadoNomeSIAFI", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.codigoSIAFI = :siafi AND m.estado = :estado"),
+		@NamedQuery(name = "Municipio.porNomeESigla", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.estado.sigla = :sigla")
+
+})
 public class Municipio {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "mun_id")
 	private long id;
+
+	@Column(name = "mun_cod_siafi")
+	private String codigoSIAFI;
 
 	@Column(name = "mun_nome")
 	private String nome;
@@ -30,8 +42,19 @@ public class Municipio {
 	private float longitude;
 
 	@ManyToOne
-	@JoinColumn(name="estado_est_id")
+	@JoinColumn(name = "estado_est_id")
 	private Estado estado;
+
+	public Municipio() {
+		super();
+	}
+
+	public Municipio(String codigoSIAFI, String nome, Estado estado) {
+		super();
+		this.codigoSIAFI = codigoSIAFI;
+		this.nome = nome;
+		this.estado = estado;
+	}
 
 	public long getId() {
 		return id;
@@ -79,6 +102,14 @@ public class Municipio {
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+
+	public String getCodigoSIAFI() {
+		return codigoSIAFI;
+	}
+
+	public void setCodigoSIAFI(String codigoSIAFI) {
+		this.codigoSIAFI = codigoSIAFI;
 	}
 
 }

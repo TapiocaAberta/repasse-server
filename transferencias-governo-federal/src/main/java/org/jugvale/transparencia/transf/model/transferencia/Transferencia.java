@@ -2,9 +2,12 @@ package org.jugvale.transparencia.transf.model.transferencia;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,9 +16,14 @@ import org.jugvale.transparencia.transf.model.base.Municipio;
 @XmlRootElement
 @Entity
 @Table(name = "transferencia")
+@NamedQueries({ 
+	@NamedQuery(name = "Transferencia.porAnoMesMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio"),
+	@NamedQuery(name = "Transferencia.quantidadePorMesEAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes")
+})
 public class Transferencia {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "tra_id")
 	private long id;
 

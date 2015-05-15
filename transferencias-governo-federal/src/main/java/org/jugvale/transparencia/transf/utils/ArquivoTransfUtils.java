@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,11 +15,8 @@ import java.util.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 public class ArquivoTransfUtils {
-	
 
 	public static final String URL_TRANSFERENCIA_BASE = "http://arquivos.portaldatransparencia.gov.br/downloads.asp?a=%d&m=%s&consulta=Transferencias";
-
-	// public static baixaZip(int ano, int mes)
 
 	/**
 	 * 
@@ -50,7 +48,7 @@ public class ArquivoTransfUtils {
 		String dadosData = entryCSV.toString().substring(0, 6);
 		Path arquivoCSV = Files.createTempFile(dadosData, ".csv");
 		IOUtils.copy(arquivoZip.getInputStream(entryCSV), new FileWriter(
-				arquivoCSV.toFile()));
+				arquivoCSV.toFile()), StandardCharsets.ISO_8859_1);
 		return arquivoCSV;
 	}
 
@@ -67,7 +65,6 @@ public class ArquivoTransfUtils {
 	public static Path deszipaECriaCSV(byte[] binario) throws IOException {
 		ZipFile arquivoZip = criaZip(binario);
 		Path arquivoCSV = pegaCSV(arquivoZip);
-		System.out.println(arquivoCSV);
 		Files.delete(Paths.get(arquivoZip.getName()));
 		return arquivoCSV;
 	}

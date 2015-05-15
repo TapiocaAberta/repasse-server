@@ -1,11 +1,15 @@
 package org.jugvale.transparencia.transf.service;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+
 
 /**
  * 
@@ -43,6 +47,15 @@ public abstract class Service<T> {
 
 	public T atualizar(T entidade) {
 		return em.merge(entidade);
+	}
+
+	public T buscaPorIdOuCria(long id, Supplier<T> objSupplier) {
+		T obj = buscarPorId(id);
+		if (Objects.isNull(obj)) {
+			obj = objSupplier.get();
+			this.salvar(obj);
+		}
+		return obj;
 	}
 
 	/**

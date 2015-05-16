@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,6 +38,7 @@ import org.jugvale.transparencia.transf.utils.ArquivoTransfUtils;
  */
 @Path("carga")
 @Stateless
+@TransactionAttribute(TransactionAttributeType.NEVER)
 public class CargaDadosResource {
 	
 	final String MSG_SUCESSO = "Dados para ano %d e mês %d agendados para carga. Acesse GET /carga/%d/%d/mensagens para ver o andamento.";

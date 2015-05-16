@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.jugvale.transparencia.transf.model.base.Area;
@@ -33,7 +31,6 @@ import org.jugvale.transparencia.transf.service.impl.SubFuncaoService;
 import org.jugvale.transparencia.transf.service.impl.TransferenciaService;
 
 @Stateless
-@Asynchronous
 public class CargaDadosController {
 
 	@Inject
@@ -81,22 +78,27 @@ public class CargaDadosController {
 	public void carregarNoBanco(int ano, int mes, Path arquivoCSV)
 			throws IOException {
 		mensagens.limpar(ano, mes);
-		AtomicInteger sucesso = new AtomicInteger(0);
-		AtomicInteger falha = new AtomicInteger(0);
+		AtomicInteger totalSucesso = new AtomicInteger(0);
+		AtomicInteger totalFalha = new AtomicInteger(0);
+		AtomicInteger totalNaoProcessada = new AtomicInteger(0);
+		AtomicInteger totalLinhas  = new AtomicInteger();
 		mensagens.adicionar(ano, mes, "Iniciando carga em " + new Date());
 		Files.lines(arquivoCSV, StandardCharsets.UTF_8).skip(1).forEach(linha -> {
+			totalLinhas.incrementAndGet();
 			try {
-				salvarLinha(ano, mes, linha);
-				sucesso.incrementAndGet();
+				if(!salvarLinha(ano, mes, linha)){
+					totalNaoProcessada.incrementAndGet();
+				}
+				totalSucesso.incrementAndGet();
 				logger.fine(linha);
 			} catch (Exception e) {
-				falha.incrementAndGet();
-				mensagens.adicionar(ano, mes,"Error: " + e.getMessage());	
+				totalFalha.incrementAndGet();
+				mensagens.adicionar(ano, mes,"Erro na linha "+ totalLinhas.get() +": " + e.getMessage());	
 				e.printStackTrace();
 			}
 		});
-		String relatorio = String.format("%d linhas adicionadas. %d erros",
-				sucesso.get(), falha.get());
+		String relatorio = String.format("%d linhas totais. %d linhas adicionadas. %d erros. %d não processadas. ",
+				totalLinhas.get(), totalSucesso.get(), totalFalha.get(), totalNaoProcessada);
 		Files.delete(arquivoCSV);
 		mensagens.adicionar(ano, mes, relatorio);
 		mensagens.adicionar(ano, mes, "Carga terminada em " + new Date());
@@ -127,12 +129,14 @@ public class CargaDadosController {
 	 * --
 	 * @param linha
 	 * @throws Exception
+	 * @return
+	 * Se a linha foi processada ou não 
+	 *
 	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void salvarLinha(int ano, int mes, String linha) throws Exception {
+	public boolean salvarLinha(int ano, int mes, String linha) throws Exception {
 		String[] campos = linha.split("\\t");
 		if (campos.length != 18) {
-			return;
+			return false;
 		}
 		String siglaEstado = campos[0];
 		String siafiMunicipio = campos[1];
@@ -173,5 +177,6 @@ public class CargaDadosController {
 		transferencia.setSubFuncao(subFuncao);
 		transferencia.setValor(valor);
 		transferenciaService.salvar(transferencia);
+		return true;
 	}
 }

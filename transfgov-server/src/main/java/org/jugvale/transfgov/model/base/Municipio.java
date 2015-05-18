@@ -14,6 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.jugvale.transfgov.resource.config.jsonview.MunicipioCompletoView;
+import org.jugvale.transfgov.resource.config.jsonview.MunicipioConcisoView;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @XmlRootElement
 @Entity
@@ -29,25 +33,32 @@ public class Municipio {
 	@Id
 	@GeneratedValue
 	@Column(name = "mun_id")
+	@JsonView(MunicipioConcisoView.class)
 	private long id;
 
 	@Column(name = "mun_cod_siafi")
+	@JsonView(MunicipioConcisoView.class)
 	private String codigoSIAFI;
 
 	@Column(name = "mun_nome")
+	@JsonView(MunicipioConcisoView.class)
 	private String nome;
 
 	@Column(name = "mun_regiao")
+	@JsonView(MunicipioCompletoView.class)
 	private String regiao;
 
 	@Column(name = "mun_latitude")
+	@JsonView(MunicipioCompletoView.class)
 	private float latitute;
 
 	@Column(name = "mun_longitude")
+	@JsonView(MunicipioCompletoView.class)
 	private float longitude;
 
 	@ManyToOne
 	@JoinColumn(name = "estado_est_id")
+	@JsonView(MunicipioCompletoView.class)
 	private Estado estado;
 
 	public Municipio() {

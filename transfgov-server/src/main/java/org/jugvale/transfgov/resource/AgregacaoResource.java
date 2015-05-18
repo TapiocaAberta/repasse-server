@@ -7,6 +7,9 @@ import javax.ws.rs.Produces;
 
 import org.jugvale.transfgov.model.agregacao.Agregacao;
 import org.jugvale.transfgov.model.agregacao.TipoAgregacao;
+import org.jugvale.transfgov.resource.config.jsonview.MunicipioConcisoView;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Path("agregacao")
 @Produces("application/json; charset=utf8")
@@ -20,14 +23,17 @@ public interface AgregacaoResource {
 	
 	@GET
 	@Path("/{tipoAgregacao}/{ano}/{mes}/municipio/{idMunicipio}")	
+	@JsonView(MunicipioConcisoView.class)	
 	public Agregacao agregaPorAnoMesMunicipio(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("idMunicipio") long idMunicipio);
 	
 	@GET
 	@Path("/{tipoAgregacao}/{ano}/municipio/{idMunicipio}")	
+	@JsonView(MunicipioConcisoView.class)
 	public Agregacao agregaPorAnoMunicipio(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("idMunicipio") long idMunicipio);
 	
 	@GET
-	@Path("/AREA/area/{areaId}/{ano}/{mes}/municipio/{idMunicipio}")	
+	@Path("/AREA/area/{areaId}/{ano}/{mes}/municipio/{idMunicipio}")
+	@JsonView(MunicipioConcisoView.class)	
 	public Agregacao agregaPorAnoMesAreaMunicipio(@PathParam("areaId") long idArea, @PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("idMunicipio") long idMunicipio);
 	
 	@GET

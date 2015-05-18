@@ -1,14 +1,20 @@
 package org.jugvale.transparencia.transf.model.transferencia;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "programa")
 @XmlRootElement
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
 public class Programa {
 
 	@Id

@@ -1,5 +1,6 @@
 package org.jugvale.transparencia.transf.model.base;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @XmlRootElement
 @Entity
 @Table(name = "municipio")
@@ -18,6 +22,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 		@NamedQuery(name = "Municipio.porEstadoNomeSIAFI", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.codigoSIAFI = :siafi AND m.estado = :estado"),
 		@NamedQuery(name = "Municipio.porNomeESigla", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.estado.sigla = :sigla")
 })
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
 public class Municipio {
 
 	@Id

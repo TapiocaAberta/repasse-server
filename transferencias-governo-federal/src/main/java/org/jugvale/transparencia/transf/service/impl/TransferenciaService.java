@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.TypedQuery;
 
+import org.jugvale.transparencia.transf.model.base.Area;
 import org.jugvale.transparencia.transf.model.base.Estado;
 import org.jugvale.transparencia.transf.model.base.Municipio;
 import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
@@ -66,6 +67,15 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("ano", ano);
 		buscaTransferencia.setParameter("mes", mes);
 		buscaTransferencia.setParameter("estado", estado);
+		return buscaTransferencia.getResultList();
+	}
+
+	public List<Transferencia> buscarPorAnoMesAreaMunicipio(int ano, int mes, Area area, Municipio municipio) {
+		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesAreaMunicipio", Transferencia.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		buscaTransferencia.setParameter("area", area);
+		buscaTransferencia.setParameter("municipio", municipio);
 		return buscaTransferencia.getResultList();
 	}	
 

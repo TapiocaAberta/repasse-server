@@ -1,5 +1,6 @@
 package org.jugvale.transparencia.transf.model.transferencia;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,11 +9,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jugvale.transparencia.transf.model.base.Area;
 
 @Entity
 @Table(name = "sub_funcao")
 @XmlRootElement
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
 public class SubFuncao {
 
 	@Id

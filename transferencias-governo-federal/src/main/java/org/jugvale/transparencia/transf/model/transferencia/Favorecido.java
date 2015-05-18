@@ -37,6 +37,11 @@ public class Favorecido {
 		this.nome = nome;
 		this.codigo = codigo;
 	}	
+	
+	@Override
+	public String toString() {
+		return nome;
+	}
 
 	public long getId() {
 		return id;

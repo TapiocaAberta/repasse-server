@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
 		@NamedQuery(name = "Municipio.porEstadoNomeSIAFI", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.codigoSIAFI = :siafi AND m.estado = :estado"),
 		@NamedQuery(name = "Municipio.porNomeESigla", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.estado.sigla = :sigla")
-
 })
 public class Municipio {
 
@@ -47,6 +46,11 @@ public class Municipio {
 
 	public Municipio() {
 		super();
+	}
+
+	@Override
+	public String toString() {
+		return nome + " - " + estado.getSigla();
 	}
 
 	public Municipio(String codigoSIAFI, String nome, Estado estado) {

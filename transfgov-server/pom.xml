@@ -81,7 +81,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>transferencias-governo-federal</finalName>
+		<finalName>transfgov</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>

@@ -164,8 +164,8 @@ public class CargaDadosController {
 		Programa programa = programaService.buscaPorIdOuCria(codigoPrograma, () -> new Programa(codigoPrograma, nomePrograma));
 		Acao acao = acaoService.buscaPorCodigoOuCria(codigoAcao, () -> new Acao(codigoAcao, nomeAcao, nomePopular));
 		Favorecido favorecido = favorecidoService.buscaPorCodigoOuCria(
-				codigoFavorecido, () -> new Favorecido(codigoFavorecido,
-						nomeFavorecido));	
+				codigoFavorecido, () -> new Favorecido(nomeFavorecido,
+						codigoFavorecido));	
 		Transferencia transferencia = new Transferencia();
 		transferencia.setAno(ano);
 		transferencia.setMes(mes);

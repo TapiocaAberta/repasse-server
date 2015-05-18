@@ -6,7 +6,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.transferencia.Acao;
@@ -15,9 +14,8 @@ import org.jugvale.transfgov.model.transferencia.Programa;
 import org.jugvale.transfgov.model.transferencia.SubFuncao;
 
 @Path("")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces("application/json; charset=utf8")
 public interface BaseResource {
-
 
 	@GET
 	@Path("area/{id}")

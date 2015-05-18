@@ -1,5 +1,6 @@
 package org.jugvale.transfgov.service.impl;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.ejb.Stateless;
@@ -39,6 +40,12 @@ public class MunicipioService extends Service<Municipio>{
 		buscaMunicipios.setParameter("sigla", sigla);
 		buscaMunicipios.setParameter("nome", nome);
 		return buscaMunicipios.getSingleResult();	
+	}
+
+	public List<Municipio> porSiglaEstado(String sigla) {
+		TypedQuery<Municipio> buscaMunicipios = em.createNamedQuery("Municipio.porSigla", Municipio.class);
+		buscaMunicipios.setParameter("sigla", sigla);
+		return buscaMunicipios.getResultList();	
 	}
 
 }

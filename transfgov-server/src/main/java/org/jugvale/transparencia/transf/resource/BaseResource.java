@@ -2,7 +2,6 @@ package org.jugvale.transparencia.transf.resource;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,95 +13,48 @@ import org.jugvale.transparencia.transf.model.transferencia.Acao;
 import org.jugvale.transparencia.transf.model.transferencia.Favorecido;
 import org.jugvale.transparencia.transf.model.transferencia.Programa;
 import org.jugvale.transparencia.transf.model.transferencia.SubFuncao;
-import org.jugvale.transparencia.transf.service.impl.AcaoService;
-import org.jugvale.transparencia.transf.service.impl.AreaService;
-import org.jugvale.transparencia.transf.service.impl.FavorecidoService;
-import org.jugvale.transparencia.transf.service.impl.ProgramaService;
-import org.jugvale.transparencia.transf.service.impl.SubFuncaoService;
-import org.jugvale.transparencia.transf.utils.JaxrsUtils;
 
 @Path("")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class BaseResource {
+public interface BaseResource {
 
-	@Inject
-	AreaService areaService;
-
-	@Inject
-	SubFuncaoService subFuncaoService;
-
-	@Inject
-	ProgramaService programaService;
-
-	@Inject
-	AcaoService acaoService;
-
-	@Inject
-	FavorecidoService favorecidoService;
 
 	@GET
 	@Path("area/{id}")
-	public Area areaPorId(@PathParam("id") long id) {
-		return JaxrsUtils.lanca404SeNulo(areaService.buscarPorId(id),
-				Area.class);
-	}
+	public Area areaPorId(@PathParam("id") long id);
 
 	@GET
 	@Path("area")
-	public List<Area> todasAreas() {
-		return areaService.todos();
-	}
+	public List<Area> todasAreas();
 
 	@GET
 	@Path("sub-funcao/{id}")
-	public SubFuncao subFuncaoPorId(@PathParam("id") long id) {
-		return JaxrsUtils.lanca404SeNulo(subFuncaoService.buscarPorId(id),
-				SubFuncao.class);
-	}
+	public SubFuncao subFuncaoPorId(@PathParam("id") long id);
 
 	@GET
 	@Path("sub-funcao")
-	public List<SubFuncao> todasSubFuncoes() {
-		return subFuncaoService.todos();
-	}
+	public List<SubFuncao> todasSubFuncoes();
 
 	@GET
 	@Path("programa/{id}")
-	public Programa programaPorId(@PathParam("id") long id) {
-		return JaxrsUtils.lanca404SeNulo(programaService.buscarPorId(id),
-				Programa.class);
-	}
+	public Programa programaPorId(@PathParam("id") long id);
 
 	@GET
 	@Path("programa")
-	public List<Programa> todosPogramas() {
-		return programaService.todos();
-	}
-
+	public List<Programa> todosPogramas();
 	@GET
 	@Path("acao/{id}")
-	public Acao acaoPorId(@PathParam("id") long id) {
-		return JaxrsUtils.lanca404SeNulo(acaoService.buscarPorId(id),
-				Acao.class);
-	}
+	public Acao acaoPorId(@PathParam("id") long id);
 
 	@GET
 	@Path("acao")
-	public List<Acao> todasAcoes() {
-		return acaoService.todos();
-	}
-
+	public List<Acao> todasAcoes();
 	@GET
 	@Path("favorecido/{id}")
-	public Favorecido favorecidoPorId(@PathParam("id") long id) {
-		return JaxrsUtils.lanca404SeNulo(favorecidoService.buscarPorId(id),
-				Favorecido.class);
-	}
+	public Favorecido favorecidoPorId(@PathParam("id") long id);
 
 	@GET
 	@Path("favorecido")
-	public List<Favorecido> todosFavorecidos() {
-		return favorecidoService.todos();
-	}
+	public List<Favorecido> todosFavorecidos();
 
 }

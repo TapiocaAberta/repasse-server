@@ -1,10 +1,14 @@
 package org.jugvale.transparencia.transf.model.base;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /*
  * Area em questão. Pode ser educação, saúde, segurança, etc
@@ -15,6 +19,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "area")
 @XmlRootElement
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
 public class Area {
 
 	@Id

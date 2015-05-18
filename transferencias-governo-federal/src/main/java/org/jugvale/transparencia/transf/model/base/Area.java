@@ -33,6 +33,13 @@ public class Area {
 		this.nome = nome;
 	}
 
+	@Override
+	public String toString() {
+		return nome;
+	}
+	
+	
+	
 	public long getId() {
 		return id;
 	}

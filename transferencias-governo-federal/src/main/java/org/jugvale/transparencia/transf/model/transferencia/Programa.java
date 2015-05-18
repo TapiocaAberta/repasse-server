@@ -26,6 +26,11 @@ public class Programa {
 		this.id = id;
 		this.nome = nome;
 	}
+	
+	@Override
+	public String toString() {
+		return nome;
+	}
 
 	public long getId() {
 		return id;

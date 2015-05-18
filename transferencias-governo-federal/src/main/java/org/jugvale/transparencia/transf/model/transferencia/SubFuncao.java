@@ -35,6 +35,11 @@ public class SubFuncao {
 		this.nome = nomeSubFuncao;
 		this.area = area;
 	}
+	
+	@Override
+	public String toString() {
+		return area.getNome() + ": " + nome;
+	}
 
 	public long getId() {
 		return id;

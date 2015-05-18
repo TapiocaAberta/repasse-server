@@ -7,7 +7,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.jugvale.transparencia.transf.model.base.Municipio;
 import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
@@ -16,7 +15,7 @@ import org.jugvale.transparencia.transf.service.impl.TransferenciaService;
 import org.jugvale.transparencia.transf.utils.JaxrsUtils;
 
 @Path("transferencia")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces("application/json; charset=utf8")
 public class TransferenciaResource {
 	
 	@Inject

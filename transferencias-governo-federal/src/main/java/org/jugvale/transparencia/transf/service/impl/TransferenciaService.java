@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.TypedQuery;
 
+import org.jugvale.transparencia.transf.model.base.Estado;
 import org.jugvale.transparencia.transf.model.base.Municipio;
 import org.jugvale.transparencia.transf.model.transferencia.Transferencia;
 import org.jugvale.transparencia.transf.service.Service;
@@ -38,6 +39,12 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("mes", mes);
 		return buscaTransferencia.getSingleResult() > 0;
 	}
+	
+	public boolean temTranferencia(int ano) {		
+		TypedQuery<Long> buscaTransferencia = em.createNamedQuery("Transferencia.quantidadePorAno", Long.class);
+		buscaTransferencia.setParameter("ano", ano);
+		return buscaTransferencia.getSingleResult() > 0;
+	}	
 
 	public List<Transferencia> buscarPorAnoMesMunicipio(int ano, int mes, Municipio municipio) {
 		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesMunicipio", Transferencia.class);
@@ -46,5 +53,20 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("municipio", municipio);
 		return buscaTransferencia.getResultList();
 	}
+	
+	public List<Transferencia> buscarPorAnoMunicipio(int ano, Municipio municipio) {
+		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMunicipio", Transferencia.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("municipio", municipio);
+		return buscaTransferencia.getResultList();
+	}
+
+	public List<Transferencia> buscarPorAnoMesEstado(int ano, int mes, Estado estado) {
+		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesEstado", Transferencia.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		buscaTransferencia.setParameter("estado", estado);
+		return buscaTransferencia.getResultList();
+	}	
 
 }

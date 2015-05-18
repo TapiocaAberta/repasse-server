@@ -22,7 +22,9 @@ import org.jugvale.transparencia.transf.model.base.Municipio;
 		@NamedQuery(name = "Transferencia.quantidadePorAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano"),
 		@NamedQuery(name = "Transferencia.porAnoMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio"),
 		@NamedQuery(name = "Transferencia.porAnoMesEstado", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio.estado = :estado"),
-		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.subFuncao.area = :area") })
+		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.subFuncao.area = :area"),
+		@NamedQuery(name = "Transferencia.todosAnos", query = "SELECT DISTINCT t.ano from Transferencia t"),
+		@NamedQuery(name = "Transferencia.mesesPorAno", query = "SELECT DISTINCT t.mes from Transferencia t WHERE t.ano = :ano") })
 public class Transferencia {
 
 	@Id

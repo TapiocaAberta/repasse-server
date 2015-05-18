@@ -24,6 +24,15 @@ public class TransferenciaResource {
 	@Inject
 	MunicipioService municipioService;
 
+	/**
+	 * 
+	 * Retorna todas as transferências para o ano, mês e município passados
+	 * 
+	 * @param ano
+	 * @param mes
+	 * @param municipioId
+	 * @return
+	 */
 	@GET
 	@Path("{ano}/{mes}/municipio/{municipioId}")
 	public List<Transferencia> porAnoMesMunicipio(@PathParam("ano") int ano,

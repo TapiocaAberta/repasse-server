@@ -77,6 +77,16 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("area", area);
 		buscaTransferencia.setParameter("municipio", municipio);
 		return buscaTransferencia.getResultList();
+	}
+
+	public List<Integer> todosAnos() {
+		return em.createNamedQuery("Transferencia.todosAnos", Integer.class).getResultList();
+	}
+
+	public List<Integer> mesesDisponiveis(int ano) {
+		TypedQuery<Integer> buscaMeses = em.createNamedQuery("Transferencia.mesesPorAno", Integer.class);
+		buscaMeses.setParameter("ano", ano);
+		return buscaMeses.getResultList();
 	}	
 
 }

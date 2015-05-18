@@ -11,11 +11,12 @@ import javax.ws.rs.core.MediaType;
 import org.jugvale.transfgov.model.base.Municipio;
 
 @Path("municipio")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ MediaType.APPLICATION_JSON })
 public interface MunicipioResource {
 
-	@GET
+	//TODO: Habilitar somente quando houver paginação
 	public List<Municipio> todosMunicipios();
+
 	@GET
 	@Path("{sigla}/{nome}")
 	public Municipio porNomeEEstado(@PathParam("sigla") String sigla, @PathParam("nome") String nome);

@@ -1,12 +1,12 @@
 package org.jugvale.transfgov.resource.impl;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.jugvale.transfgov.model.base.AnoMes;
 import org.jugvale.transfgov.resource.AnoResource;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
 
@@ -27,13 +27,13 @@ public class AnoResourceImpl  implements AnoResource {
 	 * Retorna todos os anos e meses já carregados. (método custoso e feio por causa do design de repetir ano e mês em cada transferência)
 	 * @return
 	 */
-	public Map<Integer, List<Integer>> anos() {
+	public List<AnoMes> anos() {
 		// TODO: Melhorar (é possível, tenho ctza)
-		Map<Integer, List<Integer>> anos = new HashMap<>();
+		List<AnoMes> lista = new ArrayList<>();
 		for (Integer ano : transferenciaService.todosAnos()) {
-			anos.put(ano, transferenciaService.mesesDisponiveis(ano));
+			lista.add(new AnoMes(ano, transferenciaService.mesesDisponiveis(ano)));
 		}
-		return anos;	
+		return lista;	
 	}
 
 }

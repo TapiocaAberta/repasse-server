@@ -22,6 +22,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
  * @author wsiqueir
  *
  */
+@Path("carga")
 public interface CargaDadosResource {
 	
 	final String MSG_SUCESSO = "Dados para ano %d e mês %d agendados para carga. Acesse GET /carga/%d/%d/mensagens para ver o andamento.";

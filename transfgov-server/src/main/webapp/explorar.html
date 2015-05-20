@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TransfGov - Página Inicial</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/jquery-ui.min.css" rel="stylesheet">
+<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+<link href="css/dataTables.jqueryui.css" rel="stylesheet">
+</head>
+
+<body ng-controller="ExplorarController" ng-app="AppExplorar">
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./index.html">TransfGov</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="jumbotron">
+		<div class="container">
+			<h1>TransGov Explorer</h1>
+			<p>Explore as transferências do governo federal para sua cidade e
+				cobre melhorias!</p>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="anos" class="control-label col-xs-2">Ano</label>
+					<div class="col-xs-4">
+						<select id="anos" class="form-control" ng-model="anoSelecionado"
+							ng-options="ano.ano for ano in anos">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="meses" class="control-label col-xs-2">Mês</label>
+					<div class="col-xs-4">
+						<select id="meses" class="form-control" ng-model="mesSelecionado"
+							ng-options="mes for mes in anoSelecionado.meses"
+							ng-disabled="!anoSelecionado">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="estados" class="control-label col-xs-2">Estado</label>
+					<div class="col-xs-4">
+						<select id="estados" class="form-control"
+							ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
+							ng-options="estado.sigla for estado in estados">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="cidades" class="control-label col-xs-2">Município</label>
+					<div class="col-xs-4">
+						<select id="municipios" class="form-control"
+							ng-model="municipioSelecionado" ng-disabled="!estadoSelecionado"
+							ng-options="municipio.nome for municipio in municipios">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-offset-2 col-xs-10">
+						<button type="submit" class="btn btn-primary"
+							ng-click="carregaApp()" ng-disabled="!municipioSelecionado">Explorar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<hr>
+
+	<div class="container" ng-show="transferencias">
+		<h3>
+			Transferências de <strong>{{mesBusca}}/{{anoBusca}}</strong> para <strong>{{municipioBusca.nome}}
+				- {{estadoBusca.sigla}}</strong>
+		</h3>
+		<div class="row">
+			<div role="tabpanel">
+
+				<ul class="nav nav-tabs" role="tablist" id="abasPainel">
+					<li role="presentation" class="active"><a href="#tabTabela"
+						aria-controls="home" role="tab" data-toggle="tab">Tabela</a></li>
+					<li role="presentation"><a href="#tabAgregacao"
+						aria-controls="profile" role="tab" data-toggle="tab">Gráficos
+							Agregação</a></li>
+					<li role="presentation"><a href="#tabArea"
+						aria-controls="messages" role="tab" data-toggle="tab">Análise
+							por área</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="tabTabela">
+						<table id="tblTransferencias" datatable="ng"
+							class="row-border hover">
+							<thead>
+								<tr>
+									<th>Programa</th>
+									<th>Ação</th>
+									<th>Area</th>
+									<th>Sub Função</th>
+									<th>Favorecido</th>
+									<th>Valor</th>
+								</tr>
+
+							</thead>
+							<tr ng-repeat="t in transferencias">
+								<td>{{ t.programa.nome }}</td>
+								<td>{{ t.acao.nome }}</td>
+								<td>{{ t.subFuncao.area.nome }}</td>
+								<td>{{ t.subFuncao.nome }}</td>
+								<td>{{ t.favorecido.nome }}</td>
+								<td>R${{ t.valor }}</td>
+							</tr>
+						</table>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tabAgregacao">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="agregacoes" class="control-label col-xs-3">Selecione
+									a agregação:</label>
+								<div class="col-xs-3">
+									<select id="agregacoes" class="form-control"
+										ng-disabled="gerandoGraficoAgregacao"
+										ng-change="carregaGraficosAgregacao()"
+										ng-model="agregacaoSelecionada"
+										ng-options="agregacao for agregacao in agregacoes">
+									</select>
+								</div>
+							</div>
+						</form>
+						<div class="row">
+							<div class="col-md-9" id="divPizzaAgregacao">
+								<div id="containerPizzaAgregacao"
+									style="min-width: 310px; height: 600px; max-width: 900px; margin: 0 auto"></div>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tabArea">...</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<div class="container">
+		<hr>
+		<footer>
+			<p>TransfGov 2015</p>
+		</footer>
+	</div>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.jqueryui.js"></script>
+	<script src="js/angular.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/angular-datatables.min.js"></script>
+	<script src="js/highcharts.js" type="text/javascript"></script>
+	<script src="js/jquery.highchartTable-min.js" type="text/javascript"></script>
+	<script src="js/explorar.js"></script>
+</body>
+</html>

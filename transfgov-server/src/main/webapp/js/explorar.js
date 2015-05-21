@@ -53,6 +53,7 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var a = $scope.agregacaoSelecionada;
 		var uriAgregacao =  a + "/"+ ano+ "/" + mes + "/municipio/"+ id;
 		$http.get("./rest/agregacao/" + uriAgregacao).success(function(agregacao) {
+			$scope.dadosAgregados= agregacao.dadosAgregados;
 			var dadosGrafico = new Array();
 			for(i in agregacao.dadosAgregados) {
 				dadosGrafico.push({
@@ -60,7 +61,6 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
                     y: agregacao.dadosAgregados[i]
                 });
 			}
-			
 			$('#containerPizzaAgregacao').highcharts({
 		        chart: {
 		            plotBackgroundColor: null,

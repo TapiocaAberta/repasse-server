@@ -3,8 +3,6 @@ package org.jugvale.transfgov.service.impl;
 import java.util.function.Supplier;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -12,7 +10,6 @@ import org.jugvale.transfgov.model.base.Estado;
 import org.jugvale.transfgov.service.Service;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class EstadoService extends Service<Estado>{
 	
 	public Estado buscaEstadoPorSigla(String sigla) {

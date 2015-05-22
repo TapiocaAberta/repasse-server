@@ -22,7 +22,7 @@ public interface AgregacaoResource {
 	public TipoAgregacao[] todasAgregacoes();
 	
 	@GET
-	@Path("/{tipoAgregacao}/{ano}/{mes}/municipio/{idMunicipio}")	
+	@Path("/{tipoAgregacao}/{ano}/{mes}/municipio/{idMunicipio}")
 	@JsonView(MunicipioConcisoView.class)	
 	public Agregacao agregaPorAnoMesMunicipio(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("idMunicipio") long idMunicipio);
 	

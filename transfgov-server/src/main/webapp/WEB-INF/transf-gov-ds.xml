@@ -8,8 +8,8 @@
 		<driver>mysql</driver>
 		<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
 		<pool>
-			<min-pool-size>10</min-pool-size>
-			<max-pool-size>100</max-pool-size>
+			<min-pool-size>50</min-pool-size>
+			<max-pool-size>200</max-pool-size>
 			<prefill>true</prefill>
 		</pool>
 		<security>

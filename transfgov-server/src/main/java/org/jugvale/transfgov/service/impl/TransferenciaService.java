@@ -3,6 +3,7 @@ package org.jugvale.transfgov.service.impl;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jugvale.transfgov.model.base.Area;
@@ -20,8 +21,11 @@ public class TransferenciaService extends Service<Transferencia> {
 	 * @param ano
 	 * @param mes
 	 */
-	public void limpaTransferencias(int ano, int mes) {
-		// TODO
+	public void apagaTransferencias(int ano, int mes) {
+		Query apagaTransferencia = em.createNamedQuery("Transferencia.removePorMesAno");
+		apagaTransferencia.setParameter("ano", ano);
+		apagaTransferencia.setParameter("mes", mes);
+		apagaTransferencia.executeUpdate();
 	}
 
 	/**
@@ -85,5 +89,4 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaMeses.setParameter("ano", ano);
 		return buscaMeses.getResultList();
 	}	
-
 }

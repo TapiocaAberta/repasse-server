@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TransfGov - Página Inicial</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/jquery-ui.min.css" rel="stylesheet">
+<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+<link href="css/dataTables.jqueryui.css" rel="stylesheet">
+</head>
+
+<body ng-controller="AdminController" ng-app="AppAdmin">
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./index.html">TransfGov</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="jumbotron">
+		<div class="container">
+			<h1>TransGov Administração</h1>
+			<p>Veja as cargas já feitas e carregue novos dados!</p>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<h3>Realizar carga</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="anoCarga" class="control-label col-xs-3">Ano</label>
+					<div class="col-xs-3">
+						<input id="anoCarga" type="text" ng-model="anoCarga" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="mesCarga" class="control-label col-xs-3">Mês</label>
+					<div class="col-xs-3">
+						<input type="text" id="mesCarga" ng-model="mesCarga" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-offset-2 col-xs-2">
+						<button type="submit" class="btn btn-primary"
+							ng-click="realizaCarga()"
+							ng-disabled="realizandoCarga || limpandoDados">
+							<span class="glyphicon glyphicon-download-alt"
+								style="margin-right: 10px"></span>Carregar
+						</button>
+					</div>
+					<div class="col-xs-1">
+						<button type="submit" class="btn btn-primary "
+							ng-click="apagaDadosTransferencia()"
+							ng-disabled="fazendoAcao">
+							<span class="glyphicon glyphicon-trash"
+								style="margin-right: 10px"></span>Limpar
+						</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<div
+						ng-class="{true: 'alert alert-warning', false: 'alert alert-danger'}[sucesso]"
+						role="alert">{{ msgResposta }}</div>
+				</div>
+
+			</form>
+		</div>
+		<hr />
+		<div class="row">
+			<h3>Cargas de dados de transferências</h3>
+			<table id="tblCargaTransf" datatable="ng"
+				style="text-overflow: ellipsis">
+				<thead>
+					<tr>
+						<th>Ano</th>
+						<th>Mês</th>
+						<th>Total Linhas</th>
+						<th>Não Processadas</th>
+						<th>Inseridas com Sucesso</th>
+						<th>Erro ao Inserir</th>
+						<th>Inicío da Carga</th>
+						<th>Fim</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="c in infoCargasTransf">
+						<td>{{ c.ano }}</td>
+						<td>{{c.mes }}</td>
+						<td>{{ c.qtdeLinhas }}</td>
+						<td>{{c.qtdeNaoProcessada }}</td>
+						<td>{{ c.qtdeSucesso }}</td>
+						<td>{{ c.qtdeFalhas }}</td>
+						<td>{{ c.inicio }}</td>
+						<td>{{c.fim }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class=row>
+			<div class="col-md-5">
+				<input type="checkbox" ng-model="atualizarCargaFlag"
+					ng-change="mudaAtualizarCarga()" /> <em>Atualizar
+					automaticamente</em>
+			</div>
+		</div>
+		<div class="container">
+			<hr>
+			<footer>
+				<p>TransfGov 2015</p>
+			</footer>
+		</div>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/angular.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+		<script src="js/dataTables.jqueryui.js"></script>
+		<script src="js/angular-datatables.min.js"></script>
+
+		<script src="js/admin.js"></script>
+</body>
+</html>

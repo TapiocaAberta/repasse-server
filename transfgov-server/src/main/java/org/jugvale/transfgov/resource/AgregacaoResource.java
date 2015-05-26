@@ -50,9 +50,9 @@ public interface AgregacaoResource {
 	public Map<Integer, Double> agrupaPorAno(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 	
 	@GET
-	@Path("/ANO/{ano}/AREA/municipio/{municipioId}/")
+	@Path("/ANO/{ano}/{tipoAgregacao}/municipio/{municipioId}/")
 	@JsonView(MunicipioConcisoView.class)
-	public List<Agregacao> agrupaPorAnoArea(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	public List<Agregacao> agrupaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 
 
 }

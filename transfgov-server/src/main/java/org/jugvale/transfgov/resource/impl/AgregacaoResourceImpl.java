@@ -80,13 +80,13 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	}
 
 	@Override
-	public List<Agregacao> agrupaPorAnoArea(int ano, long municipioId) {
+	public List<Agregacao> agrupaPorAnoArea(TipoAgregacao tipoAgregacao, int ano, long municipioId) {
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
 		List<Integer> meses = transferenciaService.mesesDisponiveis(ano);
 		List<Agregacao> agregacoes = new ArrayList<>();
 		for (int mes : meses) {
 			List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
-			Agregacao agregacao = agregacaoController.agregaPorTipo(ano, mes, municipio.getEstado(), municipio, TipoAgregacao.AREA, transferencias);
+			Agregacao agregacao = agregacaoController.agregaPorTipo(ano, mes, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
 			agregacoes.add(agregacao);
 		}
 		return agregacoes;

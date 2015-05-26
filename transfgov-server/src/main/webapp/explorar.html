@@ -45,15 +45,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="meses" class="control-label col-xs-2">Mês</label>
-					<div class="col-xs-4">
-						<select id="meses" class="form-control" ng-model="mesSelecionado"
-							ng-options="mes for mes in anoSelecionado.meses"
-							ng-disabled="!anoSelecionado">
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
 					<label for="estados" class="control-label col-xs-2">Estado</label>
 					<div class="col-xs-4">
 						<select id="estados" class="form-control"
@@ -82,98 +73,92 @@
 	</div>
 	<hr>
 
-	<div class="container" ng-show="transferencias">
+	<div class="container" ng-show="municipioBusca">
 		<h3>
-			Transferências de <strong>{{mesBusca}}/{{anoBusca}}</strong> para <strong>{{municipioBusca.nome}}
-				- {{estadoBusca.sigla}}</strong>
+			Transferências no ano <strong>{{anoBusca}}</strong> para <strong>{{municipioBusca.nome}}
+				- {{municipioBusca.estado.sigla}}</strong>
 		</h3>
 		<div class="row">
-			<div role="tabpanel">
-
-				<ul class="nav nav-tabs" role="tablist" id="abasPainel">
-					<li role="presentation"><a href="#tabResumo"
-						aria-controls="home" role="tab" data-toggle="tab">Resumo</a></li>
-					<li role="presentation" class="active"><a href="#tabTabela"
-						aria-controls="home" role="tab" data-toggle="tab">Tabela</a></li>
-					<li role="presentation"><a href="#tabAgregacao"
-						aria-controls="profile" role="tab" data-toggle="tab">Gráficos
-							Agregação</a></li>
-					<li role="presentation"><a href="#tabArea"
-						aria-controls="messages" role="tab" data-toggle="tab">Análise
-							por área</a></li>
-				</ul>
-
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="tabTabela">
-						<table id="tblTransferencias" datatable="ng"
-							class="row-border hover">
-							<thead>
-								<tr>
-									<th>Programa</th>
-									<th>Ação</th>
-									<th>Area</th>
-									<th>Sub Função</th>
-									<th>Favorecido</th>
-									<th>Valor</th>
-								</tr>
-
-							</thead>
-							<tr ng-repeat="t in transferencias">
-								<td>{{ t.programa.nome }}</td>
-								<td>{{ t.acao.nome }}</td>
-								<td>{{ t.subFuncao.area.nome }}</td>
-								<td>{{ t.subFuncao.nome }}</td>
-								<td>{{ t.favorecido.nome }}</td>
-								<td>R$ {{ t.valor.toLocaleString() }}</td>
-							</tr>
-						</table>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="agregacoes" class="control-label col-xs-3">Selecione
+						a agregação:</label>
+					<div class="col-xs-3">
+						<select id="agregacoes" class="form-control"
+							ng-disabled="gerandoGraficoAgregacao"
+							ng-change="listenerAgregacao()" ng-model="agregacaoSelecionada"
+							ng-options="agregacao for agregacao in agregacoes">
+						</select>
 					</div>
-					<div role="tabpanel" class="tab-pane" id="tabAgregacao">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label for="agregacoes" class="control-label col-xs-3">Selecione
-									a agregação:</label>
-								<div class="col-xs-3">
-									<select id="agregacoes" class="form-control"
-										ng-disabled="gerandoGraficoAgregacao"
-										ng-change="carregaGraficosAgregacao()"
-										ng-model="agregacaoSelecionada"
-										ng-options="agregacao for agregacao in agregacoes">
-									</select>
-								</div>
-							</div>
-						</form>
-						<div class="row">
-
-							<div class="col-md-9" id="divPizzaAgregacao">
-								<div id="containerPizzaAgregacao"
-									style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto"></div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-9">
-								<table id="tblAgregacao" class="table"
-									style="text-overflow: ellipsis">
-									<thead>
-										<tr>
-											<th>Dado</th>
-											<th>Valor</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="(key, value) in dadosAgregados">
-											<td>{{ key }}</td>
-											<td>R$ {{ value.toLocaleString() }}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane" id="tabArea">...</div>
 				</div>
+			</form>
+		</div>
 
+		<div class="row">
+			<div id="divGraficoAreaPorAno"></div>
+		</div>
+		<hr />
+		<div class="row">
+		<h3>Dados por mês</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="meses" class="control-label col-xs-2">Mês</label>
+					<div class="col-xs-4">
+						<select id="meses" class="form-control" ng-model="mesSelecionado"
+							ng-options="mes for mes in anoSelecionado.meses"
+							ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-md-9" id="divPizzaAgregacao">
+				<div id="containerPizzaAgregacao"
+					style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto"></div>
 			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
+				<table id="tblAgregacao" class="table"
+					style="text-overflow: ellipsis">
+					<thead>
+						<tr>
+							<th>Dado</th>
+							<th>Valor</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, value) in dadosAgregados">
+							<td>{{ key }}</td>
+							<td>R$ {{ value.toLocaleString() }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<table id="tblTransferencias" datatable="ng" class="row-border hover">
+				<thead>
+					<tr>
+						<th>Programa</th>
+						<th>Ação</th>
+						<th>Area</th>
+						<th>Sub Função</th>
+						<th>Favorecido</th>
+						<th>Valor</th>
+					</tr>
+
+				</thead>
+				<tr ng-repeat="t in transferenciasMes">
+					<td>{{ t.programa.nome }}</td>
+					<td>{{ t.acao.nome }}</td>
+					<td>{{ t.subFuncao.area.nome }}</td>
+					<td>{{ t.subFuncao.nome }}</td>
+					<td>{{ t.favorecido.nome }}</td>
+					<td>R$ {{ t.valor.toLocaleString() }}</td>
+				</tr>
+			</table>
 		</div>
 
 	</div>

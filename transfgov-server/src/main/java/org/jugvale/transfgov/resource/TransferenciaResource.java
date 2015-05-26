@@ -41,6 +41,6 @@ public interface TransferenciaResource {
 	@Path("{ano}/{mes}")
 	@Produces("text/plan; charset=utf8")
 	public Response apagaPorMesAno(@PathParam("ano") int ano,
-			@PathParam("mes") int mes);
+			@PathParam("mes") int mes);	
 
 }

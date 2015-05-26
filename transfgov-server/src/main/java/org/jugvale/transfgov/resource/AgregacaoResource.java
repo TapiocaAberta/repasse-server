@@ -1,5 +1,8 @@
 package org.jugvale.transfgov.resource;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,6 +21,7 @@ public interface AgregacaoResource {
 	final String MSG_AGREGACAO_ERRADA = "A agregação %s não é permitida em agregações %s";
 	final String MSG_NAO_HA_DADOS_ANO_MES =  "Não há dados de transferência para ano %d e mês %d";
 	final String MSG_NAO_HA_DADOS_ANO  =  "Não há dados de transferência para ano %d";
+
 	@GET
 	public TipoAgregacao[] todasAgregacoes();
 	
@@ -39,5 +43,16 @@ public interface AgregacaoResource {
 	@GET
 	@Path("/MUNICIPIO/{ano}/{mes}/estado/{siglaEstado}")	
 	public Agregacao agregaPorAnoEstado(@PathParam("ano") int ano,  @PathParam("mes") int mes, @PathParam("siglaEstado") String siglaEstado);
+	
+	@GET
+	@Path("/ANO/{ano}/municipio/{municipioId}/")
+	@JsonView(MunicipioConcisoView.class)
+	public Map<Integer, Double> agrupaPorAno(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	
+	@GET
+	@Path("/ANO/{ano}/{tipoAgregacao}/municipio/{municipioId}/")
+	@JsonView(MunicipioConcisoView.class)
+	public List<Agregacao> agrupaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+
 
 }

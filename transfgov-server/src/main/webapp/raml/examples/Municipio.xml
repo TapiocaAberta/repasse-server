@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<municipio>
+    <id>some value</id>
+    <latitute>some value</latitute>
+    <longitude>some value</longitude>
+    <codigosiafi>some value</codigosiafi>
+    <estado>some value</estado>
+    <nome>some value</nome>
+    <regiao>some value</regiao>
+    <id>some value</id>
+    <codigosiafi>some value</codigosiafi>
+    <nome>some value</nome>
+    <regiao>some value</regiao>
+    <latitute>some value</latitute>
+    <longitude>some value</longitude>
+    <estado>some value</estado>
+</municipio>

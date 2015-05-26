@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="estado" type="estado"/>
+
+  <xs:element name="municipio" type="municipio"/>
+
+  <xs:complexType name="municipio">
+    <xs:sequence>
+      <xs:element name="codigoSIAFI" type="xs:string" minOccurs="0"/>
+      <xs:element ref="estado" minOccurs="0"/>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="latitute" type="xs:float"/>
+      <xs:element name="longitude" type="xs:float"/>
+      <xs:element name="nome" type="xs:string" minOccurs="0"/>
+      <xs:element name="regiao" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="estado">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="nome" type="xs:string" minOccurs="0"/>
+      <xs:element name="regiao" type="xs:string" minOccurs="0"/>
+      <xs:element name="sigla" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

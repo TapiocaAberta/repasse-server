@@ -8,6 +8,6 @@ package org.jugvale.transfgov.model.agregacao;
  */
 public enum TipoAgregacao {
 
-	MES, AREA, SUB_FUNCAO, ACAO, PROGRAMA, FAVORECIDO, MUNICIPIO;
+	MES, AREA, SUB_FUNCAO, ACAO, PROGRAMA, FAVORECIDO, MUNICIPIO, ANO;
 
 }

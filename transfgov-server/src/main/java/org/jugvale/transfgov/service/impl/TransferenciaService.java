@@ -1,6 +1,8 @@
 package org.jugvale.transfgov.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -15,6 +17,14 @@ import org.jugvale.transfgov.service.Service;
 @Stateless
 public class TransferenciaService extends Service<Transferencia> {
 
+	public Map<Integer, Double> buscarPorAnoMunicipioAgregaPorMes(int ano, Municipio municipio){
+		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMunicipioAgrupadoPorMes", Object[].class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("municipio", municipio);
+		List<Object[]> linhas = buscaTransferencia.getResultList();
+		return linhas.stream().collect(Collectors.toMap(l -> (int) l[0], l -> (double) l[1]));
+	}
+	
 	/**
 	 * Limpa todos os dados de transferencias para esse ano e mes
 	 * 

@@ -25,7 +25,8 @@ import org.jugvale.transfgov.model.base.Municipio;
 		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.subFuncao.area = :area"),
 		@NamedQuery(name = "Transferencia.todosAnos", query = "SELECT DISTINCT t.ano from Transferencia t"),
 		@NamedQuery(name = "Transferencia.mesesPorAno", query = "SELECT DISTINCT t.mes from Transferencia t WHERE t.ano = :ano"), 
-		@NamedQuery(name = "Transferencia.removePorMesAno", query = "DELETE FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes")
+		@NamedQuery(name = "Transferencia.removePorMesAno", query = "DELETE FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes"),
+		@NamedQuery(name = "Transferencia.porAnoMunicipioAgrupadoPorMes", query = "SELECT t.mes, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio GROUP BY t.mes")
 })
 public class Transferencia {
 

@@ -1,6 +1,8 @@
 package org.jugvale.transfgov.resource.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,11 +23,6 @@ import org.jugvale.transfgov.utils.JaxrsUtils;
 
 @Stateless
 public class AgregacaoResourceImpl implements AgregacaoResource {
-	
-	final String MSG_AGREGACAO_ERRADA = "A agregação %s não é permitida em agregações %s";
-	final String MSG_NAO_HA_DADOS_ANO_MES =  "Não há dados de transferência para ano %d e mês %d";
-	final String MSG_NAO_HA_DADOS_ANO  =  "Não há dados de transferência para ano %d";
-
 	
 	@Inject
 	AgregacaoController agregacaoController;
@@ -74,5 +71,26 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 		List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesEstado(ano, mes, estado);
 		return agregacaoController.agregaPorTipo(ano, 0, estado, null, TipoAgregacao.MUNICIPIO, transferencias);
 	}
+	
+	@Override
+	public Map<Integer, Double> agrupaPorAno(int ano, long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(String.format(MSG_NAO_HA_DADOS_ANO, ano), ano));
+		return transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio);
+	}
+
+	@Override
+	public List<Agregacao> agrupaPorAnoArea(int ano, long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		List<Integer> meses = transferenciaService.mesesDisponiveis(ano);
+		List<Agregacao> agregacoes = new ArrayList<>();
+		for (int mes : meses) {
+			List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
+			Agregacao agregacao = agregacaoController.agregaPorTipo(ano, mes, municipio.getEstado(), municipio, TipoAgregacao.AREA, transferencias);
+			agregacoes.add(agregacao);
+		}
+		return agregacoes;
+	}
+
 
 }

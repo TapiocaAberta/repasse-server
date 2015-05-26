@@ -42,8 +42,7 @@ public class TransferenciaResourceImpl implements TransferenciaResource {
 			return Response.ok().entity(String.format(MSG_TRANSFERENCIA_APAGADAS, mes, ano)).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
-		}
-		
+		}		
 	}	
 
 }

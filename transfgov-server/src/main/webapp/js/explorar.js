@@ -47,10 +47,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 	                text: 'Mês'
 	            },
 	            categories: categorias
-	        },
-	        dataLabels: {
-	        	crop: true
-	        },
+	        },	        
 	        tooltip: {
 	        	valuePrefix: "R$ "	        	
 	        },
@@ -151,7 +148,7 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		            pointFormat: '<b>{point.percentage:.1f}%</b>'
 		        },
 		        legend: {
-		        	itemWidth: 500,
+		        	itemWidth: 250,
 		            layout: 'vertical',
 		            align: 'right',
 		            verticalAlign: 'middle',

@@ -83,19 +83,19 @@ public class CargaDadosController {
 	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public void carregarNoBanco(int ano, int mes, Path arquivoCSV)
 			throws IOException {
+		AtomicInteger totalSucesso = new AtomicInteger(0);
+		AtomicInteger totalFalha = new AtomicInteger(0);
+		AtomicInteger totalNaoProcessada = new AtomicInteger(0);
+		long qtdeLinhas = Files.lines(arquivoCSV).count() - 1;
 		logger.warning("Iniciando carga para data " + mes + "/" + ano);
 		CargaTransfInfo cargaTransfInfo = cargaTransfInfoService
 				.porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));
 		cargaTransfInfo.setInicio(new Date());
 		cargaTransfInfo.setFim(null);
-		cargaTransfInfoService.atualizar(cargaTransfInfo);
-		AtomicInteger totalSucesso = new AtomicInteger(0);
-		AtomicInteger totalFalha = new AtomicInteger(0);
-		AtomicInteger totalNaoProcessada = new AtomicInteger(0);
-		AtomicInteger totalLinhas = new AtomicInteger();
+		cargaTransfInfo.setQtdeLinhas((int) qtdeLinhas);
+		cargaTransfInfoService.atualizar(cargaTransfInfo);		
 		Files.lines(arquivoCSV, StandardCharsets.UTF_8).skip(1)
 				.forEach(linha -> {
-					totalLinhas.incrementAndGet();
 					try {
 						if (!salvarLinha(ano, mes, linha)) {
 							totalNaoProcessada.incrementAndGet();
@@ -106,7 +106,6 @@ public class CargaDadosController {
 						totalFalha.incrementAndGet();
 						e.printStackTrace();
 					}
-					cargaTransfInfo.setQtdeLinhas(totalLinhas.get());
 					cargaTransfInfo.setQtdeNaoProcessada(totalNaoProcessada.get());
 					cargaTransfInfo.setQtdeFalhas(totalFalha.get());
 					cargaTransfInfo.setQtdeSucesso(totalSucesso.get());

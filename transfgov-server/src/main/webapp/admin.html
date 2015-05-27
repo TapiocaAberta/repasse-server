@@ -83,10 +83,11 @@
 					<tr>
 						<th>Ano</th>
 						<th>Mês</th>
-						<th>Total Linhas</th>
-						<th>Não Processadas</th>
-						<th>Inseridas com Sucesso</th>
-						<th>Erro ao Inserir</th>
+						<th>% Progresso</th>
+						<th># Linhas</th>
+						<th># Não Processadas</th>
+						<th># Sucesso</th>
+						<th># Erro</th>
 						<th>Inicío da Carga</th>
 						<th>Fim</th>
 					</tr>
@@ -95,6 +96,7 @@
 					<tr ng-repeat="c in infoCargasTransf">
 						<td>{{ c.ano }}</td>
 						<td>{{c.mes }}</td>
+						<td>{{((c.qtdeNaoProcessada + c.qtdeSucesso + c.qtdeFalhas) / c.qtdeLinhas ) * 100 | number:1 }}%</td>
 						<td>{{ c.qtdeLinhas }}</td>
 						<td>{{c.qtdeNaoProcessada }}</td>
 						<td>{{ c.qtdeSucesso }}</td>

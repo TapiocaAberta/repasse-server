@@ -9,10 +9,12 @@
 <link rel="icon" href="../../favicon.ico">
 
 <title>TransfGov - Recursos para Desenvolvedores</title>
+
 <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
+	<raml-initializer></raml-initializer>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -36,14 +38,32 @@
 	</div>
 
 	<div class="container">
-		<div class="row"></div>
+		<div class="row">
+			<p>Nossa aplicação utiliza JAX-RS, Java EE 7, Java 8, Wildfly,
+				JPA e outras tecnologias desse mundo. Na view nós usamos bootstrap,
+				angularjs, jquery, highcharts, datatable.</p>
+			<p>
+				<strong><a
+					href="https://github.com/transparenciasjc/transferencias-governo-federal/">Contribua!</a></strong>
+			</p>
+
+			<p>Caso você queria criar uma aplicação cliente nós temos uma API
+				que usa o estilo arquitetural REST. Veja abaixo nossa API Explorer
+				(usando <a href="/transfgov/raml/transfgov.raml">RAML</a>):
+		</div>
+
+
+		<div class="row">
+			<div class="embed-responsive embed-responsive-4by3">
+				<iframe src="api-explorer;index.html?raml=/transfgov/raml/transfgov.raml"></iframe>
+			</div>
+		</div>
 		<hr>
 		<footer>
 			<p>TransfGov 2014</p>
 		</footer>
 	</div>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

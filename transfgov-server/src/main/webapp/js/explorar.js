@@ -101,11 +101,13 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var ano = $scope.anoSelecionado.ano;
 		var id = $scope.municipioSelecionado.id;
 		var agreg = $scope.agregacaoSelecionada;
+		$scope.anoBusca = ano;
+		$scope.municipioBusca = $scope.municipioSelecionado;
 		var uriTransfAno = "rest/agregacao/ANO/" + ano + "/" + agreg + "/municipio/" + id;
 		$http.get(uriTransfAno).success(criaGraficoAnoArea);
 	}
 	
-	$scope.carregaDadosMes = function() {
+	$scope.carregaDadosMes = function() {		
 		var ano = $scope.anoSelecionado.ano;
 		var mes = $scope.mesSelecionado;
 		var id = $scope.municipioSelecionado.id;
@@ -119,6 +121,7 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 	}
 	
 	$scope.carregaGraficosAgregacao = function() {		
+		if(!$scope.mesSelecionado) return;
 		var a = $scope.agregacaoSelecionada;
 		var ano = $scope.anoSelecionado.ano;
 		var mes = $scope.mesSelecionado;

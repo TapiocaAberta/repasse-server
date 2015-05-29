@@ -41,8 +41,8 @@ public class TransferenciaResourceImpl implements TransferenciaResource {
 		ResponseBuilder resposta = Response.ok();		
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);		
 		long totalResultados = transferenciaService.contaPorAnoMesMunicipio(ano, mes, municipio);
-		UriBuilder urlBase = uriInfo.getBaseUriBuilder().path(TransferenciaResource.class).path(TransferenciaResource.class, "porAnoMesMunicipio");	
-		JaxrsUtils.constroiLinksNavegacao(uriInfo, urlBase, totalResultados, pg, ano, mes, municipioId).stream().forEach(l -> resposta.header("Link", l));
+		UriBuilder urlBase = uriInfo.getBaseUriBuilder().path(TransferenciaResource.class).path(TransferenciaResource.class, "porAnoMesMunicipio");		
+		JaxrsUtils.constroiLinksNavegacao(uriInfo, urlBase, totalResultados, pg, ano, mes, municipioId).stream().forEach(resposta::links);
 		List<Transferencia> resultado = transferenciaService.buscarPorAnoMesMunicipioPaginado(ano, mes, municipio, JaxrsUtils.TOTAL_POR_PAGINA, pg);
 		JaxrsUtils.lanca404SeVazio(resultado);
 		resposta.entity(resultado);

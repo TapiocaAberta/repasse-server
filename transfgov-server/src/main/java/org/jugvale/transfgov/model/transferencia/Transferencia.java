@@ -22,6 +22,7 @@ import org.jugvale.transfgov.model.base.Municipio;
 @NamedQueries({
 		@NamedQuery(name = "Transferencia.porAnoMesMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio"),
 		@NamedQuery(name = "Transferencia.quantidadePorMesEAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "Transferencia.quantidadeAnoMesMunicipio", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.quantidadePorAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.porAnoMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio"),
 		@NamedQuery(name = "Transferencia.porAnoMesEstado", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio.estado = :estado"),

@@ -59,11 +59,7 @@ public class TransferenciaService extends Service<Transferencia> {
 	}	
 
 	public List<Transferencia> buscarPorAnoMesMunicipio(int ano, int mes, Municipio municipio) {
-		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesMunicipio", Transferencia.class);
-		buscaTransferencia.setParameter("ano", ano);
-		buscaTransferencia.setParameter("mes", mes);
-		buscaTransferencia.setParameter("municipio", municipio);
-		return buscaTransferencia.getResultList();
+		return queryPorAnoMesMunicipio(ano, mes, municipio).getResultList();
 	}
 	
 	public List<Transferencia> buscarPorAnoMunicipio(int ano, Municipio municipio) {
@@ -98,5 +94,29 @@ public class TransferenciaService extends Service<Transferencia> {
 		TypedQuery<Integer> buscaMeses = em.createNamedQuery("Transferencia.mesesPorAno", Integer.class);
 		buscaMeses.setParameter("ano", ano);
 		return buscaMeses.getResultList();
+	}
+
+	public List<Transferencia> buscarPorAnoMesMunicipioPaginado(int ano,
+			int mes, Municipio municipio, int totalPorPagina, int pg) {
+		TypedQuery<Transferencia> queryPorAnoMesMunicipio = queryPorAnoMesMunicipio(ano, mes, municipio);
+		queryPorAnoMesMunicipio.setFirstResult(totalPorPagina * pg);
+		queryPorAnoMesMunicipio.setMaxResults(totalPorPagina);
+		return queryPorAnoMesMunicipio.getResultList();
 	}	
+	
+	public long contaPorAnoMesMunicipio(int ano, int mes, Municipio municipio){
+		TypedQuery<Long> buscaTransferencia = em.createNamedQuery("Transferencia.quantidadeAnoMesMunicipio", Long.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);		
+		buscaTransferencia.setParameter("municipio", municipio);
+		return buscaTransferencia.getSingleResult();
+	}
+	
+	private TypedQuery<Transferencia> queryPorAnoMesMunicipio(int ano, int mes, Municipio municipio) {
+		TypedQuery<Transferencia> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesMunicipio", Transferencia.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		buscaTransferencia.setParameter("municipio", municipio);
+		return buscaTransferencia;
+	}
 }

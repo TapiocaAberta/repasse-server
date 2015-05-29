@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 
@@ -39,6 +41,23 @@ public abstract class Service<T> {
 		CriteriaQuery<Object> cq = em.getCriteriaBuilder().createQuery();
 		cq.select(cq.from(tipo));
 		return (List<T>) em.createQuery(cq).getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> todosPaginado(int total, int pg) {
+		CriteriaQuery<Object> cq = em.getCriteriaBuilder().createQuery();
+		cq.select(cq.from(tipo));
+		Query busca = em.createQuery(cq);
+		busca.setFirstResult(pg * total);
+		busca.setMaxResults(total);
+		return (List<T>) busca.getResultList();
+	}	
+
+	public long contaTodos() {
+		CriteriaBuilder qb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+		cq.select(qb.count(cq.from(tipo)));
+		return em.createQuery(cq).getSingleResult();
 	}
 
 	public T buscarPorId(long id) {

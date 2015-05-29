@@ -107,7 +107,10 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		$http.get(uriTransfAno).success(criaGraficoAnoArea);
 	}
 	
-	$scope.carregaDadosMes = function() {		
+	$scope.carregaDadosMes = function() {	
+		if(!$scope.mesSelecionado) {
+			return;
+		}
 		var ano = $scope.anoSelecionado.ano;
 		var mes = $scope.mesSelecionado;
 		var id = $scope.municipioSelecionado.id;
@@ -121,7 +124,6 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 	}
 	
 	$scope.carregaGraficosAgregacao = function() {		
-		if(!$scope.mesSelecionado) return;
 		var a = $scope.agregacaoSelecionada;
 		var ano = $scope.anoSelecionado.ano;
 		var mes = $scope.mesSelecionado;

@@ -13,7 +13,11 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Estado;
 import org.jugvale.transfgov.model.base.Municipio;
@@ -70,6 +74,9 @@ public class CargaDadosController {
 
 	@Inject
 	FavorecidoService favorecidoService;
+	
+	@PersistenceContext
+	private EntityManager em;
 
 	/**
 	 * Irá carregar o arquivo passado no banco de dados. Linha a linha será
@@ -116,7 +123,7 @@ public class CargaDadosController {
 		cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
 		cargaTransfInfoService.atualizar(cargaTransfInfo);
 		logger.warning("Carga para " + mes + "/" + ano + " terminada");
-
+		limpaCacheHibernate();
 	}
 
 	/**
@@ -187,4 +194,11 @@ public class CargaDadosController {
 		transferenciaService.salvar(transferencia);
 		return true;
 	}
+
+	public void limpaCacheHibernate() {
+	    Session s = (Session) em.getDelegate();
+	    SessionFactory sf = s.getSessionFactory();
+	    sf.getCache().evictAllRegions();
+	}
+
 }

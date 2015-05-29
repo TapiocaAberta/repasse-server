@@ -4,10 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,19 +17,19 @@ import org.jugvale.transfgov.model.base.Municipio;
 
 @XmlRootElement
 @Entity
-@Table(name = "transferencia")
+@Table(name = "transferencia", indexes = { @Index(columnList = "tra_ano"),
+		@Index(columnList = "tra_mes") })
 @NamedQueries({
 		@NamedQuery(name = "Transferencia.porAnoMesMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio"),
-		@NamedQuery(name = "Transferencia.quantidadePorMesEAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes"),
-		@NamedQuery(name = "Transferencia.quantidadePorAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano"),
+		@NamedQuery(name = "Transferencia.quantidadePorMesEAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "Transferencia.quantidadePorAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.porAnoMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio"),
 		@NamedQuery(name = "Transferencia.porAnoMesEstado", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio.estado = :estado"),
 		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.subFuncao.area = :area"),
-		@NamedQuery(name = "Transferencia.todosAnos", query = "SELECT DISTINCT t.ano from Transferencia t"),
-		@NamedQuery(name = "Transferencia.mesesPorAno", query = "SELECT DISTINCT t.mes from Transferencia t WHERE t.ano = :ano ORDER BY t.mes"), 
+		@NamedQuery(name = "Transferencia.todosAnos", query = "SELECT DISTINCT t.ano from Transferencia t", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "Transferencia.mesesPorAno", query = "SELECT DISTINCT t.mes from Transferencia t WHERE t.ano = :ano ORDER BY t.mes", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.removePorMesAno", query = "DELETE FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes"),
-		@NamedQuery(name = "Transferencia.porAnoMunicipioAgrupadoPorMes", query = "SELECT t.mes, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio GROUP BY t.mes")
-})
+		@NamedQuery(name = "Transferencia.porAnoMunicipioAgrupadoPorMes", query = "SELECT t.mes, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio GROUP BY t.mes", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }) })
 public class Transferencia {
 
 	@Id

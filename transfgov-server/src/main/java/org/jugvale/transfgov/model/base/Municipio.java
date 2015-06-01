@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 @NamedQueries({
 		@NamedQuery(name = "Municipio.porEstadoNomeSIAFI", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.codigoSIAFI = :siafi AND m.estado = :estado"),
 		@NamedQuery(name = "Municipio.porNomeESigla", query = "SELECT m FROM Municipio m WHERE m.nome = :nome AND m.estado.sigla = :sigla"),
-		@NamedQuery(name = "Municipio.porSigla", query = "SELECT m FROM Municipio m WHERE m.estado.sigla = :sigla") })
+		@NamedQuery(name = "Municipio.porSigla", query = "SELECT m FROM Municipio m WHERE m.estado.sigla = :sigla ORDER BY m.nome") })
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
 public class Municipio {

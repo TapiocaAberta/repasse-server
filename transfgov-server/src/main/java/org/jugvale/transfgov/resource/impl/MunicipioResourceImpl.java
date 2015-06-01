@@ -29,7 +29,7 @@ public class MunicipioResourceImpl implements MunicipioResource {
 		List<Municipio> resultado = municipioService.todosPaginado(JaxrsUtils.TOTAL_POR_PAGINA, pg);
 		JaxrsUtils.lanca404SeVazio(resultado);
 		resposta.entity(resultado);
-		JaxrsUtils.constroiLinksNavegacao(uriInfo, urlBase, totalResultados, pg).stream().forEach(l -> resposta.header("Link", l));
+		JaxrsUtils.constroiLinksNavegacao(uriInfo, urlBase, totalResultados, pg).stream().forEach(resposta::links);
 		return resposta.build();
 	}
 	

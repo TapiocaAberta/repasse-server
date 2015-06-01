@@ -1,4 +1,6 @@
-var appExplorar = angular.module('AppExplorar', [ 'datatables' ]);
+var appExplorar = angular.module('AppExplorar', [ 'datatables' ]).run(function(DTDefaultOptions) {
+    DTDefaultOptions.setDisplayLength(30);
+});
 
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];

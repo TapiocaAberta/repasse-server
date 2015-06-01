@@ -50,7 +50,7 @@
 						<select id="estados" class="form-control"
 							ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
 							ng-options="estado.sigla for estado in estados"
-							ng-disabled="!estados">
+							ng-disabled="!estados || !anoSelecionado">
 						</select>
 					</div>
 				</div>

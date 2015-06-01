@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">TransfGov</a>
+				<a class="navbar-brand" href="./index.html">TransfGov</a>
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="index.html">Página Inicial</a></li>
@@ -98,11 +98,11 @@
 						<td>{{c.mes }}</td>
 						<td>{{((c.qtdeNaoProcessada + c.qtdeSucesso + c.qtdeFalhas) / c.qtdeLinhas ) * 100 | number:1 }}%</td>
 						<td>{{ c.qtdeLinhas }}</td>
-						<td>{{c.qtdeNaoProcessada }}</td>
+						<td>{{ c.qtdeNaoProcessada }}</td>
 						<td>{{ c.qtdeSucesso }}</td>
 						<td>{{ c.qtdeFalhas }}</td>
 						<td>{{ c.inicio }}</td>
-						<td>{{c.fim }}</td>
+						<td>{{ c.fim }}</td>
 					</tr>
 				</tbody>
 			</table>

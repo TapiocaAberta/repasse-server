@@ -105,7 +105,7 @@
 					<label for="meses" class="control-label col-xs-2">Mês</label>
 					<div class="col-xs-4">
 						<select id="meses" class="form-control" ng-model="mesSelecionado"
-							ng-options="mes for mes in anoSelecionado.meses"
+							ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
 							ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
 						</select>
 					</div>

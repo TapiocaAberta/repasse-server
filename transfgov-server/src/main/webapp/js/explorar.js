@@ -1,5 +1,7 @@
 var appExplorar = angular.module('AppExplorar', [ 'datatables' ]);
 
+var prefixoMeses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
 function inicializa($scope, $http) {
 	$('#abasPainel a').click(function(e) {
 		e.preventDefault();
@@ -78,6 +80,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 
 appExplorar.controller('ExplorarController', function($scope, $http) {
 	inicializa($scope, $http);
+	$scope.prefixoMeses = prefixoMeses;
 	$http.get("./rest/ano").success(function(anos) {
 		$scope.anos = anos;
 	});
@@ -114,10 +117,12 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var id = $scope.municipioSelecionado.id;
 		var agreg = $scope.agregacaoSelecionada;
 		$scope.anoBusca = ano;
+		$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 		$scope.municipioBusca = $scope.municipioSelecionado;
 		var uriTransfAno = "rest/agregacao/ANO/" + ano + "/" + agreg
 				+ "/municipio/" + id;
 		$http.get(uriTransfAno).success(criaGraficoAnoArea);
+		$scope.carregaDadosMes();
 	}
 
 	$scope.carregaDadosMes = function() {

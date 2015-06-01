@@ -1,6 +1,7 @@
-var appExplorar = angular.module('AppExplorar', [ 'datatables' ]).run(function(DTDefaultOptions) {
-    DTDefaultOptions.setDisplayLength(30);
-});
+var appExplorar = angular.module('AppExplorar', [ 'datatables' ]).run(
+		function(DTDefaultOptions) {
+			DTDefaultOptions.setDisplayLength(30);
+		});
 
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
@@ -147,10 +148,10 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 			var linkAnterior, linkProxima;
 			headers('Link').split(",").forEach(function(l) {
 				var link = parseLink(l);
-				if(link.rel == 'next') {
+				if (link.rel == 'next') {
 					linkProxima = link;
 				}
-				if(link.rel == 'prev') {
+				if (link.rel == 'prev') {
 					linkAnterior = link;
 				}
 			});
@@ -171,49 +172,35 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		$http.get("./rest/agregacao/" + uriAgregacao).success(
 				function(agregacao) {
 					$scope.dadosAgregados = agregacao.dadosAgregados;
-					var dadosGrafico = new Array();
+					var categorias = new Array();
+					var valores = new Array();
 					for (i in agregacao.dadosAgregados) {
-						dadosGrafico.push({
-							name : i,
-							y : agregacao.dadosAgregados[i]
-						});
+						categorias.push(i);
+						valores.push(agregacao.dadosAgregados[i]);
 					}
-					$('#containerPizzaAgregacao').highcharts({
-						chart : {
-							plotBackgroundColor : null,
-							plotBorderWidth : null,
-							plotShadow : false
-						},
-						title : {
-							text : 'Dados agregados por ' + a
-						},
-						tooltip : {
-							pointFormat : '<b>{point.percentage:.1f}%</b>'
-						},
-						legend : {
-							itemWidth : 250,
-							layout : 'vertical',
-							align : 'right',
-							verticalAlign : 'middle',
-							borderWidth : 0
-						},
-						plotOptions : {
-							pie : {
-								allowPointSelect : true,
-								cursor : 'pointer',
-								dataLabels : {
-									enabled : false,
+					$('#containerGraficoAgregacao').highcharts(
+							{
+								title : {
+									text : 'Dados agregados no mês ' + mes
+											+ ' por ' + a + ''
 								},
-								showInLegend : true
-							}
-						},
-						series : [ {
-							type : 'pie',
-							name : 'Dados por ' + a,
-							data : dadosGrafico
-						} ]
-					});
+								chart : {
+									type : 'bar'
+								},
+								xAxis : {
+									categories : categorias
+								},
+								plotOptions : {
+									series : {
+										allowPointSelect : true
+									}
+								},
+								series : [ {
+									data : valores
+								} ]
+							});
 				});
+
 		$scope.gerandoGraficoAgregacao = false;
 	}
 
@@ -221,12 +208,12 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 
 /*
  * Gambiarra para fazer parse dos links do header...
- * */
-function parseLink(l){
+ */
+function parseLink(l) {
 	var link = {};
 	var fields = l.split(';');
 	link.url = fields[0].replace('<', '').replace('>', '');
-	link.rel = fields[1].replace(' rel="', '').replace('"','');
-	link.title= fields[2].replace(' title="', '').replace('"', '');
+	link.rel = fields[1].replace(' rel="', '').replace('"', '');
+	link.title = fields[2].replace(' title="', '').replace('"', '');
 	return link;
 }

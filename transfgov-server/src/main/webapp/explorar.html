@@ -49,7 +49,8 @@
 					<div class="col-xs-4">
 						<select id="estados" class="form-control"
 							ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
-							ng-options="estado.sigla for estado in estados" ng-disabled="!estados">
+							ng-options="estado.sigla for estado in estados"
+							ng-disabled="!estados">
 						</select>
 					</div>
 				</div>
@@ -99,7 +100,7 @@
 		</div>
 		<hr />
 		<div class="row">
-		<h3>Dados por mês</h3>
+			<h3>Dados por mês</h3>
 			<form class="form-horizontal">
 				<div class="form-group">
 					<label for="meses" class="control-label col-xs-2">Mês</label>
@@ -138,6 +139,19 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-lg-2">
+				<a href="javascript:void(0)" ng-show="linkAnterior"
+					ng-click="carregaTransferencias(linkAnterior.url)"><span
+					class="glyphicon glyphicon-backward"></span> {{linkAnterior.title}}</a><br />
+			</div>
+			<div class="col-lg-2">
+				<a href="javascript:void(0)" ng-show="linkProxima"
+					ng-click="carregaTransferencias(linkProxima.url)">{{linkProxima.title}}<span
+					class="glyphicon glyphicon-forward" style="margin-left: 5px"></span></a>
+			</div>
+		</div>
+		<div class="row">
+
 			<table id="tblTransferencias" datatable="ng" class="row-border hover">
 				<thead>
 					<tr>

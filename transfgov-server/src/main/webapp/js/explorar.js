@@ -1,6 +1,7 @@
 var appExplorar = angular.module('AppExplorar', [ 'datatables' ]);
 
-var prefixoMeses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
+		"Set", "Out", "Nov", "Dez" ];
 
 function inicializa($scope, $http) {
 	$('#abasPainel a').click(function(e) {
@@ -109,7 +110,7 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 
 	$scope.listenerAgregacao = function() {
 		$scope.carregaAgregacaoAno();
-		$scope.carregaDadosMes();
+		$scope.carregaGraficosAgregacao();
 	}
 
 	$scope.carregaAgregacaoAno = function() {
@@ -134,11 +135,25 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var id = $scope.municipioSelecionado.id;
 		var uriTransfMes = "rest/transferencia/" + ano + "/" + mes
 				+ "/municipio/" + id;
-		var uriTransfAno = "rest/agregacao/ANO/" + ano + "/AREA/municipio/"
-				+ id;
-		$http.get(uriTransfMes).success(function(transferencias) {
-			$scope.transferenciasMes = transferencias;
-			$scope.carregaGraficosAgregacao();
+		$scope.carregaTransferencias(uriTransfMes);
+		$scope.carregaGraficosAgregacao();
+	}
+
+	$scope.carregaTransferencias = function(url) {
+		$http.get(url).success(function(data, status, headers, config) {
+			$scope.transferenciasMes = data;
+			var linkAnterior, linkProxima;
+			headers('Link').split(",").forEach(function(l) {
+				var link = parseLink(l);
+				if(link.rel == 'next') {
+					linkProxima = link;
+				}
+				if(link.rel == 'prev') {
+					linkAnterior = link;
+				}
+			});
+			$scope.linkAnterior = linkAnterior;
+			$scope.linkProxima = linkProxima;
 		});
 	}
 
@@ -201,3 +216,15 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 	}
 
 });
+
+/*
+ * Gambiarra para fazer parse dos links do header...
+ * */
+function parseLink(l){
+	var link = {};
+	var fields = l.split(';');
+	link.url = fields[0].replace('<', '').replace('>', '');
+	link.rel = fields[1].replace(' rel="', '').replace('"','');
+	link.title= fields[2].replace(' title="', '').replace('"', '');
+	return link;
+}

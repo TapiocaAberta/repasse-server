@@ -1,4 +1,10 @@
-var appExplorar = angular.module('AppExplorar', [ 'datatables' ]);
+var appExplorar = angular.module('AppExplorar', [ 'datatables' ]).run(
+		function(DTDefaultOptions) {
+			DTDefaultOptions.setDisplayLength(30);
+		});
+
+var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
+		"Set", "Out", "Nov", "Dez" ];
 
 function inicializa($scope, $http) {
 	$('#abasPainel a').click(function(e) {
@@ -78,6 +84,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 
 appExplorar.controller('ExplorarController', function($scope, $http) {
 	inicializa($scope, $http);
+	$scope.prefixoMeses = prefixoMeses;
 	$http.get("./rest/ano").success(function(anos) {
 		$scope.anos = anos;
 	});
@@ -106,7 +113,7 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 
 	$scope.listenerAgregacao = function() {
 		$scope.carregaAgregacaoAno();
-		$scope.carregaDadosMes();
+		$scope.carregaGraficosAgregacao();
 	}
 
 	$scope.carregaAgregacaoAno = function() {
@@ -114,10 +121,12 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var id = $scope.municipioSelecionado.id;
 		var agreg = $scope.agregacaoSelecionada;
 		$scope.anoBusca = ano;
+		$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 		$scope.municipioBusca = $scope.municipioSelecionado;
 		var uriTransfAno = "rest/agregacao/ANO/" + ano + "/" + agreg
 				+ "/municipio/" + id;
 		$http.get(uriTransfAno).success(criaGraficoAnoArea);
+		$scope.carregaDadosMes();
 	}
 
 	$scope.carregaDadosMes = function() {
@@ -129,11 +138,25 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		var id = $scope.municipioSelecionado.id;
 		var uriTransfMes = "rest/transferencia/" + ano + "/" + mes
 				+ "/municipio/" + id;
-		var uriTransfAno = "rest/agregacao/ANO/" + ano + "/AREA/municipio/"
-				+ id;
-		$http.get(uriTransfMes).success(function(transferencias) {
-			$scope.transferenciasMes = transferencias;
-			$scope.carregaGraficosAgregacao();
+		$scope.carregaTransferencias(uriTransfMes);
+		$scope.carregaGraficosAgregacao();
+	}
+
+	$scope.carregaTransferencias = function(url) {
+		$http.get(url).success(function(data, status, headers, config) {
+			$scope.transferenciasMes = data;
+			var linkAnterior, linkProxima;
+			headers('Link').split(",").forEach(function(l) {
+				var link = parseLink(l);
+				if (link.rel == 'next') {
+					linkProxima = link;
+				}
+				if (link.rel == 'prev') {
+					linkAnterior = link;
+				}
+			});
+			$scope.linkAnterior = linkAnterior;
+			$scope.linkProxima = linkProxima;
 		});
 	}
 
@@ -149,50 +172,48 @@ appExplorar.controller('ExplorarController', function($scope, $http) {
 		$http.get("./rest/agregacao/" + uriAgregacao).success(
 				function(agregacao) {
 					$scope.dadosAgregados = agregacao.dadosAgregados;
-					var dadosGrafico = new Array();
+					var categorias = new Array();
+					var valores = new Array();
 					for (i in agregacao.dadosAgregados) {
-						dadosGrafico.push({
-							name : i,
-							y : agregacao.dadosAgregados[i]
-						});
+						categorias.push(i);
+						valores.push(agregacao.dadosAgregados[i]);
 					}
-					$('#containerPizzaAgregacao').highcharts({
-						chart : {
-							plotBackgroundColor : null,
-							plotBorderWidth : null,
-							plotShadow : false
-						},
-						title : {
-							text : 'Dados agregados por ' + a
-						},
-						tooltip : {
-							pointFormat : '<b>{point.percentage:.1f}%</b>'
-						},
-						legend : {
-							itemWidth : 250,
-							layout : 'vertical',
-							align : 'right',
-							verticalAlign : 'middle',
-							borderWidth : 0
-						},
-						plotOptions : {
-							pie : {
-								allowPointSelect : true,
-								cursor : 'pointer',
-								dataLabels : {
-									enabled : false,
+					$('#containerGraficoAgregacao').highcharts(
+							{
+								title : {
+									text : 'Dados agregados no mês ' + mes
+											+ ' por ' + a + ''
 								},
-								showInLegend : true
-							}
-						},
-						series : [ {
-							type : 'pie',
-							name : 'Dados por ' + a,
-							data : dadosGrafico
-						} ]
-					});
+								chart : {
+									type : 'bar'
+								},
+								xAxis : {
+									categories : categorias
+								},
+								plotOptions : {
+									series : {
+										allowPointSelect : true
+									}
+								},
+								series : [ {
+									data : valores
+								} ]
+							});
 				});
+
 		$scope.gerandoGraficoAgregacao = false;
 	}
 
 });
+
+/*
+ * Gambiarra para fazer parse dos links do header...
+ */
+function parseLink(l) {
+	var link = {};
+	var fields = l.split(';');
+	link.url = fields[0].replace('<', '').replace('>', '');
+	link.rel = fields[1].replace(' rel="', '').replace('"', '');
+	link.title = fields[2].replace(' title="', '').replace('"', '');
+	return link;
+}

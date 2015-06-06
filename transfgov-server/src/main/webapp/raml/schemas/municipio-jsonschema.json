@@ -12,6 +12,14 @@
         }
       ]
     } ,
+    "nome" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
+    "regiao" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
     "latitute" : {
       "type" : "string" ,
       "required" : false
@@ -25,14 +33,6 @@
       "required" : false
     } ,
     "estado" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
-    "nome" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
-    "regiao" : {
       "type" : "string" ,
       "required" : false
     }

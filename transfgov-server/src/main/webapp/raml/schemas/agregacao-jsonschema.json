@@ -3,10 +3,6 @@
   "$schema" : "http://json-schema.org/draft-03/schema" ,
   "type" : "object" ,
   "properties" : {
-    "dadosagregados" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
     "ano" : {
       "type" : "array" ,
       "required" : false ,
@@ -17,6 +13,10 @@
       ]
     } ,
     "mes" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
+    "dadosagregados" : {
       "type" : "string" ,
       "required" : false
     } ,

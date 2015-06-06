@@ -1,6 +1,6 @@
 #%RAML 0.8
 title: transfgov-server
-baseUri: http://localhost:8080/transfgov/rest
+baseUri: http://example.com
 schemas:
   - agregacao: !include schemas/agregacao.xsd
   - agregacao-jsonschema: !include schemas/agregacao-jsonschema.json
@@ -235,14 +235,24 @@ schemas:
           200: 
             body: 
               application/json: 
-/municipio/{sigla}/{nome}: 
+/municipio: 
   get: 
+    queryParameters: 
+      pg: 
+        type: integer
+        required: true
     responses: 
       200: 
         body: 
           application/json: 
-            schema: municipio-jsonschema
-            example: !include examples/municipio.json
+  /{sigla}/{nome}: 
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: municipio-jsonschema
+              example: !include examples/municipio.json
 /transferencia/{ano}/{mes}: 
   uriParameters: 
     ano: 
@@ -262,6 +272,10 @@ schemas:
         type: integer
         required: true
     get: 
+      queryParameters: 
+        pg: 
+          type: integer
+          required: true
       responses: 
         200: 
           body: 

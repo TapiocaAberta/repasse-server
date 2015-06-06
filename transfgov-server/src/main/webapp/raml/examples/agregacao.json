@@ -1,5 +1,4 @@
 {
-  "dadosagregados" : "some value" ,
   "ano" : [
     "some value" ,
     "some value" ,
@@ -10,6 +9,7 @@
     "some value"
   ] ,
   "mes" : "some value" ,
+  "dadosagregados" : "some value" ,
   "municipio" : "some value" ,
   "tipoagregacao" : "some value" ,
   "estado" : "some value"

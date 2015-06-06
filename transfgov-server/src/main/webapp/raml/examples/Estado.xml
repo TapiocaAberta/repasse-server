@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <estado>
     <id>some value</id>
-    <sigla>some value</sigla>
     <nome>some value</nome>
     <regiao>some value</regiao>
+    <sigla>some value</sigla>
     <id>some value</id>
     <nome>some value</nome>
     <sigla>some value</sigla>

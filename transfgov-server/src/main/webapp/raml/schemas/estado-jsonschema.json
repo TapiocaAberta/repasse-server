@@ -12,15 +12,15 @@
         }
       ]
     } ,
-    "sigla" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
     "nome" : {
       "type" : "string" ,
       "required" : false
     } ,
     "regiao" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
+    "sigla" : {
       "type" : "string" ,
       "required" : false
     }

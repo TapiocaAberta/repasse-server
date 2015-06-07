@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,6 +20,9 @@ import org.jugvale.transfgov.model.base.Area;
 @XmlRootElement
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
+@NamedQueries({
+	@NamedQuery(name = "SubFuncao.porArea", query = "SELECT s from SubFuncao s WHERE s.area = :area")
+})
 public class SubFuncao {
 
 	@Id

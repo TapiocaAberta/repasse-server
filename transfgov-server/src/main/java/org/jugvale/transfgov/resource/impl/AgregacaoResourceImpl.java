@@ -3,9 +3,11 @@ package org.jugvale.transfgov.resource.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.core.PathSegment;
 
 import org.jugvale.transfgov.agregacao.AgregacaoController;
 import org.jugvale.transfgov.model.agregacao.Agregacao;
@@ -88,6 +90,21 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 			List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
 			Agregacao agregacao = agregacaoController.agregaPorTipo(ano, mes, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
 			agregacoes.add(agregacao);
+		}
+		return agregacoes;
+	}
+
+	@Override
+	public List<Agregacao> agrupaPorAnoArea(TipoAgregacao tipoAgregacao,
+			int ano, PathSegment pathSegment) {
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
+		List<Agregacao> agregacoes = new ArrayList<>();
+		Set<String> ids = pathSegment.getMatrixParameters().keySet();
+		for (String id : ids) {
+			long idMunicipio = Long.parseLong(id);
+			Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(idMunicipio), Municipio.class);
+			List<Transferencia> transferencias = transferenciaService.buscarPorAnoMunicipio(ano, municipio);
+			agregacoes.add( agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias));
 		}
 		return agregacoes;
 	}

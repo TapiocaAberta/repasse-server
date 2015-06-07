@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.PathSegment;
 
 import org.jugvale.transfgov.model.agregacao.Agregacao;
 import org.jugvale.transfgov.model.agregacao.TipoAgregacao;
@@ -53,6 +54,10 @@ public interface AgregacaoResource {
 	@Path("/ANO/{ano}/{tipoAgregacao}/municipio/{municipioId}/")
 	@JsonView(MunicipioConcisoView.class)
 	public List<Agregacao> agrupaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
-
+	
+	@GET
+	@Path("/{tipoAgregacao}/{ano}/municipios/{municipioIds}")	
+	@JsonView(MunicipioConcisoView.class)
+	public List<Agregacao> agrupaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
 
 }

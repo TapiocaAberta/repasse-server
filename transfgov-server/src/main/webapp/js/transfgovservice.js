@@ -16,16 +16,24 @@ var URL_ANOS = URL_BASE + "ano";
 var URL_ESTADOS = URL_BASE + "estado";
 var URL_AGREGACAO = URL_BASE + "agregacao";
 var URL_AREAS = URL_BASE + "area";
-var URL_TRANF_POR_MES_MUN = URL_BASE + "transferencia/" + ANO + "/" + MES + "/municipio/" + MUNICIPIO;
-var URL_AGREGA_ANO_MES_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/" + MES + "/municipio/" + MUNICIPIO;
-var URL_AGREGA_ANO_MUN = URL_AGREGACAO + "/ANO/" + ANO + "/" + AGREGACAO + "/municipio/" +  MUNICIPIO;
+var URL_TRANF_POR_MES_MUN = URL_BASE + "transferencia/" + ANO + "/" + MES
+		+ "/municipio/" + MUNICIPIO;
+var URL_AGREGA_ANO_MES_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/"
+		+ MES + "/municipio/" + MUNICIPIO;
+var URL_AGREGA_ANO_MUN = URL_AGREGACAO + "/ANO/" + ANO + "/" + AGREGACAO
+		+ "/municipio/" + MUNICIPIO;
 var URL_MUN_POR_ESTADO = URL_ESTADOS + "/" + SIGLA + "/municipios";
 
-var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
-             		"Set", "Out", "Nov", "Dez" ];
+var URL_ANO_AGREGA_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municipio/" + MUNICIPIO;
 
+var URL_ANO_AGREGA_MUNICIPIOS = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municipios/ids;";
+
+var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
+		"Set", "Out", "Nov", "Dez" ];
+
+// TODO: matar o http e usar resteasy
 var TransfGovService = function($http) {
-	
+
 	this.anos = function(sucesso) {
 		$http.get(URL_ANOS).success(sucesso);
 	};
@@ -43,51 +51,70 @@ var TransfGovService = function($http) {
 			sucesso(estados);
 		});
 	};
-	
-	
+
+	this.areas = function(sucesso) {
+		$http.get(URL_AREAS).success(sucesso);
+	}
+
 	this.municipiosPorEstado = function(sigla, sucesso) {
 		var url = URL_MUN_POR_ESTADO.replace(SIGLA, sigla);
 		$http.get(url).success(sucesso);
 	};
-	
+
 	this.transfPorAnoMesMunicipio = function(ano, mes, id, sucesso) {
-		var url = URL_TRANF_POR_MES_MUN
-					.replace(ANO, ano).replace(MES, mes).replace(MUNICIPIO, id);
+		var url = URL_TRANF_POR_MES_MUN.replace(ANO, ano).replace(MES, mes)
+				.replace(MUNICIPIO, id);
 		this.dadosPaginados(url, sucesso);
-    };
+	};
+
+	this.agregacaoPorAnoMesMun = function(agregacao, ano, mes, municipio,
+			sucesso) {
+		var url = URL_AGREGA_ANO_MES_MUN.replace(AGREGACAO, agregacao).replace(
+				ANO, ano).replace(MES, mes).replace(MUNICIPIO, municipio);
+		$http.get(url).success(sucesso);
+	};
+
+	this.agregacaoPorAnoMun = function(agregacao, ano, municipio, sucesso) {
+		var url = URL_AGREGA_ANO_MUN.replace(AGREGACAO, agregacao).replace(ANO,
+				ano).replace(MUNICIPIO, municipio);
+		$http.get(url).success(sucesso);
+	};
+
+	this.anoAgregadoAreaMun = function(agregacao, ano, municipio, sucesso) {
+		var url = URL_ANO_AGREGA_MUN.replace(AGREGACAO, agregacao).replace(ANO,
+				ano).replace(MUNICIPIO, municipio);
+		$http.get(url).success(sucesso);
+	};
 	
-    this.agregacaoPorAnoMesMun = function(agregacao, ano, mes, municipio, sucesso) {
-    	var url = URL_AGREGA_ANO_MES_MUN.replace(AGREGACAO, agregacao)
-    			.replace(ANO, ano).replace(MES, mes).replace(MUNICIPIO, municipio);
-    	$http.get(url).success(sucesso);
-    };
-    
-    this.agregacaoPorAnoMun = function(agregacao, ano, municipio, sucesso) {
-    	var url = URL_AGREGA_ANO_MUN.replace(AGREGACAO, agregacao)
-    			.replace(ANO, ano).replace(MUNICIPIO, municipio);
-    	$http.get(url).success(sucesso);
-    };    
-    
+	this.anoAgregadoAreaVariosMun = function(agregacao, ano, municipiosIds, sucesso) {
+		var url = URL_ANO_AGREGA_MUNICIPIOS.replace(AGREGACAO, agregacao).replace(ANO,
+				ano) + municipiosIds.join(";");
+		$http.get(url).success(sucesso);
+	};
+	
+	
 	this.dadosPaginados = function(urlTransfPaginada, sucesso) {
-		$http.get(urlTransfPaginada).success(function(dados, status, headers, config) {
-			var linkAnterior, linkProxima;
-			headers('Link').split(",").forEach(function(l) {
-				var link = parseLink(l);
-				if (link.rel == 'next') {
-					linkProxima = link;
-				}
-				if (link.rel == 'prev') {
-					linkAnterior = link;
-				}
-			});
-			sucesso(dados, linkAnterior, linkProxima);
-		});	
+		$http.get(urlTransfPaginada).success(
+				function(dados, status, headers, config) {
+					var linkAnterior, linkProxima;
+					headers('Link').split(",").forEach(function(l) {
+						var link = parseLink(l);
+						if (link.rel == 'next') {
+							linkProxima = link;
+						}
+						if (link.rel == 'prev') {
+							linkAnterior = link;
+						}
+					});
+					sucesso(dados, linkAnterior, linkProxima);
+				});
 	}
 
 	this.agregacoes = function(sucesso) {
 		$http.get(URL_AGREGACAO).success(
 				function(agregacoes) {
-					var agregacoesFiltradas = $.grep(agregacoes, function(agregacao) {
+					var agregacoesFiltradas = $.grep(agregacoes, function(
+							agregacao) {
 						return agregacao != 'MUNICIPIO' && agregacao != 'MES'
 								&& agregacao != 'ANO';
 					});

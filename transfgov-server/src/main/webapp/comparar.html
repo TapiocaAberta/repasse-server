@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TransfGov - Página Inicial</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/jquery-ui.min.css" rel="stylesheet">
+<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+<link href="css/dataTables.jqueryui.css" rel="stylesheet">
+</head>
+
+<body ng-controller="CompararController" ng-app="TransfGovApp">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./index.html">TransfGov</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="./index.html">Página Inicial</a></li>
+				<li><a href="explorar.html">Explorar</a></li>
+				<li class="active"><a href="comparar.html">Comparar</a></li>
+				<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
+				<li><a href="sobre.html">Sobre</a></li>
+				<li><a href="admin.html">Administração</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="jumbotron">
+		<div class="container">
+			<h1>TransfGov Comparar</h1>
+			<p>Compare os dados de sua cidade com outras e veja a eficácia
+				das transferências do governo federal.</p>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<h3>Selecione municípios para comparar:</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="estados" class="control-label col-xs-2">Estado</label>
+					<div class="col-xs-4">
+						<select id="estados" class="form-control"
+							ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
+							ng-options="estado.sigla for estado in estados"
+							ng-disabled="!estados">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="cidades" class="control-label col-xs-2">Município</label>
+					<div class="col-xs-4">
+						<select id="municipios" class="form-control"
+							ng-model="municipioSelecionado" ng-disabled="!estadoSelecionado"
+							ng-options="municipio.nome for municipio in municipios">
+						</select>
+					</div>
+					<div class="col-xs-4">
+						<button type="submit" class="btn btn-primary"
+							ng-click="addMunicipio()" ng-disabled="!municipioSelecionado">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row" ng-show="municipiosSelecionados.length">
+			<h3>Selecione um ano:</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="anos" class="control-label col-xs-2">Ano</label>
+					<div class="col-xs-4">
+						<select id="anos" class="form-control" ng-model="anoSelecionado"
+							ng-options="ano.ano for ano in anos" ng-disabled="!anos"
+							ng-change="atualizaGraficos()">
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<span class="label label-success"
+				ng-repeat="m in municipiosSelecionados" style="margin-left: 10px">
+				{{ m.nome }} - {{ m.estado.sigla }} <span
+				class="glyphicon glyphicon-minus-sign" style="cursor: pointer"
+				ng-click="removerMunicipio($index)"></span>
+			</span>
+		</div>
+	</div>
+	<div class="container" ng-show="municipiosSelecionados.length && anoSelecionado">
+
+		<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
+		<div class="row">
+			<div id="graficoComparacaoAreas"></div>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<footer>
+			<p>TransfGov 2015</p>
+		</footer>
+	</div>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.jqueryui.js"></script>
+	<script src="js/angular.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/angular-datatables.min.js"></script>
+	<script src="js/highcharts.js" type="text/javascript"></script>
+	<script src="js/transfgovservice.js"></script>
+	<script src="js/comparar.js"></script>
+</body>
+</html>

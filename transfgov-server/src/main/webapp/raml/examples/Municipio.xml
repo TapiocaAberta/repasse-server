@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <municipio>
-    <id>some value</id>
     <nome>some value</nome>
     <regiao>some value</regiao>
     <latitute>some value</latitute>
     <longitude>some value</longitude>
-    <codigosiafi>some value</codigosiafi>
     <estado>some value</estado>
+    <codigosiafi>some value</codigosiafi>
+    <id>some value</id>
     <id>some value</id>
     <codigosiafi>some value</codigosiafi>
     <nome>some value</nome>

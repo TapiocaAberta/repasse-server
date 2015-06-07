@@ -61,7 +61,11 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 			 $.each(agregacoes, function(i, agreg){
 				 	var valoresPorArea = new Array();
 				 	$.each($scope.areas, function(i, a){
-				 		valoresPorArea.push(agreg.dadosAgregados[a.nome]);
+				 		var valor = agreg.dadosAgregados[a.nome];
+				 		if(!valor) {
+				 			valor = 0;
+				 		}
+				 		valoresPorArea.push(valor);
 				 	});
 				 	series.push({
 				 		name: agreg.municipio.nome + " - " + agreg.estado.sigla,

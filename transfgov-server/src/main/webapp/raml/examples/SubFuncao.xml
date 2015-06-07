@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <subfuncao>
-    <id>some value</id>
-    <area>some value</area>
     <nome>some value</nome>
+    <area>some value</area>
+    <id>some value</id>
     <id>some value</id>
     <nome>some value</nome>
     <area>some value</area>

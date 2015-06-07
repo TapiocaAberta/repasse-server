@@ -57,6 +57,16 @@ schemas:
             application/json: 
               schema: agregacao-jsonschema
               example: !include examples/agregacao.json
+  /{tipoAgregacao}/{ano}/municipios/{municipioIds}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
   /ANO/{ano}/municipio/{municipioId}: 
     uriParameters: 
       ano: 
@@ -161,6 +171,12 @@ schemas:
             application/json: 
               schema: area-jsonschema
               example: !include examples/area.json
+    /sub-funcao: 
+      get: 
+        responses: 
+          200: 
+            body: 
+              application/json: 
 /sub-funcao: 
   get: 
     responses: 

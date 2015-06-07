@@ -178,7 +178,6 @@ appExplorar.controller('ExplorarController',
 										} ]
 									});
 						});
-
 				$scope.gerandoGraficoAgregacao = false;
 			}
 		});

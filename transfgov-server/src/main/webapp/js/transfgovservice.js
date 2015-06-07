@@ -15,10 +15,14 @@ var URL_BASE = "/transfgov/rest/";
 var URL_ANOS = URL_BASE + "ano";
 var URL_ESTADOS = URL_BASE + "estado";
 var URL_AGREGACAO = URL_BASE + "agregacao";
+var URL_AREAS = URL_BASE + "area";
 var URL_TRANF_POR_MES_MUN = URL_BASE + "transferencia/" + ANO + "/" + MES + "/municipio/" + MUNICIPIO;
 var URL_AGREGA_ANO_MES_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/" + MES + "/municipio/" + MUNICIPIO;
 var URL_AGREGA_ANO_MUN = URL_AGREGACAO + "/ANO/" + ANO + "/" + AGREGACAO + "/municipio/" +  MUNICIPIO;
 var URL_MUN_POR_ESTADO = URL_ESTADOS + "/" + SIGLA + "/municipios";
+
+var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
+             		"Set", "Out", "Nov", "Dez" ];
 
 var TransfGovService = function($http) {
 	
@@ -39,6 +43,7 @@ var TransfGovService = function($http) {
 			sucesso(estados);
 		});
 	};
+	
 	
 	this.municipiosPorEstado = function(sigla, sucesso) {
 		var url = URL_MUN_POR_ESTADO.replace(SIGLA, sigla);

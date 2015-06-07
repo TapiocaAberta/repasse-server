@@ -110,7 +110,8 @@ appExplorar.controller('ExplorarController',
 				$scope.anoBusca = ano;
 				$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 				$scope.municipioBusca = $scope.municipioSelecionado;
-				transfGovService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
+				transfGovService.agregacaoPorAnoMun(agreg, ano, id,
+						criaGraficoAnoArea);
 				$scope.carregaDadosMes();
 			}
 
@@ -152,15 +153,19 @@ appExplorar.controller('ExplorarController',
 							$scope.dadosAgregados = agregacao.dadosAgregados;
 							var categorias = new Array();
 							var valores = new Array();
+							var dados = new Array();
 							for (i in agregacao.dadosAgregados) {
 								categorias.push(i);
 								valores.push(agregacao.dadosAgregados[i]);
+								dados.push({
+									name: i,
+									y:	agregacao.dadosAgregados[i]
+								});
 							}
 							$('#containerGraficoAgregacao').highcharts(
 									{
 										title : {
-											text : 'Dados agregados no mês '
-													+ mes + ' por ' + a + ''
+											text : ''
 										},
 										chart : {
 											type : 'bar'
@@ -177,8 +182,24 @@ appExplorar.controller('ExplorarController',
 											data : valores
 										} ]
 									});
+							$('#containerGraficoAgregacaoPizza').highcharts(
+									{
+										title : {
+											text : ''
+										},
+										chart : {
+											type : 'pie',
+								            options3d: {
+								                enabled: true
+								            }
+										},
+										series : [ {
+											type: 'pie',
+											data : dados
+										} ]
+									});							
 						});
-
+				
 				$scope.gerandoGraficoAgregacao = false;
 			}
 		});

@@ -18,7 +18,7 @@
 			<ul class="nav navbar-nav">
 				<li><a href="./index.html">Página Inicial</a></li>
 				<li class="active"><a href="explorar.html">Explorar</a></li>
-				<li><a href="comparar.html">Comparar</a></li>				
+				<li><a href="comparar.html">Comparar</a></li>
 				<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
 				<li><a href="sobre.html">Sobre</a></li>
 				<li><a href="admin.html">Administração</a></li>
@@ -104,19 +104,21 @@
 			<h3>Dados por mês</h3>
 			<form class="form-horizontal">
 				<div class="form-group">
-					<label for="meses" class="control-label col-xs-2">Mês</label>
-					<div class="col-xs-4">
+					<div class="col-md-1"></div>
+					<label for="meses" class="control-label col-md-2">Mês</label>
+					<div class="col-md-4">
 						<select id="meses" class="form-control" ng-model="mesSelecionado"
 							ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
 							ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
 						</select>
 					</div>
+					<div class="col-md-5"></div>
 				</div>
 			</form>
 		</div>
 		<div class="row">
-			<div id="containerGraficoAgregacao"
-				style="min-width: 310px; max-height: 800px; margin: 0 auto"></div>
+			<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
+			<div class="col-md-6" id="containerGraficoAgregacao"></div>
 		</div>
 		<div class="row">
 			<table id="tblAgregacao" class="table"

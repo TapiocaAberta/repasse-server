@@ -12,6 +12,10 @@
         }
       ]
     } ,
+    "estado" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
     "nome" : {
       "type" : "string" ,
       "required" : false
@@ -29,10 +33,6 @@
       "required" : false
     } ,
     "codigosiafi" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
-    "estado" : {
       "type" : "string" ,
       "required" : false
     }

@@ -88,11 +88,29 @@
 			</span>
 		</div>
 	</div>
-	<div class="container" ng-show="municipiosSelecionados.length && anoSelecionado">
+	<div class="container"
+		ng-show="municipiosSelecionados.length && anoSelecionado">
 
 		<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
 		<div class="row">
 			<div id="graficoComparacaoAreas"></div>
+		</div>
+		<div class="row">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="areas" class="control-label col-xs-3">Selecione
+						uma área para mais detalhes</label>
+					<div class="col-xs-3">
+						<select id="areas" class="form-control"
+							ng-change="atualizaGraficoSubArea()" ng-model="areaSelecionada"
+							ng-options="area.nome for area in areas">
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div id="graficoComparacaoSubFuncao"></div>
 		</div>
 	</div>
 	<div class="container">

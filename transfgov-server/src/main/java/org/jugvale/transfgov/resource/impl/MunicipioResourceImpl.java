@@ -9,8 +9,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.resource.MunicipioResource;
+import org.jugvale.transfgov.service.impl.DadosMunicipioService;
 import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.utils.JaxrsUtils;
 
@@ -18,6 +20,9 @@ public class MunicipioResourceImpl implements MunicipioResource {
 
 	@Inject
 	MunicipioService municipioService;
+	
+	@Inject 
+	DadosMunicipioService dadosMunicipioService;
 	
 	@Context
 	UriInfo uriInfo;
@@ -35,6 +40,12 @@ public class MunicipioResourceImpl implements MunicipioResource {
 	
 	public Municipio porNomeEEstado(String sigla, String nome) {
 		return municipioService.buscaPorNomeEEstado(sigla, nome);		
+	}
+
+	@Override
+	public List<DadosMunicipio> dadosMunicipio(String sigla, String nome) {
+		Municipio m = porNomeEEstado(sigla, nome);
+		return dadosMunicipioService.buscaMunicipio(m);
 	}
 
 }

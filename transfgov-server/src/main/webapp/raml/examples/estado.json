@@ -1,12 +1,12 @@
 {
+  "nome" : "some value" ,
+  "sigla" : "some value" ,
+  "regiao" : "some value" ,
   "id" : [
     "some value" ,
     "some value" ,
     "some value" ,
     "some value" ,
     "some value"
-  ] ,
-  "nome" : "some value" ,
-  "regiao" : "some value" ,
-  "sigla" : "some value"
+  ]
 }

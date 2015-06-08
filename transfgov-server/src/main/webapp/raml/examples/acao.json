@@ -1,12 +1,12 @@
 {
+  "codigo" : "some value" ,
+  "nomepopular" : "some value" ,
+  "nome" : "some value" ,
   "id" : [
     "some value" ,
     "some value" ,
     "some value" ,
     "some value" ,
     "some value"
-  ] ,
-  "nome" : "some value" ,
-  "nomepopular" : "some value" ,
-  "codigo" : "some value"
+  ]
 }

@@ -95,7 +95,7 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 			        tooltip: {
 			            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 			            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-			                '<td style="padding:0"><b>R$ {point.y} </b></td></tr>',
+			                '<td style="padding:0"><b>R$ {point.y:.2f} </b></td></tr>',
 			            footerFormat: '</table>',
 			            shared: true,
 			            useHTML: true
@@ -123,7 +123,11 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 					 	var valoresPorSubFuncao = new Array();
 					 	$.each(subFuncoes, function(i, a){
 					 		var chave = a.area.nome + ": " + a.nome;
-					 		valoresPorSubFuncao.push(agreg.dadosAgregados[chave]);
+					 		var valor = agreg.dadosAgregados[chave];
+					 		if(!valor) {
+					 			valor = 0;
+					 		}
+					 		valoresPorSubFuncao.push(valor);
 					 	});
 					 	series.push({
 					 		name: agreg.municipio.nome + " - " + agreg.estado.sigla,
@@ -153,7 +157,7 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 				        tooltip: {
 				            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 				            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-				                '<td style="padding:0"><b>R$ {point.y} </b></td></tr>',
+				                '<td style="padding:0"><b>R$ {point.y:.2f} </b></td></tr>',
 				            footerFormat: '</table>',
 				            shared: true,
 				            useHTML: true

@@ -1,10 +1,4 @@
 {
-  "nome" : "some value" ,
-  "regiao" : "some value" ,
-  "latitute" : "some value" ,
-  "longitude" : "some value" ,
-  "estado" : "some value" ,
-  "codigosiafi" : "some value" ,
   "id" : [
     "some value" ,
     "some value" ,
@@ -14,5 +8,11 @@
     "some value" ,
     "some value" ,
     "some value"
-  ]
+  ] ,
+  "estado" : "some value" ,
+  "nome" : "some value" ,
+  "regiao" : "some value" ,
+  "latitute" : "some value" ,
+  "longitude" : "some value" ,
+  "codigosiafi" : "some value"
 }

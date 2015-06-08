@@ -58,4 +58,8 @@ public interface CargaDadosResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CargaTransfInfo> todasInfoCargas();
 	
+	@POST
+	@Path("populacao")
+	public Response cargaDadosPop();
+	
 }

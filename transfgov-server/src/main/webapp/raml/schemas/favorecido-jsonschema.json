@@ -3,14 +3,6 @@
   "$schema" : "http://json-schema.org/draft-03/schema" ,
   "type" : "object" ,
   "properties" : {
-    "nome" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
-    "codigo" : {
-      "type" : "string" ,
-      "required" : false
-    } ,
     "id" : {
       "type" : "array" ,
       "required" : false ,
@@ -19,6 +11,14 @@
           "type" : "string"
         }
       ]
+    } ,
+    "nome" : {
+      "type" : "string" ,
+      "required" : false
+    } ,
+    "codigo" : {
+      "type" : "string" ,
+      "required" : false
     }
   }
 }

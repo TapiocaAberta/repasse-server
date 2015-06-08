@@ -16,7 +16,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
-import org.jugvale.transfgov.carga.CargaDadosController;
+import org.jugvale.transfgov.carga.CargaDadosPopController;
+import org.jugvale.transfgov.carga.CargaDadosTransfController;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 import org.jugvale.transfgov.resource.CargaDadosResource;
 import org.jugvale.transfgov.service.impl.CargaTransfInfoService;
@@ -41,7 +42,10 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	Logger logger;
 
 	@Inject
-	CargaDadosController cargaDadosController;
+	CargaDadosTransfController cargaDadosController;
+
+	@Inject
+	CargaDadosPopController cargaDadosPopController;
 
 	@Inject
 	CargaTransfInfoService cargaTransfInfoService;
@@ -107,6 +111,20 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	@Override
 	public List<CargaTransfInfo> todasInfoCargas() {
 		return cargaTransfInfoService.todos();
+	}
+
+	@Override
+	public Response cargaDadosPop() {
+		try {
+			cargaDadosPopController.fazCargaDadosPopulacao();
+			return Response
+					.ok("Carga de dados de população feitos com sucesso")
+					.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+
 	}
 
 }

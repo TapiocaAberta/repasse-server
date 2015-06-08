@@ -40,7 +40,7 @@ import org.jugvale.transfgov.service.impl.TransferenciaService;
 
 @Stateless 
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-public class CargaDadosController {
+public class CargaDadosTransfController {
 
 	@Inject
 	Logger logger;

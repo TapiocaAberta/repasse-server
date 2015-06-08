@@ -116,9 +116,8 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	@Override
 	public Response cargaDadosPop() {
 		try {
-			cargaDadosPopController.fazCargaDadosPopulacao();
 			return Response
-					.ok("Carga de dados de população feitos com sucesso")
+					.ok(cargaDadosPopController.fazCargaDadosPopulacao())
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();

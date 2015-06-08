@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <acao>
-    <id>some value</id>
-    <nome>some value</nome>
-    <nomepopular>some value</nomepopular>
     <codigo>some value</codigo>
+    <nomepopular>some value</nomepopular>
+    <nome>some value</nome>
+    <id>some value</id>
     <id>some value</id>
     <codigo>some value</codigo>
     <nome>some value</nome>

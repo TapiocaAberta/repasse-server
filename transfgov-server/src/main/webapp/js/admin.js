@@ -33,6 +33,16 @@ appExplorar.controller('AdminController', function($scope, $http, $interval) {
 					$('#tblCargaTransf').hide().fadeIn(1000);
 				});
 	};
+	$scope.carregaDadosPop = function() {
+		$scope.cargaPopulacao = true;
+		$scope.resultadoCargaPopulacao = null;
+		$http.post("./rest/carga/populacao").success(
+				function(resultado) {
+					$("#divResCargaPop").html(resultado);
+					$scope.resultadoCargaPopulacao = resultado;
+					$scope.cargaPopulacao = false;
+				});
+	};
 	$scope.atualizaCargas = atualizaCargas;
 	var relogioCargaInfo;
 	$scope.mudaAtualizarCarga = function() {

@@ -18,7 +18,7 @@
 			<ul class="nav navbar-nav">
 				<li><a href="index.html">Página Inicial</a></li>
 				<li><a href="explorar.html">Explorar</a></li>
-				<li><a href="comparar.html">Comparar</a></li>				
+				<li><a href="comparar.html">Comparar</a></li>
 				<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
 				<li><a href="sobre.html">Sobre</a></li>
 				<li class="active"><a href="admin.html">Administração</a></li>
@@ -35,7 +35,7 @@
 
 	<div class="container">
 		<div class="row">
-			<h3>Realizar carga</h3>
+			<h3>Realizar carga de transferências</h3>
 			<form class="form-horizontal">
 				<div class="form-group">
 					<label for="anoCarga" class="control-label col-xs-3">Ano</label>
@@ -59,9 +59,8 @@
 						</button>
 					</div>
 					<div class="col-xs-1">
-						<button type="submit" class="btn btn-primary "
-							ng-click="apagaDadosTransferencia()"
-							ng-disabled="fazendoAcao">
+						<button type="submit" class="btn btn-primary"
+							ng-click="apagaDadosTransferencia()" ng-disabled="fazendoAcao">
 							<span class="glyphicon glyphicon-trash"
 								style="margin-right: 10px"></span>Limpar
 						</button>
@@ -72,8 +71,21 @@
 						ng-class="{true: 'alert alert-warning', false: 'alert alert-danger'}[sucesso]"
 						role="alert">{{ msgResposta }}</div>
 				</div>
-
 			</form>
+		</div>
+		<hr />
+
+		<div class="row">
+			<h3>Carregar População</h3>
+			<div class="col-md-6">
+				<button class="btn btn-primary" ng-click="carregaDadosPop()"
+					ng-disabled="cargaPopulacao">Atualizar dados da população
+					para cada município</button>
+				<br />
+				<div class="alert alert-warning" role="alert"
+					ng-show="resultadoCargaPopulacao" id="divResCargaPop"></div>
+
+			</div>
 		</div>
 		<hr />
 		<div class="row">
@@ -97,7 +109,8 @@
 					<tr ng-repeat="c in infoCargasTransf">
 						<td>{{ c.ano }}</td>
 						<td>{{c.mes }}</td>
-						<td>{{((c.qtdeNaoProcessada + c.qtdeSucesso + c.qtdeFalhas) / c.qtdeLinhas ) * 100 | number:1 }}%</td>
+						<td>{{((c.qtdeNaoProcessada + c.qtdeSucesso + c.qtdeFalhas) /
+							c.qtdeLinhas ) * 100 | number:1 }}%</td>
 						<td>{{ c.qtdeLinhas }}</td>
 						<td>{{ c.qtdeNaoProcessada }}</td>
 						<td>{{ c.qtdeSucesso }}</td>

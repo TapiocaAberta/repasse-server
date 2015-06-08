@@ -60,6 +60,7 @@ public interface CargaDadosResource {
 	
 	@POST
 	@Path("populacao")
+	@Produces(MediaType.TEXT_HTML)
 	public Response cargaDadosPop();
 	
 }

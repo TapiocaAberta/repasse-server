@@ -87,30 +87,67 @@
 				ng-click="removerMunicipio($index)"></span>
 			</span>
 		</div>
+		<hr>
 	</div>
 	<div class="container"
 		ng-show="municipiosSelecionados.length && anoSelecionado">
-
-		<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
 		<div class="row">
-			<div id="graficoComparacaoAreas"></div>
-		</div>
-		<div class="row">
-			<form class="form-horizontal">
-				<div class="form-group">
-					<label for="areas" class="control-label col-xs-3">Selecione
-						uma área para mais detalhes</label>
-					<div class="col-xs-3">
-						<select id="areas" class="form-control"
-							ng-change="atualizaGraficoSubArea()" ng-model="areaSelecionada"
-							ng-options="area.nome for area in areas">
-						</select>
+			<div class="col-md-4">
+				<div class="input-group">
+					<div id="radioBtn" class="btn-group">
+						<a class="btn btn-primary btn-sm"
+							ng-class="{active: isSelected(a), notActive: !isSelected(a)}"
+							ng-click="selecionaAgregacao(a)"
+							ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
 					</div>
 				</div>
-			</form>
+			</div>
+			<div class="col-md-3 col-md-offset-5">
+				<em style="margin-left: 10px">Mostrando
+					{{todasCategorias.length }} de {{
+					todasCategorias.length + categoriaRemovidas.length }} categorias
+					<button class="btn btn-primary" ng-click="configurarCategorias()">
+						<span style="margin-left: 5px" class="glyphicon glyphicon-wrench"></span>
+					</button>
+				</em>
+			</div>
 		</div>
+		<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
 		<div class="row">
-			<div id="graficoComparacaoSubFuncao"></div>
+			<div id="graficoComparacaoAgregacao"></div>
+		</div>
+	</div>
+	<div id="dialogoSelecionarCategorias" style="display: none"
+		title="Configurar Categorias">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Categorias Adicionadas</div>
+					<div class="panel-body">
+						<select class="form-control" ng-model="categoriaParaRemover"
+							ng-options="c for c in todasCategorias" size="10" multiple></select>
+						<button class="btn" ng-disabled="!categoriaParaRemover"
+							ng-click="removeCategoria()">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Categorias Removidas</h3>
+					</div>
+					<div class="panel-body">
+						<select class="form-control" ng-model="categoriaParaAdicionar"
+							ng-options="c for c in categoriaRemovidas" size="10" multiple></select>
+						<button class="btn" ng-disabled="!categoriaParaAdicionar"
+							ng-click="adicionaCategoria()">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="container">
@@ -119,6 +156,7 @@
 			<p>TransfGov 2015</p>
 		</footer>
 	</div>
+
 	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
 	<script src="js/jquery.dataTables.min.js"></script>
@@ -131,3 +169,4 @@
 	<script src="js/comparar.js"></script>
 </body>
 </html>
+

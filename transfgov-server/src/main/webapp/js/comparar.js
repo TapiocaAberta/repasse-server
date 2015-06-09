@@ -1,16 +1,52 @@
-var app = angular.module('TransfGovApp', []).factory('transfGovService',
+angular.module('TransfGovApp', []).factory('transfGovService',
 		function($http) {
 			return new TransfGovService($http)
 		}).controller('CompararController', function($scope, transfGovService) {
+	
 			
-	$scope.municipiosSelecionados = new Array();		
+	$scope.configurarCategorias = function() {
+		$("#dialogoSelecionarCategorias").dialog({
+		      resizable: false,
+		      height:650,
+		      width:800,
+		      modal: true,
+		      Cancel: function() {
+		            this.dialog( "close" );
+		      }
+		});
+	};
+			
+	$scope.selecionaAgregacao = function(agregacao) {
+		$scope.agregacaoSelecionada = agregacao;
+		$scope.atualizaGraficos();
+	};
+	
+	$scope.removeCategoria = function() {
+		$.each($scope.categoriaParaRemover, function(i, v){
+			 var pos = $scope.todasCategorias.indexOf(v);
+			 $scope.todasCategorias.splice(pos,1);
+			 $scope.categoriaRemovidas.push(v);
+		});
+
+		 atualizaGraficoAgregacao($scope.agregacoes);
+	};
+	
+	$scope.adicionaCategoria = function() {
+		 var pos =  $scope.categoriaRemovidas.indexOf($scope.categoriaParaAdicionar);
+		 $scope.categoriaRemovidas.splice(pos, 1);
+		 $scope.todasCategorias.push($scope.categoriaParaAdicionar);		
+		 atualizaGraficoAgregacao($scope.agregacoes);
+	};
+
+	$scope.isSelected = function(agregacao) {
+	    return $scope.agregacaoSelecionada === agregacao;
+	}	
+	$scope.municipiosSelecionados = new Array();	
+	$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
+	$scope.agregacaoSelecionada = AGREGACOES_SUPORTADAS_COMPARACAO[0];
 	
 	transfGovService.estados(function(d) {
 		$scope.estados = d;
-	});
-	
-	transfGovService.areas(function(d){
-		$scope.areas = d;
 	});
 	
 	transfGovService.anos(function(d) {
@@ -42,26 +78,34 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 	$scope.atualizaGraficos = function() {
 		if(!$scope.anoSelecionado) 
 			return;
-		atualizaGraficoArea();	
-		$scope.atualizaGraficoSubArea();
-	};
-	
-	var atualizaGraficoArea = function() {
 		 var ids = new Array();
+		 
 		 $.each($scope.municipiosSelecionados, function (i, m){
 			 ids.push(m.id);
 		 });	
-		 transfGovService.anoAgregadoAreaVariosMun('AREA', $scope.anoSelecionado.ano, ids, function(agregacoes){
+		 transfGovService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
+			 $scope.categoriaRemovidas = new Array();
+			 $scope.todasCategorias = new Array();
+			 $scope.agregacoes = agregacoes;
+			 $.each(agregacoes, function(i, agreg){
+				 $.each(agreg.dadosAgregados, function(cat, valor){
+					 if($scope.todasCategorias.indexOf(cat) == -1) {
+						 $scope.todasCategorias.push(cat);
+					 }					 
+				 });
+			 });
+			 atualizaGraficoAgregacao(agregacoes);
+		 });
+	};
+	
+	var atualizaGraficoAgregacao = function(agregacoes) {
 			 var series = new Array();
-			 var categorias = new Array();
-			 
-			 for(i in $scope.areas) {
-				 categorias.push( $scope.areas[i].nome);
-			 }
+			 var categorias = $scope.todasCategorias;	 
+			 categorias.sort();
 			 $.each(agregacoes, function(i, agreg){
 				 	var valoresPorArea = new Array();
-				 	$.each($scope.areas, function(i, a){
-				 		var valor = agreg.dadosAgregados[a.nome];
+				 	$.each(categorias, function(i, a){
+				 		var valor = agreg.dadosAgregados[a];
 				 		if(!valor) {
 				 			valor = 0;
 				 		}
@@ -72,13 +116,13 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 				 		data: valoresPorArea
 				 	}); 
 			 });
-			 var grafico = $('#graficoComparacaoAreas').highcharts({
+			 var grafico = $('#graficoComparacaoAgregacao').highcharts({
 			        chart: {
 			            type: 'column'
 			        },
 			        title: {
-			            text: 'Transferências por área'
-			        },
+			            text: 'Transferências por ' + $scope.agregacaoSelecionada.nome
+			        },			       
 			        subtitle: {
 			            text: 'Comparação entre municípios'
 			        },
@@ -103,69 +147,5 @@ var app = angular.module('TransfGovApp', []).factory('transfGovService',
 			        series: series
 			    });
 			 
-		 });
-	};
-	
-	$scope.atualizaGraficoSubArea = function() {
-		if(!$scope.areaSelecionada) return;
-		transfGovService.subFuncoesPorArea($scope.areaSelecionada.id, function(subFuncoes){
-			 var ids = new Array();
-			 $.each($scope.municipiosSelecionados, function (i, m){
-				 ids.push(m.id);
-			 });	
-			 transfGovService.anoAgregadoAreaVariosMun('SUB_FUNCAO', $scope.anoSelecionado.ano, ids, function(agregacoes){
-				 var series = new Array();
-				 var categorias = new Array();				 
-				 for(i in subFuncoes) {
-					 categorias.push(subFuncoes[i].area.nome + ": " + subFuncoes[i].nome);
-				 }
-				 $.each(agregacoes, function(i, agreg){
-					 	var valoresPorSubFuncao = new Array();
-					 	$.each(subFuncoes, function(i, a){
-					 		var chave = a.area.nome + ": " + a.nome;
-					 		var valor = agreg.dadosAgregados[chave];
-					 		if(!valor) {
-					 			valor = 0;
-					 		}
-					 		valoresPorSubFuncao.push(valor);
-					 	});
-					 	series.push({
-					 		name: agreg.municipio.nome + " - " + agreg.estado.sigla,
-					 		data: valoresPorSubFuncao
-					 	}); 
-				 });
-				 var grafico = $('#graficoComparacaoSubFuncao').highcharts({
-				        chart: {
-				            type: 'column'
-				        },
-				        title: {
-				            text: 'Transferências por SubArea para área "' + $scope.areaSelecionada.nome  + '"'
-				        },
-				        subtitle: {
-				            text: 'Comparação entre municípios'
-				        },
-				        xAxis: {
-				            categories: categorias,
-				            crosshair: true
-				        },
-				        yAxis: {
-				            min: 0,
-				            title: {
-				                text: 'Total (R$)'
-				            }
-				        },
-				        tooltip: {
-				            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-				            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-				                '<td style="padding:0"><b>R$ {point.y:.2f} </b></td></tr>',
-				            footerFormat: '</table>',
-				            shared: true,
-				            useHTML: true
-				        },
-				        series: series
-				    });
-				 
-			 });
-		});
-	};
+	};	
 });

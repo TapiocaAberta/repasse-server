@@ -17,7 +17,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 
 import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Municipio;

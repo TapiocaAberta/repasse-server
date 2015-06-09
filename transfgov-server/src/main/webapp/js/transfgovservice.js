@@ -1,8 +1,30 @@
 /**
+
  * Uma classe service que permite acesso a métodos da API do TransfGov.
  * 
  * Nenhum tratamento de erro por enquanto.
  */
+
+// Agregações suportadas para fazer a comparação de municípios
+var AGREGACOES_SUPORTADAS_COMPARACAO = [
+      {
+    	  nome: "Área",
+          valor: "AREA"		  
+      },
+      {
+    	  nome: "Sub Área",
+          valor: "SUB_FUNCAO"		  
+      },
+      {
+    	  nome: "Ação",
+          valor: "ACAO"		  
+      },      
+      {
+    	  nome: "Programa",
+          valor: "PROGRAMA"		  
+      }
+];
+
 
 // Parâmetros
 var MUNICIPIO = "{MUNICIPIO}";

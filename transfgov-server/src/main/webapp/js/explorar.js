@@ -64,7 +64,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 			verticalAlign : 'middle',
 			borderWidth : 0
 		},
-		series : series
+		series : series		
 	});
 }
 
@@ -179,6 +179,7 @@ appExplorar.controller('ExplorarController',
 											}
 										},
 										series : [ {
+											name: $scope.municipioSelecionado.nome,
 											data : valores
 										} ]
 									});
@@ -194,6 +195,7 @@ appExplorar.controller('ExplorarController',
 								            }
 										},
 										series : [ {
+											name: "",
 											type: 'pie',
 											data : dados
 										} ]

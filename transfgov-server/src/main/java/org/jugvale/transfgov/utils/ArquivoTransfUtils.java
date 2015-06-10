@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -17,6 +19,15 @@ import org.apache.commons.io.IOUtils;
 public class ArquivoTransfUtils {
 
 	public static final String URL_TRANSFERENCIA_BASE = "http://arquivos.portaldatransparencia.gov.br/downloads.asp?a=%d&m=%s&consulta=Transferencias";
+	/**
+	 * Cache para a contagem de linhas e assim evitarmos muitos downloads. TODO: usar infinispan invés disso
+	 */
+	private static final Map<String, Long> cacheContagemLinhas;
+	
+	static{
+		cacheContagemLinhas = new HashMap<>();
+	}
+	
 
 	/**
 	 * 
@@ -77,18 +88,46 @@ public class ArquivoTransfUtils {
 	 * @param mes
 	 *            Mes
 	 * @return Path do arquivo CSV
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public static Path baixaDeszipaECriaCSV(int ano, int mes) throws IOException {
+	public static Path baixaDeszipaECriaCSV(int ano, int mes)
+			throws IOException {
 		String mesStr = String.valueOf(mes);
 		if (mesStr.length() == 1)
 			mesStr = "0" + mesStr;
-		URL urlArquivoZip = new URL(String.format(URL_TRANSFERENCIA_BASE, ano, mesStr));
+		URL urlArquivoZip = new URL(String.format(URL_TRANSFERENCIA_BASE, ano,
+				mesStr));
 		File tempZip = Files.createTempFile("carga", ".zip").toFile();
 		IOUtils.copy(urlArquivoZip.openStream(), new FileOutputStream(tempZip));
 		Path arquivoCSV = pegaCSV(new ZipFile(tempZip));
 		Files.delete(Paths.get(tempZip.getPath()));
 		return arquivoCSV;
 	}
+
+	/**
+	 * 
+	 * Simplesmente irá contar a quantidade de linhas que têm no arquivo do site
+	 * de transparência para referência
+	 * 
+	 * @param ano
+	 * @param mes
+	 * @return
+	 * @throws IOException
+	 */
+	public static long contaLinhasdoSite(int ano, int mes) throws IOException {
+		return contaLinhasdoSite(ano, mes, baixaDeszipaECriaCSV(ano, mes));		
+	}
+	
+	public static long contaLinhasdoSite(int ano, int mes, Path csv) throws IOException {
+		String chave = ano + "-" + mes;
+		if(cacheContagemLinhas.containsKey(chave)) {
+			return cacheContagemLinhas.get(chave);
+		}
+		long totalLinhas = Files.lines(csv).count() - 1;
+		Files.delete(csv);
+		cacheContagemLinhas.put(chave, totalLinhas);
+		return totalLinhas;
+		
+	} 
 
 }

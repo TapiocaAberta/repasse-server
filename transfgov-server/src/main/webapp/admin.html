@@ -90,6 +90,13 @@
 		<hr />
 		<div class="row">
 			<h3>Cargas de dados de transferências</h3>
+			<div class="alert alert-info" role="alert">
+				Alguns dados podem ter sido carregados diretamente no banco, assim
+				não houve carga pela interface. Confira os dados acessando <a
+					href="http://transparencia.gov.br/">O Portal da transparëncia
+					do governo federal</a>
+			</div>
+
 			<table id="tblCargaTransf" datatable="ng"
 				style="text-overflow: ellipsis">
 				<thead>
@@ -128,35 +135,65 @@
 					automaticamente</em>
 			</div>
 		</div>
-		<div class="container">
-			<hr>
-			<footer>
-				<div class="row">
-					<div class="col-md-2 ">
-						<a href="http://nuvem.ufabc.edu.br/"><img
-							src="./imagens/logo_small.jpg" alt="Nuvem UFABC" width="100"
-							height="80"></a>
-					</div>
-					<div class="col-md-2 col-md-offset-3">
-						<a href="http://www.ufabc.edu.br"><img
-							src="./imagens/logo_ufabc.png" alt="UFABC" width="100"
-							height="80"></a>
-					</div>
-					<div class="col-md-2 col-md-offset-3">
-						<a href="http://uab.ufabc.edu.br/index.php/cursos/tsi"><img
-							src="./imagens/logouab.jpg" alt="UAB" width="100" height="80"></a>
-					</div>
-				</div>
-			</footer>
+		<div class="row">
+			<h3>Resumo dos dados no banco</h3>
+			<div class="alert alert-info" role="alert">
+				Tabela para verificar dados no nosso banco com relação aos dados do
+				<a href="http://transparencia.gov.br/">Portal da transparëncia
+					do governo federal</a>. Notem que o número de linhas carregadas é
+				ligeiramente diferente e isso é normal, pois algumas linhas não
+				contém informações de transferëncia.
+			</div>
+				<div class="alert alert-warning" role="alert" ng-show="!dadosResumo">AGUARDE! O resumo pode levar muito tempo para ser gerado pela primeira vez!</div>
+				<table id="tblDadosResumo" datatable="ng"
+				style="text-overflow: ellipsis">
+				<thead>
+					<tr>
+						<th>Ano</th>
+						<th>Mês</th>
+						<th>Dados locais</th>
+						<th>Total de linhas no arquivo do portal da transparëncia</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="r in dadosResumo">
+						<td>{{ r.ano }}</td>
+						<td>{{r.mes }}</td>
+						<td>{{ r.totalTransferencias }}</td>
+						<td>{{ r.contagemLinhas }}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<script src="js/jquery-1.11.3.min.js"></script>
-		<script src="js/jquery-ui.min.js"></script>
-		<script src="js/angular.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/jquery.dataTables.min.js"></script>
-		<script src="js/dataTables.jqueryui.js"></script>
-		<script src="js/angular-datatables.min.js"></script>
+	</div>
+	<div class="container">
+		<hr>
+		<footer>
+			<div class="row">
+				<div class="col-md-2 ">
+					<a href="http://nuvem.ufabc.edu.br/"><img
+						src="./imagens/logo_small.jpg" alt="Nuvem UFABC" width="100"
+						height="80"></a>
+				</div>
+				<div class="col-md-2 col-md-offset-3">
+					<a href="http://www.ufabc.edu.br"><img
+						src="./imagens/logo_ufabc.png" alt="UFABC" width="100" height="80"></a>
+				</div>
+				<div class="col-md-2 col-md-offset-3">
+					<a href="http://uab.ufabc.edu.br/index.php/cursos/tsi"><img
+						src="./imagens/logouab.jpg" alt="UAB" width="100" height="80"></a>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/angular.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.jqueryui.js"></script>
+	<script src="js/angular-datatables.min.js"></script>
 
-		<script src="js/admin.js"></script>
+	<script src="js/admin.js"></script>
 </body>
 </html>

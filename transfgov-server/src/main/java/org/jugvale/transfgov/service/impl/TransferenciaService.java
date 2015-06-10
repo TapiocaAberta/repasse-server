@@ -119,4 +119,11 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("municipio", municipio);
 		return buscaTransferencia;
 	}
+
+	public long contaPorAnoMesMunicipio(int ano, int mes) {
+		TypedQuery<Long> buscaTransferencia = em.createNamedQuery("Transferencia.quantidadePorMesEAno", Long.class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);		
+		return buscaTransferencia.getSingleResult();
+	}
 }

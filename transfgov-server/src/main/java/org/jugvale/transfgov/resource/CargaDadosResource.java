@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
+import org.jugvale.transfgov.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 
 /**
@@ -57,6 +58,16 @@ public interface CargaDadosResource {
 	@Path("transferencia")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CargaTransfInfo> todasInfoCargas();
+	
+	/**
+	 * 
+	 * Como é um método custoso, irá exigir autenticação, por isso POST.
+	 * @return
+	 */
+	@POST
+	@Path("transferencia/resumo")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ResumoDadosTransferencia> resumoDadosTransferencia();
 	
 	@POST
 	@Path("populacao")

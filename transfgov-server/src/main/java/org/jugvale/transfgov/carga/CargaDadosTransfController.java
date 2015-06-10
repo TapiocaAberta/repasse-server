@@ -94,8 +94,8 @@ public class CargaDadosTransfController {
 		AtomicInteger totalSucesso = new AtomicInteger(0);
 		AtomicInteger totalFalha = new AtomicInteger(0);
 		AtomicInteger totalNaoProcessada = new AtomicInteger(0);
-		long qtdeLinhas = ArquivoTransfUtils.contaLinhasdoSite(ano, mes,
-				Files.copy(arquivoCSV, Files.createTempFile("contar", "csv")));
+		logger.warning("Contando linhas de transferência para data " + mes + "/" + ano);
+		long qtdeLinhas = Files.lines(arquivoCSV).count() - 1;;
 		logger.warning("Iniciando carga para data " + mes + "/" + ano);
 		CargaTransfInfo cargaTransfInfo = cargaTransfInfoService
 				.porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));

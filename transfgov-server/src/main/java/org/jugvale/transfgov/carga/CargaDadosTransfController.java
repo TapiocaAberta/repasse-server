@@ -37,8 +37,9 @@ import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.service.impl.ProgramaService;
 import org.jugvale.transfgov.service.impl.SubFuncaoService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
+import org.jugvale.transfgov.utils.ArquivoTransfUtils;
 
-@Stateless 
+@Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class CargaDadosTransfController {
 
@@ -74,7 +75,7 @@ public class CargaDadosTransfController {
 
 	@Inject
 	FavorecidoService favorecidoService;
-	
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -93,31 +94,36 @@ public class CargaDadosTransfController {
 		AtomicInteger totalSucesso = new AtomicInteger(0);
 		AtomicInteger totalFalha = new AtomicInteger(0);
 		AtomicInteger totalNaoProcessada = new AtomicInteger(0);
-		long qtdeLinhas = Files.lines(arquivoCSV).count() - 1;
+		long qtdeLinhas = ArquivoTransfUtils.contaLinhasdoSite(ano, mes,
+				Files.copy(arquivoCSV, Files.createTempFile("contar", "csv")));
 		logger.warning("Iniciando carga para data " + mes + "/" + ano);
 		CargaTransfInfo cargaTransfInfo = cargaTransfInfoService
 				.porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));
 		cargaTransfInfo.setInicio(new Date());
 		cargaTransfInfo.setFim(null);
 		cargaTransfInfo.setQtdeLinhas((int) qtdeLinhas);
-		cargaTransfInfoService.atualizar(cargaTransfInfo);		
-		Files.lines(arquivoCSV, StandardCharsets.UTF_8).skip(1)
-				.forEach(linha -> {
-					try {
-						if (!salvarLinha(ano, mes, linha)) {
-							totalNaoProcessada.incrementAndGet();
-						} else {
-							totalSucesso.incrementAndGet();
-						}
-					} catch (Exception e) {
-						totalFalha.incrementAndGet();
-						e.printStackTrace();
-					}
-					cargaTransfInfo.setQtdeNaoProcessada(totalNaoProcessada.get());
-					cargaTransfInfo.setQtdeFalhas(totalFalha.get());
-					cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
-					cargaTransfInfoService.atualizar(cargaTransfInfo);
-				});
+		cargaTransfInfoService.atualizar(cargaTransfInfo);
+		Files.lines(arquivoCSV, StandardCharsets.UTF_8)
+				.skip(1)
+				.forEach(
+						linha -> {
+							try {
+								if (!salvarLinha(ano, mes, linha)) {
+									totalNaoProcessada.incrementAndGet();
+								} else {
+									totalSucesso.incrementAndGet();
+								}
+							} catch (Exception e) {
+								totalFalha.incrementAndGet();
+								e.printStackTrace();
+							}
+							cargaTransfInfo
+									.setQtdeNaoProcessada(totalNaoProcessada
+											.get());
+							cargaTransfInfo.setQtdeFalhas(totalFalha.get());
+							cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
+							cargaTransfInfoService.atualizar(cargaTransfInfo);
+						});
 		Files.delete(arquivoCSV);
 		cargaTransfInfo.setFim(new Date());
 		cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
@@ -196,9 +202,9 @@ public class CargaDadosTransfController {
 	}
 
 	public void limpaCacheHibernate() {
-	    Session s = (Session) em.getDelegate();
-	    SessionFactory sf = s.getSessionFactory();
-	    sf.getCache().evictAllRegions();
+		Session s = (Session) em.getDelegate();
+		SessionFactory sf = s.getSessionFactory();
+		sf.getCache().evictAllRegions();
 	}
 
 }

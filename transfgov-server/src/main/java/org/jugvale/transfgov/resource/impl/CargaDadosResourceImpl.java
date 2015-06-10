@@ -1,6 +1,7 @@
 package org.jugvale.transfgov.resource.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -18,8 +19,11 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.jugvale.transfgov.carga.CargaDadosPopController;
 import org.jugvale.transfgov.carga.CargaDadosTransfController;
+import org.jugvale.transfgov.carga.ResumoDadosTransferencia;
+import org.jugvale.transfgov.model.base.AnoMes;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 import org.jugvale.transfgov.resource.CargaDadosResource;
+import org.jugvale.transfgov.service.AnoService;
 import org.jugvale.transfgov.service.impl.CargaTransfInfoService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
 import org.jugvale.transfgov.utils.ArquivoTransfUtils;
@@ -49,6 +53,9 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 
 	@Inject
 	CargaTransfInfoService cargaTransfInfoService;
+	
+	@Inject
+	AnoService anoService;
 
 	public Response baixaECarrega(int ano, int mes) throws IOException {
 		verificaSeJaFoiCarregado(ano, mes);
@@ -124,6 +131,28 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 
+	}
+
+	@Override
+	public List<ResumoDadosTransferencia> resumoDadosTransferencia() {
+		List<ResumoDadosTransferencia> resumos = new ArrayList<>();
+		List<AnoMes> anos = anoService.anos();
+		for (AnoMes anoMes : anos) {
+			for (int mes : anoMes.getMeses()) {
+				int ano = anoMes.getAno();
+				ResumoDadosTransferencia resumo = new ResumoDadosTransferencia();
+				resumo.setAno(ano);
+				resumo.setMes(mes);
+				resumo.setTotalTransferencias(transferenciaService.contaPorAnoMesMunicipio(ano, mes));
+				try {
+					resumo.setContagemLinhas(ArquivoTransfUtils.contaLinhasdoSite(ano, mes));
+				} catch (IOException e) {
+					resumo.setContagemLinhas(-1);
+				}
+				resumos.add(resumo);
+			}
+		}
+		return resumos;
 	}
 
 }

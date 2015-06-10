@@ -20,6 +20,10 @@ appExplorar.controller('AdminController', function($scope, $http, $interval) {
 		$http.post(url).success(sucesso).error(erro);
 	}
 
+	$http.post("./rest/carga/transferencia/resumo").success(function(resumo) {
+		$scope.dadosResumo = resumo;
+	});
+	
 	$scope.apagaDadosTransferencia = function() {
 		var url = "./rest/transferencia/" + $scope.anoCarga + "/"
 				+ $scope.mesCarga;

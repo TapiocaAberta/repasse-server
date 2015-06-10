@@ -2,20 +2,21 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		function($http) {
 			return new TransfGovService($http)
 		}).controller('CompararController', function($scope, transfGovService) {
-	
-			
+		
 	$scope.configurarCategorias = function() {
-		$("#dialogoSelecionarCategorias").dialog({
+		var d = $("#dialogoSelecionarCategorias").dialog({
 		      resizable: false,
-		      height:650,
+		      height:700,
 		      width:800,
 		      modal: true,
-		      Cancel: function() {
-		            this.dialog( "close" );
+		      buttons: {
+		    	  Ok: function() {
+		    		  d.dialog( "close" );
+		    	  }
 		      }
 		});
 	};
-			
+				
 	$scope.selecionaAgregacao = function(agregacao) {
 		$scope.agregacaoSelecionada = agregacao;
 		$scope.atualizaGraficos();

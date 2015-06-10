@@ -11,6 +11,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * 
+ * Dados gerais anuais do município.
+ * 
+ * @author wsiqueir
+ *
+ */
 @XmlRootElement
 @Entity
 @Table(name = "dados_municipio", uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -28,11 +35,7 @@ public class DadosMunicipio {
 	@JoinColumn(name = "municipio_mun_id")
 	private Municipio municipio;
 	private long populacao;
-	private float idhm;
-	private float idhmEducacao;
-	private float idhmRenda;
-	private float idhmLongevidade;
-
+	
 	public int getAno() {
 		return ano;
 	}
@@ -55,38 +58,6 @@ public class DadosMunicipio {
 
 	public void setPopulacao(long populacao) {
 		this.populacao = populacao;
-	}
-
-	public float getIdhm() {
-		return idhm;
-	}
-
-	public void setIdhm(float idhm) {
-		this.idhm = idhm;
-	}
-
-	public float getIdhmEducacao() {
-		return idhmEducacao;
-	}
-
-	public void setIdhmEducacao(float idhmEducacao) {
-		this.idhmEducacao = idhmEducacao;
-	}
-
-	public float getIdhmRenda() {
-		return idhmRenda;
-	}
-
-	public void setIdhmRenda(float idhmRenda) {
-		this.idhmRenda = idhmRenda;
-	}
-
-	public float getIdhmLongevidade() {
-		return idhmLongevidade;
-	}
-
-	public void setIdhmLongevidade(float idhmLongevidade) {
-		this.idhmLongevidade = idhmLongevidade;
 	}
 
 }

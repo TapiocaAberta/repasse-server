@@ -48,4 +48,9 @@ public class CargaTransfInfoService extends Service<CargaTransfInfo> {
 		}
 	}
 
+	public void apagaPorAnoMes(int ano, int mes) {
+		CargaTransfInfo c = porAnoMes(ano, mes);
+		remover(c);
+	}
+
 }

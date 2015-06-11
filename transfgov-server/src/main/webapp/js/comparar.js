@@ -28,15 +28,18 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			 $scope.todasCategorias.splice(pos,1);
 			 $scope.categoriaRemovidas.push(v);
 		});
-
 		 atualizaGraficoAgregacao($scope.agregacoes);
+		 $scope.categoriaParaRemover = null;
 	};
 	
 	$scope.adicionaCategoria = function() {
-		 var pos =  $scope.categoriaRemovidas.indexOf($scope.categoriaParaAdicionar);
-		 $scope.categoriaRemovidas.splice(pos, 1);
-		 $scope.todasCategorias.push($scope.categoriaParaAdicionar);		
+		$.each($scope.categoriaParaAdicionar, function(i, v){
+			 var pos =  $scope.categoriaRemovidas.indexOf(v);
+			 $scope.categoriaRemovidas.splice(pos, 1);
+			 $scope.todasCategorias.push(v);				
+		});			
 		 atualizaGraficoAgregacao($scope.agregacoes);
+		 $scope.categoriaParaAdicionar = null;
 	};
 
 	$scope.isSelected = function(agregacao) {

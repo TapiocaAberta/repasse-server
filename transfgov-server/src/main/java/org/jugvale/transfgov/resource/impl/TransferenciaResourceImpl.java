@@ -13,6 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.transferencia.Transferencia;
 import org.jugvale.transfgov.resource.TransferenciaResource;
+import org.jugvale.transfgov.service.impl.CargaTransfInfoService;
 import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
 import org.jugvale.transfgov.utils.JaxrsUtils;
@@ -27,6 +28,9 @@ public class TransferenciaResourceImpl implements TransferenciaResource {
 	
 	@Context
 	UriInfo uriInfo;
+	
+	@Inject
+	CargaTransfInfoService cargaTransfInfoService;
 
 	/**
 	 * 
@@ -53,6 +57,7 @@ public class TransferenciaResourceImpl implements TransferenciaResource {
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano, mes), String.format(MSG_NAO_HA_TRANSFERENCIA, mes, ano));
 		try {
 			transferenciaService.apagaTransferencias(ano, mes);
+			cargaTransfInfoService.apagaPorAnoMes(ano, mes);
 			return Response.ok().entity(String.format(MSG_TRANSFERENCIA_APAGADAS, mes, ano)).build();
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();

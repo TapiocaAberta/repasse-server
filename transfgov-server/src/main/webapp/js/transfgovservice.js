@@ -26,7 +26,7 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
 ];
 
 
-var SEPARADOR_URL = '|';
+var SEPARADOR_URL = '&';
 
 // Parâmetros
 var MUNICIPIO = "{MUNICIPIO}";

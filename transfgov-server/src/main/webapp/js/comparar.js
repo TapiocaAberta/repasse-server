@@ -85,7 +85,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		params['ano'] = $scope.anoSelecionado.ano;
 		params['municipios'] = new Array();
 		$.each($scope.municipiosSelecionados, function(i, m){
-			params['municipios'].push(m.id + ';' + m.nome + ';' + m.estado.sigla);
+			params['municipios'].push(m.id + ';' + encodeURI(m.nome) + ';' + m.estado.sigla);
 		});
 		params['agregacao'] = $scope.agregacaoSelecionada.nome + ';' + $scope.agregacaoSelecionada.valor;
 		salvaMapaUrl(params);
@@ -170,7 +170,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			var campos = v.split(';');
 			$scope.municipiosSelecionados.push({
 				id: campos[0],
-				nome: campos[1],
+				nome: decodeURI(campos[1]),
 				estado: {
 					sigla: campos[2]
 				}

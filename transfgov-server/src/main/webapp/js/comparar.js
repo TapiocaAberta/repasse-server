@@ -2,7 +2,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		function($http) {
 			return new TransfGovService($http)
 		}).controller('CompararController', function($scope, transfGovService) {
-		
+	$scope.municipiosSelecionados = new Array();
 	$scope.configurarCategorias = function() {
 		var d = $("#dialogoSelecionarCategorias").dialog({
 		      resizable: false,
@@ -44,8 +44,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 
 	$scope.isSelected = function(agregacao) {
 	    return $scope.agregacaoSelecionada === agregacao;
-	}	
-	$scope.municipiosSelecionados = new Array();	
+	}		
 	$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
 	$scope.agregacaoSelecionada = AGREGACOES_SUPORTADAS_COMPARACAO[0];
 	
@@ -82,6 +81,15 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 	$scope.atualizaGraficos = function() {
 		if(!$scope.anoSelecionado) 
 			return;
+		var params = {};
+		params['ano'] = $scope.anoSelecionado.ano;
+		params['municipios'] = new Array();
+		$.each($scope.municipiosSelecionados, function(i, m){
+			params['municipios'].push(m.id + ';' + m.nome + ';' + m.estado.sigla);
+		});
+		params['agregacao'] = $scope.agregacaoSelecionada.nome + ';' + $scope.agregacaoSelecionada.valor;
+		salvaMapaUrl(params);
+		
 		 var ids = new Array();
 		 
 		 $.each($scope.municipiosSelecionados, function (i, m){
@@ -125,7 +133,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			            type: 'column'
 			        },
 			        title: {
-			            text: 'Transferências por ' + $scope.agregacaoSelecionada.nome
+			            text: 'Transferências por ' + $scope.agregacaoSelecionada.nome + ' em ' + $scope.anoSelecionado.ano
 			        },			       
 			        subtitle: {
 			            text: 'Comparação entre municípios'
@@ -151,5 +159,31 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			        series: series
 			    });
 			 
-	};	
+	};
+	
+	// por fim vamos atualizar a tela com os parâmetros de URL
+	
+	var paramsUrl = recuperaMapaUrl(); 
+	if(paramsUrl['ano'] && paramsUrl['municipios']){
+		$scope.anoSelecionado = { ano: paramsUrl['ano']};
+		$.each(paramsUrl['municipios'].split(','), function (i, v) {		
+			var campos = v.split(';');
+			$scope.municipiosSelecionados.push({
+				id: campos[0],
+				nome: campos[1],
+				estado: {
+					sigla: campos[2]
+				}
+			});
+		});
+		if(paramsUrl['agregacao']) {
+			var campos = paramsUrl['agregacao'].split(';');
+			$scope.agregacaoSelecionada = {
+					nome: campos[0],
+					valor: campos[1]
+			};
+			
+		}
+		$scope.atualizaGraficos();
+	}
 });

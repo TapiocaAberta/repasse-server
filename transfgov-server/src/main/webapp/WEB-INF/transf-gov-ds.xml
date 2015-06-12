@@ -9,7 +9,7 @@
 		<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
 		<pool>
 			<min-pool-size>50</min-pool-size>
-			<max-pool-size>200</max-pool-size>
+			<max-pool-size>250</max-pool-size>
 			<prefill>true</prefill>
 		</pool>
 		<security>

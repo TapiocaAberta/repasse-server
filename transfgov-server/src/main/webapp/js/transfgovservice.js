@@ -26,6 +26,8 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
 ];
 
 
+var SEPARADOR_URL = '|';
+
 // Parâmetros
 var MUNICIPIO = "{MUNICIPIO}";
 var ANO = "{ANO}";
@@ -149,6 +151,32 @@ var TransfGovService = function($http) {
 					sucesso(agregacoesFiltradas);
 				});
 	}
+}
+
+/**
+ * Irá adicionar os parâmetros do mapa na URL para serem encontrados posteriormente
+ * @param params
+ */
+function salvaMapaUrl(params) {
+	var novaUrl = '';
+	$.each(params, function(i, v){
+		novaUrl += i + '=' + v + SEPARADOR_URL;
+	});
+	window.location.hash = novaUrl.substring(0, novaUrl.length - 1);
+}
+
+/**
+ * Irá retirar os parâmetros do mapa na URL
+ * @param params
+ */
+function recuperaMapaUrl() {
+	var todos = window.location.hash.replace('#',  '');
+	var params = {};
+	$.each(todos.split(SEPARADOR_URL), function(i, v){
+		var campos = v.split('=');
+		params[campos[0]] = campos[1];
+	});
+	return params;
 }
 
 /*

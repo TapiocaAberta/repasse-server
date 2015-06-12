@@ -1,5 +1,7 @@
 package org.jugvale.transfgov.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -41,4 +43,21 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 		} 
 	}
 
+	/**
+	 * Tenta buscar a população para o ano ou então traz a medida mais recente de população
+	 * @param ano
+	 * @param municipio
+	 * @return
+	 */
+	public DadosMunicipio buscaPorAnoMunicipioOuMaisRecente(int ano,
+			Municipio municipio) {
+		try {
+			return buscaPorAnoMunicipio(ano, municipio);
+		} catch (NoResultException e) {
+			List<DadosMunicipio> dados = buscaMunicipio(municipio);
+			Collections.sort(dados, Collections.reverseOrder(Comparator.comparingInt(DadosMunicipio::getAno)));
+			return dados.get(0);			
+		}		
+	}
+	
 }

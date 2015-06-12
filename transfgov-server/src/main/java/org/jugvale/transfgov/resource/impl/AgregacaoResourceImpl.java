@@ -13,11 +13,13 @@ import org.jugvale.transfgov.agregacao.AgregacaoController;
 import org.jugvale.transfgov.model.agregacao.Agregacao;
 import org.jugvale.transfgov.model.agregacao.TipoAgregacao;
 import org.jugvale.transfgov.model.base.Area;
+import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Estado;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.transferencia.Transferencia;
 import org.jugvale.transfgov.resource.AgregacaoResource;
 import org.jugvale.transfgov.service.impl.AreaService;
+import org.jugvale.transfgov.service.impl.DadosMunicipioService;
 import org.jugvale.transfgov.service.impl.EstadoService;
 import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
@@ -40,6 +42,9 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 
 	@Inject
 	private AreaService areaService;
+
+	@Inject
+	private DadosMunicipioService dadosMunicipioService;
 	
 	public TipoAgregacao[] todasAgregacoes() {
 		return TipoAgregacao.values();
@@ -53,10 +58,7 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	}
 	
 	public Agregacao agregaPorAnoMunicipio(TipoAgregacao tipoAgregacao, int ano, long idMunicipio) {
-		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
-		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(idMunicipio), Municipio.class);
-		List<Transferencia> transferencias = transferenciaService.buscarPorAnoMunicipio(ano, municipio);
-		return agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, idMunicipio, false);
 	}
 	
 
@@ -96,7 +98,24 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 
 	@Override
 	public List<Agregacao> agrupaPorAnoArea(TipoAgregacao tipoAgregacao,
-			int ano, PathSegment pathSegment) {
+			int ano, PathSegment pathSegment){
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, pathSegment, false);
+	}
+
+	@Override
+	public Agregacao agregaPorAnoMunicipioPercapita(
+			TipoAgregacao tipoAgregacao, int ano, long idMunicipio) {
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, idMunicipio, true);
+	}
+
+	@Override
+	public List<Agregacao> agrupaPerCapitaPorAnoArea(
+			TipoAgregacao tipoAgregacao, int ano, PathSegment pathSegment) {
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, pathSegment, true);
+	}
+	
+	private List<Agregacao> criarAgregacaoPorAnoMunicipio(TipoAgregacao tipoAgregacao,
+			int ano, PathSegment pathSegment, boolean ehPercapita) {
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
 		List<Agregacao> agregacoes = new ArrayList<>();
 		Set<String> ids = pathSegment.getMatrixParameters().keySet();
@@ -104,10 +123,30 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 			long idMunicipio = Long.parseLong(id);
 			Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(idMunicipio), Municipio.class);
 			List<Transferencia> transferencias = transferenciaService.buscarPorAnoMunicipio(ano, municipio);
-			agregacoes.add( agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias));
+			Agregacao agregacao;
+			if(ehPercapita) {
+				DadosMunicipio dados = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio);
+				agregacao = agregacaoController.agregaPercapitaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias, dados.getPopulacao());
+			} else {
+				agregacao = agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
+			}
+			agregacoes.add(agregacao);
 		}
 		return agregacoes;
 	}
-
-
+	
+	private Agregacao criarAgregacaoPorAnoMunicipio(TipoAgregacao tipoAgregacao, int ano, long idMunicipio, boolean ehPerCapita) {
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(idMunicipio), Municipio.class);
+		List<Transferencia> transferencias = transferenciaService.buscarPorAnoMunicipio(ano, municipio);
+		Agregacao agregacao;
+		if(ehPerCapita) {
+			DadosMunicipio dados = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio);
+			agregacao = agregacaoController.agregaPercapitaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias, dados.getPopulacao());
+		} else {
+			agregacao = agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
+		}
+		return agregacao;
+	}	
+	
 }

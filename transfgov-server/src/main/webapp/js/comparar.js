@@ -28,8 +28,8 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			 $scope.todasCategorias.splice(pos,1);
 			 $scope.categoriaRemovidas.push(v);
 		});
-		 atualizaGraficoAgregacao($scope.agregacoes);
-		 $scope.categoriaParaRemover = null;
+		atualizaTodosGraficosAgregacao();
+		$scope.categoriaParaRemover = null;
 	};
 	
 	$scope.adicionaCategoria = function() {
@@ -38,8 +38,8 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			 $scope.categoriaRemovidas.splice(pos, 1);
 			 $scope.todasCategorias.push(v);				
 		});			
-		 atualizaGraficoAgregacao($scope.agregacoes);
-		 $scope.categoriaParaAdicionar = null;
+		atualizaTodosGraficosAgregacao();
+		$scope.categoriaParaAdicionar = null;
 	};
 
 	$scope.isSelected = function(agregacao) {
@@ -85,7 +85,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		params['ano'] = $scope.anoSelecionado.ano;
 		params['municipios'] = new Array();
 		$.each($scope.municipiosSelecionados, function(i, m){
-			params['municipios'].push(m.id + ';' + m.nome + ';' + m.estado.sigla);
+			params['municipios'].push(m.id + ';' + encodeURI(m.nome) + ';' + m.estado.sigla);
 		});
 		params['agregacao'] = $scope.agregacaoSelecionada.nome + ';' + $scope.agregacaoSelecionada.valor;
 		salvaMapaUrl(params);
@@ -95,22 +95,39 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		 $.each($scope.municipiosSelecionados, function (i, m){
 			 ids.push(m.id);
 		 });	
+		 
 		 transfGovService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
-			 $scope.categoriaRemovidas = new Array();
-			 $scope.todasCategorias = new Array();
+			 organizaColunas(agregacoes);
 			 $scope.agregacoes = agregacoes;
-			 $.each(agregacoes, function(i, agreg){
-				 $.each(agreg.dadosAgregados, function(cat, valor){
-					 if($scope.todasCategorias.indexOf(cat) == -1) {
-						 $scope.todasCategorias.push(cat);
-					 }					 
-				 });
-			 });
-			 atualizaGraficoAgregacao(agregacoes);
+			 atualizaGraficoAgregacao('#graficoComparacaoAgregacao', agregacoes);
+		 });
+		 
+		 transfGovService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
+			 organizaColunas(agregacoes);
+			 $scope.agregacoesPerCapita = agregacoes;
+			 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', agregacoes);
 		 });
 	};
 	
-	var atualizaGraficoAgregacao = function(agregacoes) {
+	var organizaColunas = function (agregacoes) {
+		 $scope.categoriaRemovidas = new Array();
+		 $scope.todasCategorias = new Array();
+		 $.each(agregacoes, function(i, agreg){
+			 $.each(agreg.dadosAgregados, function(cat, valor){
+				 if($scope.todasCategorias.indexOf(cat) == -1) {
+					 $scope.todasCategorias.push(cat);
+				 }					 
+			 });
+		 });		
+	}
+	
+	var atualizaTodosGraficosAgregacao = function () {
+		atualizaGraficoAgregacao('#graficoComparacaoAgregacao', $scope.agregacoes);
+		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', $scope.agregacoesPerCapita);
+
+	}
+	
+	var atualizaGraficoAgregacao = function(divGrafico, agregacoes) {
 			 var series = new Array();
 			 var categorias = $scope.todasCategorias;	 
 			 categorias.sort();
@@ -128,7 +145,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 				 		data: valoresPorArea
 				 	}); 
 			 });
-			 var grafico = $('#graficoComparacaoAgregacao').highcharts({
+			 var grafico = $(divGrafico).highcharts({
 			        chart: {
 			            type: 'column'
 			        },
@@ -170,7 +187,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			var campos = v.split(';');
 			$scope.municipiosSelecionados.push({
 				id: campos[0],
-				nome: campos[1],
+				nome: decodeURI(campos[1]),
 				estado: {
 					sigla: campos[2]
 				}

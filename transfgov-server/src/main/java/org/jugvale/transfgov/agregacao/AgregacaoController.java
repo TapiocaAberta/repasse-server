@@ -34,6 +34,12 @@ public class AgregacaoController {
 		return new Agregacao(ano, mes, estado, municipio, tipoAgregacao, dadosSomados);		
 	}
 	
+	public Agregacao agregaPercapitaPorTipo(int ano, int mes, Estado estado, Municipio municipio, TipoAgregacao tipoAgregacao, List<Transferencia> transferencias, long populacao) {
+		Function<Transferencia, ?> funcao = criaFuncao(tipoAgregacao);
+		Map<Object, Double> dadosSomados =  agregaESomaPerCapita(transferencias,  funcao, populacao);
+		return new Agregacao(ano, mes, estado, municipio, tipoAgregacao, dadosSomados);		
+	}
+	
 	/**
 	 * 
 	 * Cria a função usada para fazer agregação
@@ -67,6 +73,12 @@ public class AgregacaoController {
 	
 	private Map<Object, Double> agregaESoma(List<Transferencia> transferencias, Function<? super Transferencia, ?> agregador){
 		return transferencias.stream().collect(Collectors.groupingBy(agregador, Collectors.summingDouble(Transferencia::getValor)));
-	} 	
+	} 
+	
+	private Map<Object, Double> agregaESomaPerCapita(List<Transferencia> transferencias, Function<? super Transferencia, ?> agregador, long populacao){
+		return transferencias.stream().collect(Collectors.groupingBy(agregador, Collectors.summingDouble(t -> {
+			return ((Transferencia) t).getValor() / populacao;
+		})));
+	} 
 
 }

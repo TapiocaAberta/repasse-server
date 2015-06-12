@@ -26,7 +26,7 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
 ];
 
 
-var SEPARADOR_URL = '|';
+var SEPARADOR_URL = '&';
 
 // Parâmetros
 var MUNICIPIO = "{MUNICIPIO}";
@@ -52,6 +52,7 @@ var URL_SUBFUNCOES_AREA = URL_AREAS + "/" + AREA+  "/sub-funcao";
 var URL_ANO_AGREGA_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municipio/" + MUNICIPIO;
 
 var URL_ANO_AGREGA_MUNICIPIOS = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municipios/ids;";
+var URL_ANO_AGREGA_MUNICIPIOS_PERCAPITA = URL_AGREGACAO + "/percapita/" + AGREGACAO + "/" + ANO + "/municipios/ids;";
 
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
@@ -120,7 +121,14 @@ var TransfGovService = function($http) {
 		var url = URL_ANO_AGREGA_MUNICIPIOS.replace(AGREGACAO, agregacao).replace(ANO,
 				ano) + municipiosIds.join(";");
 		$http.get(url).success(sucesso);
+	};	
+	
+	this.anoAgregadoPerCapitaAreaVariosMun = function(agregacao, ano, municipiosIds, sucesso) {
+		var url = URL_ANO_AGREGA_MUNICIPIOS_PERCAPITA.replace(AGREGACAO, agregacao).replace(ANO,
+				ano) + municipiosIds.join(";");
+		$http.get(url).success(sucesso);
 	};
+	
 	
 	
 	this.dadosPaginados = function(urlTransfPaginada, sucesso) {

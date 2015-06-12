@@ -74,6 +74,7 @@ appExplorar.controller('ExplorarController',
 				e.preventDefault();
 				$(this).tab('show');
 			});
+			var paramsUrl = recuperaMapaUrl();
 			transfGovService.agregacoes(function(agregacoes) {
 				$scope.agregacoes = agregacoes;
 				$scope.agregacaoSelecionada = $scope.agregacoes[0];
@@ -82,20 +83,42 @@ appExplorar.controller('ExplorarController',
 			$scope.prefixoMeses = prefixoMeses;
 			transfGovService.anos(function(anos) {
 				$scope.anos = anos;
+				$.each(anos, function(i, ano) { 
+					if(ano.ano == paramsUrl['ano']){
+						$scope.anoSelecionado = ano;
+					}
+				});
 			});
 			transfGovService.estados(function(estados) {
 				$scope.estados = estados;
+				$.each(estados, function(i, estado) {
+					if(estado.sigla == paramsUrl['sigla']) {
+						$scope.estadoSelecionado = estado;
+						$scope.carregaMunicipios();
+					}
+				});
 			});
 			$scope.carregaMunicipios = function() {
 				transfGovService.municipiosPorEstado(
 						$scope.estadoSelecionado.sigla, function(municipios) {
 							$scope.municipios = municipios;
-						});
+							$.each(municipios, function(i, m) {
+								if(m.id == paramsUrl['id']){
+									$scope.municipioSelecionado = m;
+									$scope.carregaApp();
+								}
+							});
+				});
 
 			}
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
 				$scope.municipioBusca = $scope.municipioSelecionado;
+				var mapa = {};
+				mapa['sigla'] = $scope.estadoSelecionado.sigla;
+				mapa['id'] = $scope.municipioSelecionado.id;
+				mapa['ano'] =  $scope.anoSelecionado.ano;
+				salvaMapaUrl(mapa);
 			}
 
 			$scope.listenerAgregacao = function() {

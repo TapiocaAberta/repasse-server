@@ -37,11 +37,6 @@ public interface AgregacaoResource {
 	public Agregacao agregaPorAnoMunicipio(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("idMunicipio") long idMunicipio);
 	
 	@GET
-	@Path("/percapita/{tipoAgregacao}/{ano}/municipio/{idMunicipio}")	
-	@JsonView(MunicipioConcisoView.class)
-	public Agregacao agregaPorAnoMunicipioPercapita(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("idMunicipio") long idMunicipio);
-	
-	@GET
 	@Path("/AREA/area/{areaId}/{ano}/{mes}/municipio/{idMunicipio}")
 	@JsonView(MunicipioConcisoView.class)	
 	public Agregacao agregaPorAnoMesAreaMunicipio(@PathParam("areaId") long idArea, @PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("idMunicipio") long idMunicipio);
@@ -69,6 +64,16 @@ public interface AgregacaoResource {
 	@Path("/percapita/{tipoAgregacao}/{ano}/municipios/{municipioIds}")	
 	@JsonView(MunicipioConcisoView.class)
 	public List<Agregacao> agrupaPerCapitaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
+	
+	@GET
+	@Path("/percapita/{tipoAgregacao}/{ano}/municipio/{idMunicipio}")	
+	@JsonView(MunicipioConcisoView.class)
+	public Agregacao agregaPorAnoMunicipioPercapita(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("idMunicipio") long idMunicipio);
+	
+	@GET
+	@Path("percapita/ANO/{ano}/municipio/{municipioId}/")
+	@JsonView(MunicipioConcisoView.class)
+	public Map<Integer, Double> agrupaPorAnoPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 
 
 }

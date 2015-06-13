@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -78,9 +79,7 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	
 	@Override
 	public Map<Integer, Double> agrupaPorAno(int ano, long municipioId) {
-		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
-		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(String.format(MSG_NAO_HA_DADOS_ANO, ano), ano));
-		return transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio);
+		return criaAgrupamentoPorAno(ano, municipioId, false);
 	}
 
 	@Override
@@ -114,6 +113,11 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, pathSegment, true);
 	}
 	
+	@Override
+	public Map<Integer, Double> agrupaPorAnoPerCapita(int ano, long municipioId) {
+		return criaAgrupamentoPorAno(ano, municipioId, true);
+	}	
+		
 	private List<Agregacao> criarAgregacaoPorAnoMunicipio(TipoAgregacao tipoAgregacao,
 			int ano, PathSegment pathSegment, boolean ehPercapita) {
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
@@ -147,6 +151,20 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 			agregacao = agregacaoController.agregaPorTipo(ano, 0, municipio.getEstado(), municipio, tipoAgregacao, transferencias);
 		}
 		return agregacao;
-	}	
+	}
 	
+	public Map<Integer, Double> criaAgrupamentoPorAno(int ano, long municipioId, boolean ehPerCapita) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(String.format(MSG_NAO_HA_DADOS_ANO, ano), ano));
+		Map<Integer, Double> retorno = transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio);
+		if(ehPerCapita) {
+			DadosMunicipio dados = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio);
+			retorno = retorno.entrySet().stream()
+					.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue() / dados.getPopulacao()
+			));
+		}
+		return retorno;
+	}
+
+
 }

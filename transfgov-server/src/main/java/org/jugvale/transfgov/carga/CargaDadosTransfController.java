@@ -177,7 +177,7 @@ public class CargaDadosTransfController {
 				codigoFuncao, nomeFuncao));
 		SubFuncao subFuncao = subFuncaoService.buscaPorIdOuCria(
 				codigoSubFuncao, () -> new SubFuncao(codigoSubFuncao,
-						nomeSubFuncao, area));
+						nomeSubFuncao));
 		Programa programa = programaService.buscaPorIdOuCria(codigoPrograma,
 				() -> new Programa(codigoPrograma, nomePrograma));
 		Acao acao = acaoService.buscaPorCodigoOuCria(codigoAcao,
@@ -190,7 +190,7 @@ public class CargaDadosTransfController {
 		transferencia.setMes(mes);
 		transferencia.setAcao(acao);
 		transferencia.setFavorecido(favorecido);
-
+		transferencia.setArea(area);
 		transferencia.setMunicipio(municipio);
 		transferencia.setPrograma(programa);
 		transferencia.setSubFuncao(subFuncao);

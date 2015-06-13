@@ -80,10 +80,4 @@ public class BaseResourceImpl implements BaseResource{
 		return favorecidoService.todos();
 	}
 
-	@Override
-	public List<SubFuncao> subFuncoesPorArea(long id) {
-		Area a = JaxrsUtils.lanca404SeNulo(areaService.buscarPorId(id), Area.class);
-		return subFuncaoService.buscaPorArea(a);
-	}
-
 }

@@ -13,6 +13,7 @@ import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Municipio;
 
 @XmlRootElement
@@ -26,7 +27,7 @@ import org.jugvale.transfgov.model.base.Municipio;
 		@NamedQuery(name = "Transferencia.quantidadePorAno", query = "SELECT COUNT(t) FROM Transferencia t WHERE t.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.porAnoMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.municipio = :municipio"),
 		@NamedQuery(name = "Transferencia.porAnoMesEstado", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio.estado = :estado"),
-		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.subFuncao.area = :area"),
+		@NamedQuery(name = "Transferencia.porAnoMesAreaMunicipio", query = "SELECT t from Transferencia t WHERE t.ano = :ano AND t.mes = :mes AND t.municipio = :municipio AND t.area = :area"),
 		@NamedQuery(name = "Transferencia.todosAnos", query = "SELECT DISTINCT t.ano from Transferencia t", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.mesesPorAno", query = "SELECT DISTINCT t.mes from Transferencia t WHERE t.ano = :ano ORDER BY t.mes", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.removePorMesAno", query = "DELETE FROM Transferencia t WHERE t.ano = :ano AND t.mes = :mes"),
@@ -51,6 +52,10 @@ public class Transferencia {
 	@JoinColumn(name = "municipio_mun_id")
 	private Municipio municipio;
 
+	@ManyToOne
+	@JoinColumn(name = "area_area_id")
+	private Area area;
+	
 	@ManyToOne
 	@JoinColumn(name = "programa_pro_id")
 	private Programa programa;
@@ -150,4 +155,13 @@ public class Transferencia {
 	public void setFavorecido(Favorecido favorecido) {
 		this.favorecido = favorecido;
 	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+	
 }

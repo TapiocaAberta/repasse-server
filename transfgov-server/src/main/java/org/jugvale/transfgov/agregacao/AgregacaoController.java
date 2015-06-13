@@ -60,7 +60,7 @@ public class AgregacaoController {
 		case MES:
 			return Transferencia::getMes;
 		case AREA:
-			return t -> t.getSubFuncao().getArea();
+			return Transferencia::getArea;
 		case FAVORECIDO:
 			return Transferencia::getFavorecido;
 		case MUNICIPIO:

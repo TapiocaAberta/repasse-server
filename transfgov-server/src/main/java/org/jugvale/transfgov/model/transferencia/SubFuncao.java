@@ -4,25 +4,17 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.jugvale.transfgov.model.base.Area;
 
 @Entity
 @Table(name = "sub_funcao")
 @XmlRootElement
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
-@NamedQueries({
-	@NamedQuery(name = "SubFuncao.porArea", query = "SELECT s from SubFuncao s WHERE s.area = :area")
-})
 public class SubFuncao {
 
 	@Id
@@ -32,23 +24,18 @@ public class SubFuncao {
 	@Column(name = "sfu_nome")
 	private String nome;
 	
-	@ManyToOne
-	@JoinColumn(name = "area_area_id")
-	private Area area;
-	
 	public SubFuncao() {
 		super();
 	}
 
-	public SubFuncao(long codigoSubFuncao, String nomeSubFuncao, Area area) {
+	public SubFuncao(long codigoSubFuncao, String nomeSubFuncao) {
 		this.id = codigoSubFuncao;
-		this.nome = nomeSubFuncao;
-		this.area = area;
+		this.nome = nomeSubFuncao;	
 	}
 	
 	@Override
 	public String toString() {
-		return area.getNome() + ": " + nome;
+		return nome;
 	}
 
 	public long getId() {
@@ -65,14 +52,6 @@ public class SubFuncao {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Area getArea() {
-		return area;
-	}
-
-	public void setArea(Area area) {
-		this.area = area;
 	}
 
 }

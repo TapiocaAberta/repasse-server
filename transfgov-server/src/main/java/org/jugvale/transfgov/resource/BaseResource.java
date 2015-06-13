@@ -20,10 +20,6 @@ public interface BaseResource {
 	@GET
 	@Path("area/{id}")
 	public Area areaPorId(@PathParam("id") long id);
-	
-	@GET
-	@Path("area/{id}/sub-funcao")
-	public List<SubFuncao> subFuncoesPorArea(@PathParam("id") long id);
 
 	@GET
 	@Path("area")

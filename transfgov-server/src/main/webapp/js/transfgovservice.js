@@ -34,7 +34,7 @@ var ANOS = [
 
 var SEPARADOR_URL = '&';
 
-// Parâmetros
+// Parâmetros (TODO: Remover no futuro, usar RESTEasy Ajax Client)
 var MUNICIPIO = "{MUNICIPIO}";
 var ANO = "{ANO}";
 var MES = "{MES}";
@@ -62,6 +62,8 @@ var URL_ANO_AGREGA_MUNICIPIOS_PERCAPITA = URL_AGREGACAO + "/percapita/" + AGREGA
 
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
+
+var URL_PORTAL_TRANSP = "http://transparencia.gov.br/PortalTransparenciaListaAcoes.asp?Exercicio="+ANO+"&SelecaoUF=1&SiglaUF="+SIGLA+"&CodMun={SIAFI}&ordem=0"
 
 // TODO: matar o http e usar resteasy
 var TransfGovService = function($http) {
@@ -206,4 +208,8 @@ function parseLink(l) {
 	link.rel = fields[1].replace(' rel="', '').replace('"', '');
 	link.title = fields[2].replace(' title="', '').replace('"', '');
 	return link;
+}
+
+function linkFontePorAno(ano, sigla, siafi) {
+	return URL_PORTAL_TRANSP.replace(ANO, ano). replace(SIGLA, sigla).replace('{SIAFI}', siafi);
 }

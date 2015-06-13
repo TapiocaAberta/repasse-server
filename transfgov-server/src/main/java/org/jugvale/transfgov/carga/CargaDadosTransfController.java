@@ -167,9 +167,7 @@ public class CargaDadosTransfController {
 		String codigoFavorecido = campos[12];
 		String nomeFavorecido = campos[13];
 		// GAMBIARRA PARA EVITAR PROBLEMAS COM LOCALE DE FLOATS
-		float valor = Float.parseFloat(campos[17].replaceAll("\\,", "")
-				.replace("\\.", ","));
-
+		float valor = Float.parseFloat(campos[17].replaceAll("\\,", ""));
 		Estado estado = estadoService.buscaEstadoPorSiglaOuCria(siglaEstado,
 				() -> new Estado(siglaEstado));
 		Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(

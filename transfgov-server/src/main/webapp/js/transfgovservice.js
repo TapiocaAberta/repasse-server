@@ -1,5 +1,5 @@
 /**
-
+ * 
  * Uma classe service que permite acesso a métodos da API do TransfGov.
  * 
  * Nenhum tratamento de erro por enquanto.
@@ -24,6 +24,12 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
           valor: "PROGRAMA"		  
       }
 ];
+
+var ANOS = [
+	{	
+		ano: 2015, meses: [ 1, 2, 3, 4 ]
+	}
+]
 
 
 var SEPARADOR_URL = '&';
@@ -162,7 +168,9 @@ var TransfGovService = function($http) {
 }
 
 /**
- * Irá adicionar os parâmetros do mapa na URL para serem encontrados posteriormente
+ * Irá adicionar os parâmetros do mapa na URL para serem encontrados
+ * posteriormente
+ * 
  * @param params
  */
 function salvaMapaUrl(params) {
@@ -175,6 +183,7 @@ function salvaMapaUrl(params) {
 
 /**
  * Irá retirar os parâmetros do mapa na URL
+ * 
  * @param params
  */
 function recuperaMapaUrl() {

@@ -128,6 +128,9 @@ appExplorar.controller('ExplorarController',
 				mapa['id'] = $scope.municipioSelecionado.id;
 				mapa['ano'] =  $scope.anoSelecionado.ano;
 				salvaMapaUrl(mapa);
+				$scope.linkFontePorAno = linkFontePorAno($scope.anoSelecionado.ano, 
+						$scope.estadoSelecionado.sigla, 
+					    $scope.municipioSelecionado.codigoSIAFI);
 			}
 
 			$scope.listenerAgregacao = function() {

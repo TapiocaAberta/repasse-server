@@ -81,6 +81,8 @@ appExplorar.controller('ExplorarController',
 			});
 
 			$scope.prefixoMeses = prefixoMeses;
+			
+			/* REMOVIDO TEMPORARIAMENTE
 			transfGovService.anos(function(anos) {
 				$scope.anos = anos;
 				$.each(anos, function(i, ano) { 
@@ -88,7 +90,14 @@ appExplorar.controller('ExplorarController',
 						$scope.anoSelecionado = ano;
 					}
 				});
+			});*/
+			$scope.anos = ANOS;
+			$.each(ANOS, function(i, ano) { 
+				if(ano.ano == paramsUrl['ano']){
+					$scope.anoSelecionado = ano;
+				}
 			});
+			
 			transfGovService.estados(function(estados) {
 				$scope.estados = estados;
 				$.each(estados, function(i, estado) {

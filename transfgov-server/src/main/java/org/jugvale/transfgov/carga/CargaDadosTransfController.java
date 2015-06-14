@@ -37,7 +37,6 @@ import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.service.impl.ProgramaService;
 import org.jugvale.transfgov.service.impl.SubFuncaoService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
-import org.jugvale.transfgov.utils.ArquivoTransfUtils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

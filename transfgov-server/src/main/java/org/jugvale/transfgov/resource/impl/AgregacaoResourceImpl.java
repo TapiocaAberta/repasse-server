@@ -166,5 +166,4 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 		return retorno;
 	}
 
-
 }

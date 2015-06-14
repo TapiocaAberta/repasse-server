@@ -15,7 +15,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 	var series = new Array();
 	agregacoesAno.forEach(function(agregacaoAno) {
 		ano = agregacaoAno.ano;
-		categorias.push(agregacaoAno.mes);
+		categorias.push(prefixoMeses[agregacaoAno.mes - 1]);
 		for (a in agregacaoAno.dadosAgregados) {
 			if (!seriesMap[a])
 				seriesMap[a] = new Array();
@@ -45,8 +45,10 @@ function criaGraficoAnoArea(agregacoesAno) {
 			categories : categorias
 		},
 		tooltip : {
-			valuePrefix : "R$ "
-		},
+			valuePrefix : "R$ ",
+			headerFormat: "Mês: {point.x} <br/>", 
+	        pointFormat: '{point.y:,.3f}'
+	    },
 		yAxis : {
 			title : {
 				text : 'Valor'
@@ -70,6 +72,12 @@ function criaGraficoAnoArea(agregacoesAno) {
 
 appExplorar.controller('ExplorarController',
 		function($scope, transfGovService) {
+			Highcharts.setOptions({
+			    lang: {
+			        decimalPoint: ',',
+			        thousandsSep: '.'
+			    }
+			});		
 			$('#abasPainel a').click(function(e) {
 				e.preventDefault();
 				$(this).tab('show');
@@ -205,6 +213,9 @@ appExplorar.controller('ExplorarController',
 										chart : {
 											type : 'bar'
 										},
+										tooltip : {
+									        pointFormat: 'R$ {point.y:,.3f}'
+									    },
 										xAxis : {
 											categories : categorias
 										},
@@ -229,6 +240,9 @@ appExplorar.controller('ExplorarController',
 								                enabled: true
 								            }
 										},
+										tooltip : {
+									        pointFormat: 'R$ {point.y:,.3f}'
+									    },
 										series : [ {
 											name: "",
 											type: 'pie',

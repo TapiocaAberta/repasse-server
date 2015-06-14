@@ -2,13 +2,12 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		function($http) {
 			return new TransfGovService($http)
 		}).controller('CompararController', function($scope, transfGovService) {
-			
-		    Highcharts.setOptions({
-		        lang: {
-		            decimalPoint: ',',
-		            thousandsSep: ' '
-		        }
-		    });		
+	Highcharts.setOptions({
+	    lang: {
+	        decimalPoint: ',',
+	        thousandsSep: '.'
+	    }
+	});			
 	$scope.municipiosSelecionados = new Array();
 	$scope.configurarCategorias = function() {
 		var d = $("#dialogoSelecionarCategorias").dialog({
@@ -132,7 +131,6 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 	var atualizaTodosGraficosAgregacao = function () {
 		atualizaGraficoAgregacao('#graficoComparacaoAgregacao', $scope.agregacoes);
 		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', $scope.agregacoesPerCapita);
-
 	}
 	
 	var atualizaGraficoAgregacao = function(divGrafico, agregacoes) {
@@ -176,7 +174,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			        tooltip: {
 			            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 			            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-			                '<td style="padding:0"><b>R$ {point.y} </b></td></tr>',
+			                '<td style="padding:0"><b>R$ {point.y:,.3f} </b></td></tr>',
 			            footerFormat: '</table>',
 			            shared: true,
 			            useHTML: true

@@ -27,10 +27,9 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
 
 var ANOS = [
 	{	
-		ano: 2015, meses: [ 1, 2, 3, 4 ]
+		ano: 2015, meses: [ 1, 2, 3, 4 ],
 	}
 ]
-
 
 var SEPARADOR_URL = '&';
 
@@ -136,8 +135,6 @@ var TransfGovService = function($http) {
 				ano) + municipiosIds.join(";");
 		$http.get(url).success(sucesso);
 	};
-	
-	
 	
 	this.dadosPaginados = function(urlTransfPaginada, sucesso) {
 		$http.get(urlTransfPaginada).success(

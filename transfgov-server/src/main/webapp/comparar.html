@@ -63,20 +63,6 @@
 				</div>
 			</form>
 		</div>
-		<div class="row" ng-show="municipiosSelecionados.length">
-			<h3>Selecione um ano:</h3>
-			<form class="form-horizontal">
-				<div class="form-group">
-					<label for="anos" class="control-label col-xs-2">Ano</label>
-					<div class="col-xs-4">
-						<select id="anos" class="form-control" ng-model="anoSelecionado"
-							ng-options="ano.ano for ano in anos" ng-disabled="!anos"
-							ng-change="atualizaGraficos()">
-						</select>
-					</div>
-				</div>
-			</form>
-		</div>
 		<div class="row">
 			<span class="label label-success"
 				ng-repeat="m in municipiosSelecionados" style="margin-left: 10px">
@@ -87,31 +73,40 @@
 		</div>
 		<hr>
 	</div>
-	<div class="container"
-		ng-show="municipiosSelecionados.length && anoSelecionado">
+	<div class="container" ng-show="municipiosSelecionados.length">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="input-group">
 					<div id="radioBtn" class="btn-group">
 						<a class="btn btn-primary btn-sm"
-							ng-class="{active: isSelected(a), notActive: !isSelected(a)}"
+							ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
 							ng-click="selecionaAgregacao(a)"
 							ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3 col-md-offset-5">
-				<em style="margin-left: 10px">Mostrando
-					{{todasCategorias.length }} de {{ todasCategorias.length +
-					categoriaRemovidas.length }} categorias
+			<div class="col-md-5">
+				<div class="input-group">
+					<div id="radioBtn" class="btn-group">
+						<a class="btn btn-primary btn-sm"
+							ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
+							ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<em class="pull-right"> Mostrando {{todasCategorias.length }}
+					de {{ todasCategorias.length + categoriaRemovidas.length }}
+					categorias
 					<button class="btn btn-primary" ng-click="configurarCategorias()">
-						<span style="margin-left: 5px" class="glyphicon glyphicon-wrench"></span>
+						<span class="glyphicon glyphicon-wrench"></span>
 					</button>
 				</em>
 			</div>
 		</div>
 		<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
-				<div class="row">
+		<div class="row">
 			<h4>Comparação percapita de cada Município</h4>
 			<div id="graficoPerCapitaComparacaoAgregacao"></div>
 		</div>
@@ -184,4 +179,3 @@
 	<script src="js/comparar.js"></script>
 </body>
 </html>
-

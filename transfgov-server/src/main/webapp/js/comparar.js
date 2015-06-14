@@ -27,6 +27,11 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		$scope.agregacaoSelecionada = agregacao;
 		$scope.atualizaGraficos();
 	};
+
+	$scope.selecionaAno = function(ano) {
+		$scope.anoSelecionado = ano;
+		$scope.atualizaGraficos();
+	};	
 	
 	$scope.removeCategoria = function() {
 		$.each($scope.categoriaParaRemover, function(i, v){
@@ -48,11 +53,14 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		$scope.categoriaParaAdicionar = null;
 	};
 
-	$scope.isSelected = function(agregacao) {
+	$scope.ehAgregacaoSelecionada = function(agregacao) {
 	    return $scope.agregacaoSelecionada === agregacao;
 	}		
+	
+	$scope.ehAnoSelecionado = function(ano) {
+		return $scope.anoSelecionado === ano;
+	}
 	$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
-	$scope.agregacaoSelecionada = AGREGACOES_SUPORTADAS_COMPARACAO[0];
 	
 	transfGovService.estados(function(d) {
 		$scope.estados = d;
@@ -94,7 +102,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		$.each($scope.municipiosSelecionados, function(i, m){
 			params['municipios'].push(m.id + ';' + encodeURI(m.nome) + ';' + m.estado.sigla);
 		});
-		params['agregacao'] = $scope.agregacaoSelecionada.nome + ';' + $scope.agregacaoSelecionada.valor;
+		params['agregacao'] = $scope.agregacaoSelecionada.valor;
 		salvaMapaUrl(params);
 		
 		 var ids = new Array();
@@ -184,11 +192,29 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			 
 	};
 	
-	// por fim vamos atualizar a tela com os parâmetros de URL
-	
+	// por fim vamos atualizar a tela com os parâmetros de URL	
 	var paramsUrl = recuperaMapaUrl(); 
-	if(paramsUrl['ano'] && paramsUrl['municipios']){
-		$scope.anoSelecionado = { ano: paramsUrl['ano']};
+	if(paramsUrl['ano']) {
+		$.each($scope.anos, function (i, v){
+			if(i.ano == paramsUrl['ano']){
+				$scope.anoSelecionado = i;
+			}
+		})		
+	}
+	if(!$scope.anoSelecionado) {
+		$scope.anoSelecionado = ANOS[0];
+	}
+	if(paramsUrl['agregacao']) {
+		$.each($scope.agregacoesSuportadas, function (i, v){ 
+			if(v.valor == paramsUrl['agregacao']) {
+				$scope.agregacaoSelecionada = v;
+			}
+		});
+	} 
+	if(!$scope.agregacaoSelecionada){
+		$scope.agregacaoSelecionada = AGREGACOES_SUPORTADAS_COMPARACAO[0];
+	}
+	if(paramsUrl['municipios']) {
 		$.each(paramsUrl['municipios'].split(','), function (i, v) {		
 			var campos = v.split(';');
 			$scope.municipiosSelecionados.push({
@@ -199,14 +225,6 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 				}
 			});
 		});
-		if(paramsUrl['agregacao']) {
-			var campos = paramsUrl['agregacao'].split(';');
-			$scope.agregacaoSelecionada = {
-					nome: campos[0],
-					valor: campos[1]
-			};
-			
-		}
 		$scope.atualizaGraficos();
-	}
+	}	
 });

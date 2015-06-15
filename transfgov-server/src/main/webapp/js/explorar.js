@@ -30,7 +30,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 	}
 	$('#divGraficoAreaPorAno').highcharts({
 		title : {
-			text : 'Tranferências no ano ' + ano,
+			text : 'Transferências no ano ' + ano,
 			x : -20
 		// center
 		},

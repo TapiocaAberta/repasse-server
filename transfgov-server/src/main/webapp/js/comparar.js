@@ -94,8 +94,10 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 	};
 	
 	$scope.atualizaGraficos = function() {
-		if(!$scope.anoSelecionado) 
+		if(!$scope.anoSelecionado || !$scope.municipiosSelecionados.length){ 
+			salvaMapaUrl([]);
 			return;
+		}
 		var params = {};
 		params['ano'] = $scope.anoSelecionado.ano;
 		params['municipios'] = new Array();
@@ -191,7 +193,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			    });
 			 
 	};
-	
+
 	// por fim vamos atualizar a tela com os parâmetros de URL	
 	var paramsUrl = recuperaMapaUrl(); 
 	if(paramsUrl['ano']) {
@@ -226,5 +228,5 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			});
 		});
 		$scope.atualizaGraficos();
-	}	
+	}
 });

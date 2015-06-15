@@ -59,6 +59,9 @@ var URL_ANO_AGREGA_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municip
 var URL_ANO_AGREGA_MUNICIPIOS = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/municipios/ids;";
 var URL_ANO_AGREGA_MUNICIPIOS_PERCAPITA = URL_AGREGACAO + "/percapita/" + AGREGACAO + "/" + ANO + "/municipios/ids;";
 
+var URL_ANO_AGREGA_COMPARA = URL_AGREGACAO + "/percapita/ANO/{ANO}/municipio/{MUNICIPIO}/compara";
+var URL_ANO_AGREGA_COMPARA_PERCAPITA = URL_AGREGACAO + "/percapita/ANO/{ANO}/municipio/{MUNICIPIO}/compara";
+
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
 
@@ -104,6 +107,16 @@ var TransfGovService = function($http) {
 				.replace(MUNICIPIO, id);
 		this.dadosPaginados(url, sucesso);
 	};
+	
+	this.tranfComparaPorAno = function(ano, id, sucesso) {
+		var url = URL_ANO_AGREGA_COMPARA.replace(ANO, ano).replace(MUNICIPIO, id);
+		$http.get(url).success(sucesso);
+	}
+	
+	this.tranfComparaPorAnoPerCapita = function(ano, id, sucesso) {
+		var url = URL_ANO_AGREGA_COMPARA.replace(ANO, ano).replace(MUNICIPIO, id);
+		$http.get(url).success(sucesso);;
+	}
 
 	this.agregacaoPorAnoMesMun = function(agregacao, ano, mes, municipio,
 			sucesso) {

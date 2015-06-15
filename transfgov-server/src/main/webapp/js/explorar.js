@@ -130,7 +130,8 @@ appExplorar.controller('ExplorarController',
 			}
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
-				$scope.municipioBusca = $scope.municipioSelecionado;
+				carregaDadosComparacao();
+				$scope.municipioBusca = $scope.municipioSelecionado;				
 				var mapa = {};
 				mapa['sigla'] = $scope.estadoSelecionado.sigla;
 				mapa['id'] = $scope.municipioSelecionado.id;
@@ -183,6 +184,26 @@ appExplorar.controller('ExplorarController',
 				});
 			}
 
+			var carregaDadosComparacao = function() {
+				transfGovService.tranfComparaPorAnoPerCapita($scope.anoSelecionado.ano, 
+						$scope.municipioSelecionado.id, function(dados) {
+					montaGraficoComparacao('#divGraficoComparacaoPerCapitaPorAno', 'Comparação PerCapita', dados);
+				});
+				transfGovService.tranfComparaPorAno($scope.anoSelecionado.ano, 
+						$scope.municipioSelecionado.id, function(dados) {
+					montaGraficoComparacao('#divGraficoComparacaoPorAno', 'Comparação Dados Brutos', dados);
+				});
+				
+				
+			};
+			
+			var montaGraficoComparacao = function(elemento, titulo, dados) {
+				for(i in dados) {
+					
+				};
+				
+			}
+			
 			$scope.carregaGraficosAgregacao = function() {
 				var a = $scope.agregacaoSelecionada;
 				var ano = $scope.anoSelecionado.ano;
@@ -205,30 +226,12 @@ appExplorar.controller('ExplorarController',
 									y:	agregacao.dadosAgregados[i]
 								});
 							}
-							$('#containerGraficoAgregacao').highcharts(
-									{
-										title : {
-											text : ''
-										},
-										chart : {
-											type : 'bar'
-										},
-										tooltip : {
-									        pointFormat: 'R$ {point.y:,.3f}'
-									    },
-										xAxis : {
-											categories : categorias
-										},
-										plotOptions : {
-											series : {
-												allowPointSelect : true
-											}
-										},
-										series : [ {
-											name: $scope.municipioSelecionado.nome,
-											data : valores
-										} ]
-									});
+							criaGraficoBarra('#containerGraficoAgregacao', '', categorias, [
+								{
+									name: $scope.municipioSelecionado.nome,
+									data : valores
+								}
+							]);
 							$('#containerGraficoAgregacaoPizza').highcharts(
 									{
 										title : {
@@ -254,3 +257,27 @@ appExplorar.controller('ExplorarController',
 				$scope.gerandoGraficoAgregacao = false;
 			}
 		});
+
+function criaGraficoBarra(elemento, titulo, categorias, series) {
+	$(elemento).highcharts(
+			{
+				title : {
+					text : titulo
+				},
+				chart : {
+					type : 'bar'
+				},
+				tooltip : {
+			        pointFormat: 'R$ {point.y:,.3f}'
+			    },
+				xAxis : {
+					categories : categorias
+				},
+				plotOptions : {
+					series : {
+						allowPointSelect : true
+					}
+				},
+				series : series
+			});
+}

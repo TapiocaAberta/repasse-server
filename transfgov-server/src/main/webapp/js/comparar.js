@@ -116,13 +116,13 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		 transfGovService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
 			 organizaColunas(agregacoes);
 			 $scope.agregacoes = agregacoes;
-			 atualizaGraficoAgregacao('#graficoComparacaoAgregacao', agregacoes);
+			 atualizaTodosGraficosAgregacao();
 		 });
 		 
 		 transfGovService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
 			 organizaColunas(agregacoes);
 			 $scope.agregacoesPerCapita = agregacoes;
-			 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', agregacoes);
+			 atualizaTodosGraficosAgregacao();
 		 });
 	};
 	
@@ -139,11 +139,11 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 	}
 	
 	var atualizaTodosGraficosAgregacao = function () {
-		atualizaGraficoAgregacao('#graficoComparacaoAgregacao', $scope.agregacoes);
-		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', $scope.agregacoesPerCapita);
+		atualizaGraficoAgregacao('#graficoComparacaoAgregacao', 'Total (R$)', $scope.agregacoes);
+		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
 	}
 	
-	var atualizaGraficoAgregacao = function(divGrafico, agregacoes) {
+	var atualizaGraficoAgregacao = function(divGrafico, tituloY, agregacoes) {
 			 var series = new Array();
 			 var categorias = $scope.todasCategorias;	 
 			 categorias.sort();
@@ -161,7 +161,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 				 		data: valoresPorArea
 				 	}); 
 			 });
-			 var grafico = $(divGrafico).highcharts({
+			 $(divGrafico).highcharts({
 			        chart: {
 			            type: 'column'
 			        },
@@ -178,7 +178,7 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			        yAxis: {
 			            min: 0,
 			            title: {
-			                text: 'Total (R$)'
+			                text: tituloY
 			            }
 			        },
 			        tooltip: {

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -16,14 +17,30 @@ import org.jugvale.transfgov.service.Service;
 
 @Stateless
 public class TransferenciaService extends Service<Transferencia> {
+	
+	@Inject
+	DadosMunicipioService dadosMunicipioService;
 
-	public Map<Integer, Double> buscarPorAnoMunicipioAgregaPorMes(int ano, Municipio municipio){
+	public Map<Integer, Double> buscarPorAnoMunicipioAgregaPorMes(int ano, Municipio municipio, boolean perCapita){
+		double divisor = 1;
 		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMunicipioAgrupadoPorMes", Object[].class);
 		buscaTransferencia.setParameter("ano", ano);
 		buscaTransferencia.setParameter("municipio", municipio);
-		List<Object[]> linhas = buscaTransferencia.getResultList();
-		return linhas.stream().collect(Collectors.toMap(l -> (int) l[0], l -> (double) l[1]));
+		if(perCapita) {
+			divisor = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio).getPopulacao();
+		}
+		return montaMapaAgregacaoPorMes(buscaTransferencia.getResultList(), divisor);
 	}
+
+	public Map<Integer, Double> buscarPorAnoAgregaPorMes(int ano, boolean perCapita){
+		double divisor = 1;
+		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoAgrupadoPorMes", Object[].class);
+		buscaTransferencia.setParameter("ano", ano);
+		if(perCapita) {
+			divisor = dadosMunicipioService.somaPorAnoOuMaisRecente(ano);
+		}
+		return montaMapaAgregacaoPorMes(buscaTransferencia.getResultList(), divisor);
+	}	
 	
 	/**
 	 * Limpa todos os dados de transferencias para esse ano e mes
@@ -125,5 +142,12 @@ public class TransferenciaService extends Service<Transferencia> {
 		buscaTransferencia.setParameter("ano", ano);
 		buscaTransferencia.setParameter("mes", mes);		
 		return buscaTransferencia.getSingleResult();
+	}
+	
+	private Map<Integer, Double> montaMapaAgregacaoPorMes (List<Object[]> linhas, double divisor) {
+		return linhas.stream().collect(Collectors.toMap(l -> (int) l[0], l -> {
+			double valor = (double) l[1];
+			return valor / divisor;
+		}));
 	}
 }

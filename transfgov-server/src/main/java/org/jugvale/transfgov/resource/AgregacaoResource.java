@@ -74,6 +74,14 @@ public interface AgregacaoResource {
 	@Path("percapita/ANO/{ano}/municipio/{municipioId}/")
 	@JsonView(MunicipioConcisoView.class)
 	public Map<Integer, Double> agrupaPorAnoPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	
+	@GET
+	@Path("percapita/ANO/{ano}/municipio/{municipioId}/compara")
+	public Map<String, Map<Integer, Double>> comparaComMediaNacionalPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	
+	@GET
+	@Path("ANO/{ano}/municipio/{municipioId}/compara")
+	public Map<String, Map<Integer, Double>> comparaComMediaNacional(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 
 
 }

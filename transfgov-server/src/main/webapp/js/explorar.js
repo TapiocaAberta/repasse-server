@@ -30,7 +30,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 	}
 	$('#divGraficoAreaPorAno').highcharts({
 		title : {
-			text : 'Tranferências no ano ' + ano,
+			text : 'Transferências no ano ' + ano,
 			x : -20
 		// center
 		},
@@ -46,8 +46,8 @@ function criaGraficoAnoArea(agregacoesAno) {
 		},
 		tooltip : {
 			valuePrefix : "R$ ",
-			headerFormat: "Mês: {point.x} <br/>", 
-	        pointFormat: '{point.y:,.3f}'
+			headerFormat: "{series.name} <br/>", 
+	        pointFormat: '<b>R$ {point.y:,.3f}</b>'
 	    },
 		yAxis : {
 			title : {

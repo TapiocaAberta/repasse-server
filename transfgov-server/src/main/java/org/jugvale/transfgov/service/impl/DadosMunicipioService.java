@@ -31,6 +31,12 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 		return buscaDadosMunicipios.getResultList();	
 	}
 	
+	public Long somaPopulacaoPorAno(int ano) {
+		TypedQuery<Long> buscaDadosMunicipios = em.createNamedQuery("DadosMunicipio.somaPopulacaoPorAno", Long.class);
+		buscaDadosMunicipios.setParameter("ano", ano);
+		return buscaDadosMunicipios.getSingleResult();	
+	}	
+	
 	public DadosMunicipio buscaPorAnoMunicipioOuCria(int ano, Municipio m) {
 		try{
 			return buscaPorAnoMunicipio(ano, m);
@@ -58,6 +64,21 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 			Collections.sort(dados, Collections.reverseOrder(Comparator.comparingInt(DadosMunicipio::getAno)));
 			return dados.get(0);			
 		}		
+	}
+	
+
+	public boolean temDadosParaAno(int ano) {
+		TypedQuery<Long> buscaContagemPorAno = em.createNamedQuery("DadosMunicipio.contaLinhasPorAno", Long.class);
+		buscaContagemPorAno.setParameter("ano", ano);
+		return buscaContagemPorAno.getFirstResult() > 0;
+	}
+	
+	public Long somaPorAnoOuMaisRecente(int ano) {
+		if(!temDadosParaAno(ano)) {
+			TypedQuery<Integer> buscaAnoMaisRecente = em.createNamedQuery("DadosMunicipio.anoMaisRecente", Integer.class);
+			ano = buscaAnoMaisRecente.getSingleResult().intValue();
+		}
+		return somaPopulacaoPorAno(ano);
 	}
 	
 }

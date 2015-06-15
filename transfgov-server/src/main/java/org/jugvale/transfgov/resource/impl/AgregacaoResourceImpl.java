@@ -1,10 +1,10 @@
 package org.jugvale.transfgov.resource.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -153,17 +153,32 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 		return agregacao;
 	}
 	
+	@Override
+	public Map<String, Map<Integer, Double>> comparaComMediaNacionalPerCapita(int ano, long municipioId) {
+		return criaComparacaoComMediaNacional(ano, municipioId, true);
+	}
+
+	@Override
+	public Map<String, Map<Integer, Double>> comparaComMediaNacional(int ano, long municipioId) {
+		return criaComparacaoComMediaNacional(ano, municipioId, false);
+	}
+	
+	public Map<String, Map<Integer, Double>> criaComparacaoComMediaNacional(int ano, long municipioId, boolean ehPerCapita) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		Map<String, Map<Integer, Double>> dados = new HashMap<>();
+		dados.put(municipio.toString(), criaAgrupamentoPorAno(ano, municipioId, ehPerCapita));
+		dados.put("Média Nacional", transferenciaService.buscarPorAnoAgregaPorMes(ano, ehPerCapita));
+		return dados;
+	}
+	
 	public Map<Integer, Double> criaAgrupamentoPorAno(int ano, long municipioId, boolean ehPerCapita) {
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(String.format(MSG_NAO_HA_DADOS_ANO, ano), ano));
-		Map<Integer, Double> retorno = transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio);
-		if(ehPerCapita) {
-			DadosMunicipio dados = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio);
-			retorno = retorno.entrySet().stream()
-					.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue() / dados.getPopulacao()
-			));
-		}
-		return retorno;
+		return transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio, ehPerCapita);
 	}
+
+
+	
+	
 
 }

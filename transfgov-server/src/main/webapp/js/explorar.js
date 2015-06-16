@@ -13,15 +13,31 @@ function criaGraficoAnoArea(agregacoesAno) {
 	var seriesMap = {};
 	var ano;
 	var series = new Array();
+	var nomesSeries = new Array();
+	// coleta as categorias (meses disponíveis) e todas séries
 	agregacoesAno.forEach(function(agregacaoAno) {
 		ano = agregacaoAno.ano;
 		categorias.push(prefixoMeses[agregacaoAno.mes - 1]);
+		// coleta todas séries possíveis
 		for (a in agregacaoAno.dadosAgregados) {
-			if (!seriesMap[a])
-				seriesMap[a] = new Array();
-			seriesMap[a].push(agregacaoAno.dadosAgregados[a]);
-		}
+			if(nomesSeries.indexOf(a) == -1)
+				nomesSeries.push(a);
+		}		
 	});
+	//para cada mês, vamos ver se tem valor, senão tiver, é 0!
+	agregacoesAno.forEach(function(agregacaoAno) {
+		for (a in nomesSeries) {
+			var s = nomesSeries[a];
+			if (!seriesMap[s])
+				seriesMap[s] = new Array();
+			var valor = 0;
+			if(agregacaoAno.dadosAgregados[s]) {
+				valor = agregacaoAno.dadosAgregados[s];
+			}
+			seriesMap[s].push(valor);
+		}		
+	});	
+	
 	for (s in seriesMap) {
 		series.push({
 			name : s,
@@ -53,6 +69,7 @@ function criaGraficoAnoArea(agregacoesAno) {
 			title : {
 				text : 'Valor'
 			},
+			min: 0,
 			plotLines : [ {
 				value : 0,
 				width : 1,
@@ -90,7 +107,7 @@ appExplorar.controller('ExplorarController',
 
 			$scope.prefixoMeses = prefixoMeses;
 			
-			/* REMOVIDO TEMPORARIAMENTE
+			/* REMOVIDO TEMPORARIAMENTE ATÉ RESOLVER #74 
 			transfGovService.anos(function(anos) {
 				$scope.anos = anos;
 				$.each(anos, function(i, ano) { 
@@ -187,21 +204,29 @@ appExplorar.controller('ExplorarController',
 			var carregaDadosComparacao = function() {
 				transfGovService.tranfComparaPorAnoPerCapita($scope.anoSelecionado.ano, 
 						$scope.municipioSelecionado.id, function(dados) {
-					montaGraficoComparacao('#divGraficoComparacaoPerCapitaPorAno', 'Comparação PerCapita', dados);
+					montaGraficoComparacao('#divGraficoComparacaoPerCapitaPorAno', 'Comparação <em>per capita</em>', dados);
 				});
+				/* Retornar somente após a solução do issue #74
 				transfGovService.tranfComparaPorAno($scope.anoSelecionado.ano, 
 						$scope.municipioSelecionado.id, function(dados) {
-					montaGraficoComparacao('#divGraficoComparacaoPorAno', 'Comparação Dados Brutos', dados);
-				});
-				
-				
+					montaGraficoComparacao('#divGraficoComparacaoPorAno', 'Comparação em valores totais', dados);
+				});*/	
 			};
 			
 			var montaGraficoComparacao = function(elemento, titulo, dados) {
+				var categorias = [];
+				var series = new Array();
 				for(i in dados) {
-					
-				};
-				
+					var serie = {};
+					serie.name = i;
+					serie.data = [];
+					for(mes in dados[i]) {
+						categorias.push(prefixoMeses[mes-1]);
+						serie.data.push(dados[i][mes]); 
+					}
+					series.push(serie);
+				}
+				criaGraficoBarra(elemento, titulo, categorias, series);
 			}
 			
 			$scope.carregaGraficosAgregacao = function() {
@@ -268,6 +293,7 @@ function criaGraficoBarra(elemento, titulo, categorias, series) {
 					type : 'bar'
 				},
 				tooltip : {
+					headerFormat: '{point.key} - {series.name}<br />',
 			        pointFormat: 'R$ {point.y:,.3f}'
 			    },
 				xAxis : {

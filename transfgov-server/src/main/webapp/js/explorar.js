@@ -147,7 +147,6 @@ appExplorar.controller('ExplorarController',
 			}
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
-				carregaDadosComparacao();
 				$scope.municipioBusca = $scope.municipioSelecionado;				
 				var mapa = {};
 				mapa['sigla'] = $scope.estadoSelecionado.sigla;
@@ -162,6 +161,7 @@ appExplorar.controller('ExplorarController',
 			$scope.listenerAgregacao = function() {
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
+				carregaDadosComparacao();
 			}
 
 			$scope.carregaAgregacaoAno = function() {
@@ -200,18 +200,6 @@ appExplorar.controller('ExplorarController',
 					$scope.linkProxima = linkProxima;
 				});
 			}
-
-			var carregaDadosComparacao = function() {
-				transfGovService.tranfComparaPorAnoPerCapita($scope.anoSelecionado.ano, 
-						$scope.municipioSelecionado.id, function(dados) {
-					montaGraficoComparacao('#divGraficoComparacaoPerCapitaPorAno', 'Comparação <em>per capita</em>', dados);
-				});
-				/* Retornar somente após a solução do issue #74
-				transfGovService.tranfComparaPorAno($scope.anoSelecionado.ano, 
-						$scope.municipioSelecionado.id, function(dados) {
-					montaGraficoComparacao('#divGraficoComparacaoPorAno', 'Comparação em valores totais', dados);
-				});*/	
-			};
 			
 			var montaGraficoComparacao = function(elemento, titulo, dados) {
 				var categorias = [];
@@ -277,8 +265,7 @@ appExplorar.controller('ExplorarController',
 											data : dados
 										} ]
 									});							
-						});
-				
+						});				
 				$scope.gerandoGraficoAgregacao = false;
 			}
 		});

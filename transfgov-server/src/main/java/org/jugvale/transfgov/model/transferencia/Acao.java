@@ -1,7 +1,5 @@
 package org.jugvale.transfgov.model.transferencia;
 
-import java.util.Objects;
-
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,8 +47,7 @@ public class Acao {
 
 	@Override
 	public String toString() {
-		return Objects.isNull(nomePopular) ? nome : nome + "/"
-				+ nomePopular;
+		return nome + " - " + codigo;
 	}
 
 	public long getId() {

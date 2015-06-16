@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.jugvale.transfgov.model.agregacao.TipoAgregacao;
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Estado;
 import org.jugvale.transfgov.model.base.Municipio;
@@ -21,7 +22,7 @@ public class TransferenciaService extends Service<Transferencia> {
 	@Inject
 	DadosMunicipioService dadosMunicipioService;
 
-	public Map<Integer, Double> buscarPorAnoMunicipioAgregaPorMes(int ano, Municipio municipio, boolean perCapita){
+	public Map<Object, Double> buscarPorAnoMunicipioAgregaPorMes(int ano, Municipio municipio, boolean perCapita){
 		double divisor = 1;
 		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMunicipioAgrupadoPorMes", Object[].class);
 		buscaTransferencia.setParameter("ano", ano);
@@ -29,17 +30,41 @@ public class TransferenciaService extends Service<Transferencia> {
 		if(perCapita) {
 			divisor = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio).getPopulacao();
 		}
-		return montaMapaAgregacaoPorMes(buscaTransferencia.getResultList(), divisor);
+		return montaMapaAgregacao(buscaTransferencia.getResultList(), divisor);
 	}
 
-	public Map<Integer, Double> buscarPorAnoAgregaPorMes(int ano, boolean perCapita){
+	public Map<Object, Double> buscarPorAnoAgregado(TipoAgregacao tipoAgregacao, int ano, boolean perCapita){
 		double divisor = 1;
-		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoAgrupadoPorMes", Object[].class);
+		String namedQuery = "";
+		switch(tipoAgregacao) {
+			case ACAO:
+				namedQuery = "Transferencia.porAnoAgrupadoPorAcao";
+				break;
+			case AREA:
+				namedQuery = "Transferencia.porAnoAgrupadoPorArea";
+				break;
+			case FAVORECIDO:
+				namedQuery = "Transferencia.porAnoAgrupadoPorFavorecido";								
+				break;
+			case PROGRAMA:
+				namedQuery = "Transferencia.porAnoAgrupadoPorPrograma";								
+				break;
+			case SUB_FUNCAO:
+				namedQuery = "Transferencia.porAnoAgrupadoPorSubFuncao";
+				break;
+			case ANO: 
+				namedQuery = "Transferencia.porAnoAgrupadoPorMes";
+				break;
+			default:
+				throw new IllegalArgumentException("Tipo de agregação não suportada aqui");
+			
+		}
+		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery(namedQuery, Object[].class);
 		buscaTransferencia.setParameter("ano", ano);
 		if(perCapita) {
 			divisor = dadosMunicipioService.somaPorAnoOuMaisRecente(ano);
 		}
-		return montaMapaAgregacaoPorMes(buscaTransferencia.getResultList(), divisor);
+		return montaMapaAgregacao(buscaTransferencia.getResultList(), divisor);
 	}	
 	
 	/**
@@ -144,8 +169,14 @@ public class TransferenciaService extends Service<Transferencia> {
 		return buscaTransferencia.getSingleResult();
 	}
 	
-	private Map<Integer, Double> montaMapaAgregacaoPorMes (List<Object[]> linhas, double divisor) {
-		return linhas.stream().collect(Collectors.toMap(l -> (int) l[0], l -> {
+	private Map<Object, Double> montaMapaAgregacao(List<Object[]> linhas, double divisor) {
+		System.out.println("FAZENDO COISINHAS");
+		linhas.stream().forEach(l -> {
+			double valor = (double) l[1];
+			System.out.println(l[0] + " - " + valor / divisor); 
+		});
+		System.out.println("COSINHAS FEITAS");
+		return linhas.stream().collect(Collectors.toMap(l -> l[0], l -> {
 			double valor = (double) l[1];
 			return valor / divisor;
 		}));

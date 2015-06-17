@@ -188,4 +188,16 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 		dados.put("Média Nacional", transferenciaService.buscarPorAnoAgregado(tipoAgregacao, ano, true));
 		return dados;
 	}
+
+	@Override
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalAgrupadoPorAreaPerCapita(
+			int ano, int mes, long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
+		Agregacao dadosMunAgregados = criarAgregacaoPorAnoMunicipio(TipoAgregacao.AREA, ano, municipioId, true);
+		Map<String, Map<Object, Double>> dados = new HashMap<>();
+		dados.put(municipio.getNome(), dadosMunAgregados.getDadosAgregados());
+		dados.put("Média Nacional", transferenciaService.buscarPorAnoMesAgregadoPorArea(ano, mes, true));
+		return dados;
+	}
 }

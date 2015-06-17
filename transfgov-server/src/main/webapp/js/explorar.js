@@ -107,7 +107,7 @@ appExplorar.controller('ExplorarController',
 
 			$scope.prefixoMeses = prefixoMeses;
 			
-			/* REMOVIDO TEMPORARIAMENTE ATÉ RESOLVER #74 
+			/* REMOVIDO TEMPORARIAMENTE ENQUANTO FAZEMOS CARGAS
 			transfGovService.anos(function(anos) {
 				$scope.anos = anos;
 				$.each(anos, function(i, ano) { 
@@ -147,6 +147,7 @@ appExplorar.controller('ExplorarController',
 			}
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
+				$scope.carregaGraficosAgregacao();
 				$scope.municipioBusca = $scope.municipioSelecionado;				
 				var mapa = {};
 				mapa['sigla'] = $scope.estadoSelecionado.sigla;
@@ -160,8 +161,6 @@ appExplorar.controller('ExplorarController',
 
 			$scope.listenerAgregacao = function() {
 				$scope.carregaAgregacaoAno();
-				$scope.carregaGraficosAgregacao();
-				carregaDadosComparacao();
 			}
 
 			$scope.carregaAgregacaoAno = function() {
@@ -183,13 +182,13 @@ appExplorar.controller('ExplorarController',
 				var ano = $scope.anoSelecionado.ano;
 				var mes = $scope.mesSelecionado;
 				var id = $scope.municipioSelecionado.id;
+				$scope.carregaGraficosAgregacao();
 				transfGovService.transfPorAnoMesMunicipio(ano, mes, id,
 						function(transfMes, linkAnterior, linkProxima) {
 							$scope.transferenciasMes = transfMes;
 							$scope.linkAnterior = linkAnterior;
 							$scope.linkProxima = linkProxima;
 						});
-				$scope.carregaGraficosAgregacao();
 			}
 
 			$scope.carregaTransferencias = function(url) {
@@ -201,22 +200,6 @@ appExplorar.controller('ExplorarController',
 				});
 			}
 			
-			var montaGraficoComparacao = function(elemento, titulo, dados) {
-				var categorias = [];
-				var series = new Array();
-				for(i in dados) {
-					var serie = {};
-					serie.name = i;
-					serie.data = [];
-					for(mes in dados[i]) {
-						categorias.push(prefixoMeses[mes-1]);
-						serie.data.push(dados[i][mes]); 
-					}
-					series.push(serie);
-				}
-				criaGraficoBarra(elemento, titulo, categorias, series);
-			}
-			
 			$scope.carregaGraficosAgregacao = function() {
 				var a = $scope.agregacaoSelecionada;
 				var ano = $scope.anoSelecionado.ano;
@@ -225,7 +208,25 @@ appExplorar.controller('ExplorarController',
 				if (!a)
 					return;
 				$scope.gerandoGraficoAgregacao = true;
-				transfGovService.agregacaoPorAnoMesMun(a, ano, mes, id,
+				transfGovService.comparaPorAnoMesAgregaPorArea(ano, mes, id, function(dados){
+					var categorias = [];
+					var series = new Array();
+					for(i in dados[$scope.municipioSelecionado.nome]) {
+						categorias.push(i);
+					}
+					for(i in dados) {
+						var serie = {};
+						serie.name = i;
+						serie.data = [];
+						for(j in categorias) {
+							var area = categorias[j];
+							serie.data.push(dados[i][area]);
+						}
+						series.push(serie);
+					}					
+					criaGraficoBarra('#containerGraficoAgregacao', 'Comparação <em>per capita</em>', categorias, series);					
+				});
+				transfGovService.agregacaoPorAnoMesMun('AREA', ano, mes, id,
 						function(agregacao) {
 							$scope.dadosAgregados = agregacao.dadosAgregados;
 							var categorias = new Array();
@@ -238,17 +239,11 @@ appExplorar.controller('ExplorarController',
 									name: i,
 									y:	agregacao.dadosAgregados[i]
 								});
-							}
-							criaGraficoBarra('#containerGraficoAgregacao', '', categorias, [
-								{
-									name: $scope.municipioSelecionado.nome,
-									data : valores
-								}
-							]);
+							}						
 							$('#containerGraficoAgregacaoPizza').highcharts(
 									{
 										title : {
-											text : ''
+											text : 'Valores Totais'
 										},
 										chart : {
 											type : 'pie',

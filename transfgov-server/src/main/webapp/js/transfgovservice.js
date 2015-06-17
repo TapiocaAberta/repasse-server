@@ -118,6 +118,11 @@ var TransfGovService = function($http) {
 		var url = URL_ANO_AGREGA_COMPARA_PERCAPITA.replace(ANO, ano).replace(MUNICIPIO, id);
 		$http.get(url).success(sucesso);
 	}
+	
+	this.comparaPorAnoMesAgregaPorArea = function(ano, mes, id, sucesso) {
+		var url = 'rest/agregacao/percapita/AREA/ANO/'+ano+'/'+mes+'/municipio/'+id+'/compara'
+		$http.get(url).success(sucesso);		
+	}
 
 	this.agregacaoPorAnoMesMun = function(agregacao, ano, mes, municipio,
 			sucesso) {

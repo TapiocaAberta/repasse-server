@@ -181,4 +181,16 @@ public class TransferenciaService extends Service<Transferencia> {
 			return valor / divisor;
 		}));
 	}
+
+	public Map<Object, Double> buscarPorAnoMesAgregadoPorArea(int ano, int mes,
+			boolean perCapita) {
+		long divisor = 1;
+		TypedQuery<Object[]> buscaTransferencia = em.createNamedQuery("Transferencia.porAnoMesAgrupadoPorArea", Object[].class);
+		buscaTransferencia.setParameter("ano", ano);
+		buscaTransferencia.setParameter("mes", mes);
+		if(perCapita) {
+			divisor = dadosMunicipioService.somaPorAnoOuMaisRecente(ano);
+		}
+		return montaMapaAgregacao(buscaTransferencia.getResultList(), divisor);
+	}
 }

@@ -170,12 +170,6 @@ public class TransferenciaService extends Service<Transferencia> {
 	}
 	
 	private Map<Object, Double> montaMapaAgregacao(List<Object[]> linhas, double divisor) {
-		System.out.println("FAZENDO COISINHAS");
-		linhas.stream().forEach(l -> {
-			double valor = (double) l[1];
-			System.out.println(l[0] + " - " + valor / divisor); 
-		});
-		System.out.println("COSINHAS FEITAS");
 		return linhas.stream().collect(Collectors.toMap(l -> l[0], l -> {
 			double valor = (double) l[1];
 			return valor / divisor;

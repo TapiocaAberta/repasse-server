@@ -48,7 +48,7 @@ public interface AgregacaoResource {
 	@GET
 	@Path("/ANO/{ano}/municipio/{municipioId}/")
 	@JsonView(MunicipioConcisoView.class)
-	public Map<Integer, Double> agrupaPorAno(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	public Map<Object, Double> agrupaPorAno(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 	
 	@GET
 	@Path("/ANO/{ano}/{tipoAgregacao}/municipio/{municipioId}/")
@@ -59,6 +59,10 @@ public interface AgregacaoResource {
 	@Path("/{tipoAgregacao}/{ano}/municipios/{municipioIds}")	
 	@JsonView(MunicipioConcisoView.class)
 	public List<Agregacao> agrupaPorAnoArea(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
+	
+	@GET
+	@Path("ANO/{ano}/municipio/{municipioId}/compara")
+	public Map<String, Map<Object, Double>> comparaComMediaNacional(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 	
 	@GET
 	@Path("/percapita/{tipoAgregacao}/{ano}/municipios/{municipioIds}")	
@@ -73,15 +77,18 @@ public interface AgregacaoResource {
 	@GET
 	@Path("percapita/ANO/{ano}/municipio/{municipioId}/")
 	@JsonView(MunicipioConcisoView.class)
-	public Map<Integer, Double> agrupaPorAnoPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	public Map<Object, Double> agrupaPorAnoPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 	
 	@GET
 	@Path("percapita/ANO/{ano}/municipio/{municipioId}/compara")
-	public Map<String, Map<Integer, Double>> comparaComMediaNacionalPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalPerCapita(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 	
 	@GET
-	@Path("ANO/{ano}/municipio/{municipioId}/compara")
-	public Map<String, Map<Integer, Double>> comparaComMediaNacional(@PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
+	@Path("percapita/{tipoAgregacao}/ANO/{ano}/municipio/{municipioId}/compara")
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalPerCapita(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("municipioId") long municipioId);
 
-
+	@GET
+	@Path("percapita/AREA/ANO/{ano}/{mes}/municipio/{municipioId}/compara")
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalAgrupadoPorAreaPerCapita(@PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("municipioId") long municipioId);
+	
 }

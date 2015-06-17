@@ -78,7 +78,7 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	}
 	
 	@Override
-	public Map<Integer, Double> agrupaPorAno(int ano, long municipioId) {
+	public Map<Object, Double> agrupaPorAno(int ano, long municipioId) {
 		return criaAgrupamentoPorAno(ano, municipioId, false);
 	}
 
@@ -114,7 +114,7 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	}
 	
 	@Override
-	public Map<Integer, Double> agrupaPorAnoPerCapita(int ano, long municipioId) {
+	public Map<Object, Double> agrupaPorAnoPerCapita(int ano, long municipioId) {
 		return criaAgrupamentoPorAno(ano, municipioId, true);
 	}	
 		
@@ -154,31 +154,50 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	}
 	
 	@Override
-	public Map<String, Map<Integer, Double>> comparaComMediaNacionalPerCapita(int ano, long municipioId) {
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalPerCapita(int ano, long municipioId) {
 		return criaComparacaoComMediaNacional(ano, municipioId, true);
 	}
 
 	@Override
-	public Map<String, Map<Integer, Double>> comparaComMediaNacional(int ano, long municipioId) {
+	public Map<String, Map<Object, Double>> comparaComMediaNacional(int ano, long municipioId) {
 		return criaComparacaoComMediaNacional(ano, municipioId, false);
 	}
 	
-	public Map<String, Map<Integer, Double>> criaComparacaoComMediaNacional(int ano, long municipioId, boolean ehPerCapita) {
+	public Map<String, Map<Object, Double>> criaComparacaoComMediaNacional(int ano, long municipioId, boolean ehPerCapita) {
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
-		Map<String, Map<Integer, Double>> dados = new HashMap<>();
-		dados.put(municipio.toString(), criaAgrupamentoPorAno(ano, municipioId, ehPerCapita));
-		dados.put("Média Nacional", transferenciaService.buscarPorAnoAgregaPorMes(ano, ehPerCapita));
+		Map<String, Map<Object, Double>> dados = new HashMap<>();
+		dados.put(municipio.getNome(), criaAgrupamentoPorAno(ano, municipioId, ehPerCapita));
+		dados.put("Média Nacional", transferenciaService.buscarPorAnoAgregado(TipoAgregacao.ANO, ano, ehPerCapita));
 		return dados;
 	}
 	
-	public Map<Integer, Double> criaAgrupamentoPorAno(int ano, long municipioId, boolean ehPerCapita) {
+	public Map<Object, Double> criaAgrupamentoPorAno(int ano, long municipioId, boolean ehPerCapita) {
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(String.format(MSG_NAO_HA_DADOS_ANO, ano), ano));
 		return transferenciaService.buscarPorAnoMunicipioAgregaPorMes(ano, municipio, ehPerCapita);
 	}
 
+	@Override
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalPerCapita(
+			TipoAgregacao tipoAgregacao, int ano, long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
+		Agregacao dadosMunAgregados = criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, municipioId, true);
+		Map<String, Map<Object, Double>> dados = new HashMap<>();
+		dados.put(municipio.getNome(), dadosMunAgregados.getDadosAgregados());
+		dados.put("Média Nacional", transferenciaService.buscarPorAnoAgregado(tipoAgregacao, ano, true));
+		return dados;
+	}
 
-	
-	
-
+	@Override
+	public Map<String, Map<Object, Double>> comparaComMediaNacionalAgrupadoPorAreaPerCapita(
+			int ano, int mes, long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
+		Agregacao dadosMunAgregados = criarAgregacaoPorAnoMunicipio(TipoAgregacao.AREA, ano, municipioId, true);
+		Map<String, Map<Object, Double>> dados = new HashMap<>();
+		dados.put(municipio.getNome(), dadosMunAgregados.getDadosAgregados());
+		dados.put("Média Nacional", transferenciaService.buscarPorAnoMesAgregadoPorArea(ano, mes, true));
+		return dados;
+	}
 }

@@ -20,8 +20,12 @@ function criaGraficoAnoArea(agregacoesAno) {
 		categorias.push(prefixoMeses[agregacaoAno.mes - 1]);
 		// coleta todas séries possíveis
 		for (a in agregacaoAno.dadosAgregados) {
-			if(nomesSeries.indexOf(a) == -1)
-				nomesSeries.push(a);
+			var nome = a;
+			if(nome == 'Encargos Especiais') {
+				nome = 'Uso Geral';
+			}
+			if(nomesSeries.indexOf(nome) == -1)
+				nomesSeries.push(nome);
 		}		
 	});
 	//para cada mês, vamos ver se tem valor, senão tiver, é 0!

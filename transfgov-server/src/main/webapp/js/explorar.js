@@ -223,23 +223,32 @@ appExplorar.controller('ExplorarController',
 							serie.data.push(dados[i][area]);
 						}
 						series.push(serie);
-					}					
+					}
+					// renomear categoria de outras transferências para nome mais popular
+					for(i in categorias) {
+						if(categorias[i] == 'Encargos Especiais') {
+							categorias[i] = 'Uso Geral';
+							break;	
+						}
+					}
 					criaGraficoBarra('#containerGraficoAgregacao', 'Comparação <em>per capita</em>', categorias, series);					
 				});
 				transfGovService.agregacaoPorAnoMesMun('AREA', ano, mes, id,
 						function(agregacao) {
 							$scope.dadosAgregados = agregacao.dadosAgregados;
-							var categorias = new Array();
 							var valores = new Array();
 							var dados = new Array();
 							for (i in agregacao.dadosAgregados) {
-								categorias.push(i);
+								var nome = i; 
+								if(i == 'Encargos Especiais') {
+									nome  = 'Uso Geral';
+								}
 								valores.push(agregacao.dadosAgregados[i]);
 								dados.push({
-									name: i,
+									name: nome,
 									y:	agregacao.dadosAgregados[i]
 								});
-							}						
+							}					
 							$('#containerGraficoAgregacaoPizza').highcharts(
 									{
 										title : {

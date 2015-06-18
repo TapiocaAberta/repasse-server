@@ -28,6 +28,9 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
 var ANOS = [
 	{	
 		ano: 2015, meses: [ 1, 2, 3, 4 ],
+	},
+	{	
+		ano: 2014, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
 	}
 ]
 

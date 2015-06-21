@@ -146,8 +146,8 @@ appExplorar.controller('ExplorarController',
 								}
 							});
 				});
-
 			}
+			
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
@@ -173,18 +173,8 @@ appExplorar.controller('ExplorarController',
 				$scope.anoBusca = ano;
 				$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 				$scope.municipioBusca = $scope.municipioSelecionado;
-				transfGovService.agregacaoPorAnoMun(agreg, ano, id,function(agregacoesAno) {
-					criaGraficoAnoArea(agregacoesAno);
-					$scope.valorTotalAno = 0;
-					agregacoesAno.forEach(function(a) {
-						$.each(a.dadosAgregados, function(k, v){
-							$scope.valorTotalAno += a.dadosAgregados[k];
-						})
-					});
-					
-				});
+				transfGovService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
 				$scope.carregaDadosMes();
-
 			}
 
 			$scope.carregaDadosMes = function() {
@@ -249,11 +239,13 @@ appExplorar.controller('ExplorarController',
 						function(agregacao) {
 							$scope.dadosAgregados = agregacao.dadosAgregados;							
 							var dados = new Array();
+							$scope.valorTotalMes = 0;
 							for (i in agregacao.dadosAgregados) {
 								var nome = i; 
 								if(i == 'Encargos Especiais') {
 									nome  = 'Uso Geral';
 								}
+								$scope.valorTotalMes += agregacao.dadosAgregados[i];
 								dados.push({
 									name: nome,
 									y:	agregacao.dadosAgregados[i]

@@ -76,7 +76,7 @@
 
 	<div class="container" ng-show="municipioBusca" style="background: #FFFFDD">
 		<h3>
-			Foram repassados <strong>R$ {{valorTotalAno.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
+			Repasses anuais para <strong>{{municipioBusca.nome}}
 				- {{estadoSelecionado.sigla}}</strong> em <strong>{{anoBusca}}</strong>!
 		</h3>
 		<div class="row">
@@ -124,6 +124,10 @@
 			</form>
 		</div>
 		<div class="row">
+		<h3>
+			Foram repassados <strong>R$ {{valorTotalMes.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
+				- {{estadoSelecionado.sigla}}</strong> em <strong>{{prefixoMeses[mesSelecionado - 1]}}/{{anoSelecionado.ano}}</strong>!
+		</h3>
 			<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
 			<div class="col-md-6" id="containerGraficoAgregacao"></div>
 		</div>

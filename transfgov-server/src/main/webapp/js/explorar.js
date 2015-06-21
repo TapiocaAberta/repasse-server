@@ -8,94 +8,13 @@ var appExplorar = angular.module('TransfGovApp', [ 'datatables' ]).factory(
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
 
-function criaGraficoAnoArea(agregacoesAno) {
-	var categorias = new Array();
-	var seriesMap = {};
-	var ano;
-	var series = new Array();
-	var nomesSeries = new Array();
-	// coleta as categorias (meses disponíveis) e todas séries
-	agregacoesAno.forEach(function(agregacaoAno) {
-		ano = agregacaoAno.ano;
-		categorias.push(prefixoMeses[agregacaoAno.mes - 1]);
-		// coleta todas séries possíveis
-		for (a in agregacaoAno.dadosAgregados) {
-			if(nomesSeries.indexOf(a) == -1)
-				nomesSeries.push(a);
-		}		
-	});
-	//para cada mês, vamos ver se tem valor, senão tiver, é 0!
-	agregacoesAno.forEach(function(agregacaoAno) {
-		for (a in nomesSeries) {
-			var s = nomesSeries[a];
-			if (!seriesMap[s])
-				seriesMap[s] = new Array();
-			var valor = 0;
-			if(agregacaoAno.dadosAgregados[s]) {
-				valor = agregacaoAno.dadosAgregados[s];
-			}
-			seriesMap[s].push(valor);
-		}		
-	});	
-	
-	for (s in seriesMap) {
-		var nome = s;
-		if(nome == 'Encargos Especiais')
-			nome = 'Uso Geral';
-		series.push({
-			name : nome,
-			data : seriesMap[s]
-		});
-	}
-	$('#divGraficoAreaPorAno').highcharts({
-		title : {
-			text : 'Transferências no ano ' + ano,
-			x : -20
-		// center
-		},
-		subtitle : {
-			text : 'Agregadas todas as transferências no ano de ' + ano,
-			x : -20
-		},
-		xAxis : {
-			title : {
-				text : 'Mês'
-			},
-			categories : categorias
-		},
-		tooltip : {
-			valuePrefix : "R$ ",
-			headerFormat: "{series.name} <br/>", 
-	        pointFormat: '<b>R$ {point.y:,.3f}</b>'
-	    },
-		yAxis : {
-			title : {
-				text : 'Valor'
-			},
-			min: 0,
-			plotLines : [ {
-				value : 0,
-				width : 1,
-				color : '#808080'
-			} ]
-		},
-		legend : {
-			itemWidth : 200,
-			layout : 'vertical',
-			align : 'right',
-			verticalAlign : 'middle',
-			borderWidth : 0
-		},
-		series : series		
-	});
-}
-
 appExplorar.controller('ExplorarController',
 		function($scope, transfGovService) {
 			Highcharts.setOptions({
 			    lang: {
 			        decimalPoint: ',',
-			        thousandsSep: '.'
+			        thousandsSep: '.',
+			        numericSymbols:  [ " mil" , " milhões" , " bilhões" , "T" , "P" , "E"]
 			    }
 			});		
 			$('#abasPainel a').click(function(e) {
@@ -299,4 +218,91 @@ function criaGraficoBarra(elemento, titulo, categorias, series) {
 				},
 				series : series
 			});
+}
+
+function criaGraficoAnoArea(agregacoesAno) {
+	var categorias = new Array();
+	var seriesMap = {};
+	var ano;
+	var series = new Array();
+	var nomesSeries = new Array();
+	// coleta as categorias (meses disponíveis) e todas séries
+	agregacoesAno.forEach(function(agregacaoAno) {
+		ano = agregacaoAno.ano;
+		categorias.push(prefixoMeses[agregacaoAno.mes - 1]);
+		// coleta todas séries possíveis
+		for (a in agregacaoAno.dadosAgregados) {
+			if(nomesSeries.indexOf(a) == -1)
+				nomesSeries.push(a);
+		}		
+	});
+	//para cada mês, vamos ver se tem valor, senão tiver, é 0!
+	agregacoesAno.forEach(function(agregacaoAno) {
+		for (a in nomesSeries) {
+			var s = nomesSeries[a];
+			if (!seriesMap[s])
+				seriesMap[s] = new Array();
+			var valor = 0;
+			if(agregacaoAno.dadosAgregados[s]) {
+				valor = agregacaoAno.dadosAgregados[s];
+			}
+			seriesMap[s].push(valor);
+		}		
+	});	
+	
+	for (s in seriesMap) {
+		var nome = s;
+		if(nome == 'Encargos Especiais')
+			nome = 'Uso Geral';
+		series.push({
+			name : nome,
+			data : seriesMap[s]
+		});
+	}
+	$('#divGraficoAreaPorAno').highcharts({
+		title : {
+			text : 'Transferências no ano ' + ano,
+			x : -20
+		// center
+		},
+		subtitle : {
+			text : 'Agregadas todas as transferências no ano de ' + ano,
+			x : -20
+		},
+		xAxis : {
+			title : {
+				text : 'Mês'
+			},
+			categories : categorias
+		},
+		tooltip : {
+			valuePrefix : "R$ ",
+			headerFormat: "{series.name} <br/>", 
+	        pointFormat: '<b>R$ {point.y:,.3f}</b>'
+	    },
+		yAxis : {
+			title : {
+				text : 'Valor'
+			},
+			labels: {
+				formatter: function() {
+					return 'R$ ' + this.value.toLocaleString();
+				}				
+			},
+			min: 0,
+			plotLines : [ {
+				value : 0,
+				width : 1,
+				color : '#808080'
+			} ]
+		},
+		legend : {
+			itemWidth : 200,
+			layout : 'vertical',
+			align : 'right',
+			verticalAlign : 'middle',
+			borderWidth : 0
+		},
+		series : series		
+	});
 }

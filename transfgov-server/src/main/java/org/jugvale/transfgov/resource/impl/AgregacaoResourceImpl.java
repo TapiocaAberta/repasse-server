@@ -193,8 +193,10 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	public Map<String, Map<Object, Double>> comparaComMediaNacionalAgrupadoPorAreaPerCapita(
 			int ano, int mes, long municipioId) {
 		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
-		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));
-		Agregacao dadosMunAgregados = criarAgregacaoPorAnoMunicipio(TipoAgregacao.AREA, ano, municipioId, true);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano), String.format(MSG_NAO_HA_DADOS_ANO, ano));	
+		DadosMunicipio dadosMun = dadosMunicipioService.buscaPorAnoMunicipioOuMaisRecente(ano, municipio);
+		List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
+		Agregacao dadosMunAgregados = agregacaoController.agregaPercapitaPorTipo(ano, 0, municipio.getEstado(), municipio, TipoAgregacao.AREA, transferencias, dadosMun.getPopulacao());
 		Map<String, Map<Object, Double>> dados = new HashMap<>();
 		dados.put(municipio.getNome(), dadosMunAgregados.getDadosAgregados());
 		dados.put("Média Nacional", transferenciaService.buscarPorAnoMesAgregadoPorArea(ano, mes, true));

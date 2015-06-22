@@ -60,7 +60,13 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 	$scope.ehAnoSelecionado = function(ano) {
 		return $scope.anoSelecionado === ano;
 	}
-	$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
+	$scope.agregacoesSuportadas = [];
+	for(i in AGREGACOES_SUPORTADAS_COMPARACAO) {
+		var a = AGREGACOES_SUPORTADAS_COMPARACAO[i];
+		if(a. valor != 'FAVORECIDO') {
+			$scope.agregacoesSuportadas.push(a);
+		}
+	};
 	
 	transfGovService.estados(function(d) {
 		$scope.estados = d;

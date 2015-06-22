@@ -16,17 +16,25 @@ appExplorar.controller('ExplorarController',
 			        thousandsSep: '.',
 			        numericSymbols:  [ " mil" , " milhões" , " bilhões" , "T" , "P" , "E"]
 			    }
-			});		
-			$('#abasPainel a').click(function(e) {
-				e.preventDefault();
-				$(this).tab('show');
-			});
+			});	
+			$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
+			$scope.selecionaAgregacao = function(agregacao) {
+				$scope.agregacaoSelecionada = agregacao;
+				$scope.carregaAgregacaoAno();
+			};
+			$scope.selecionaAno = function(ano) {
+				$scope.anoSelecionado = ano;
+				$scope.carregaApp();
+			};	
+			$scope.ehAgregacaoSelecionada = function(agregacao) {
+			    return $scope.agregacaoSelecionada === agregacao;
+			};
+			$scope.ehAnoSelecionado = function(ano) {
+				return $scope.anoSelecionado === ano;
+			};
+			$scope.anoSelecionado = ANOS[0];
+			$scope.agregacaoSelecionada = $scope.agregacoesSuportadas[0];
 			var paramsUrl = recuperaMapaUrl();
-			transfGovService.agregacoes(function(agregacoes) {
-				$scope.agregacoes = agregacoes;
-				$scope.agregacaoSelecionada = $scope.agregacoes[0];
-			});
-
 			$scope.prefixoMeses = prefixoMeses;
 			
 			/* REMOVIDO TEMPORARIAMENTE ENQUANTO FAZEMOS CARGAS
@@ -65,8 +73,7 @@ appExplorar.controller('ExplorarController',
 								}
 							});
 				});
-			}
-			
+			};			
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
@@ -79,23 +86,16 @@ appExplorar.controller('ExplorarController',
 				$scope.linkFontePorAno = linkFontePorAno($scope.anoSelecionado.ano, 
 						$scope.estadoSelecionado.sigla, 
 					    $scope.municipioSelecionado.codigoSIAFI);
-			}
-
-			$scope.listenerAgregacao = function() {
-				$scope.carregaAgregacaoAno();
-			}
-
+			};
 			$scope.carregaAgregacaoAno = function() {
 				var ano = $scope.anoSelecionado.ano;
 				var id = $scope.municipioSelecionado.id;
-				var agreg = $scope.agregacaoSelecionada;
+				var agreg = $scope.agregacaoSelecionada.valor;
 				$scope.anoBusca = ano;
 				$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 				$scope.municipioBusca = $scope.municipioSelecionado;
 				transfGovService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
-				$scope.carregaDadosMes();
-			}
-
+			};
 			$scope.carregaDadosMes = function() {
 				if (!$scope.mesSelecionado) {
 					return;
@@ -110,8 +110,7 @@ appExplorar.controller('ExplorarController',
 							$scope.linkAnterior = linkAnterior;
 							$scope.linkProxima = linkProxima;
 						});
-			}
-
+			};
 			$scope.carregaTransferencias = function(url) {
 				transfGovService.dadosPaginados(url, function(transfMes,
 						linkAnterior, linkProxima) {
@@ -119,8 +118,7 @@ appExplorar.controller('ExplorarController',
 					$scope.linkAnterior = linkAnterior;
 					$scope.linkProxima = linkProxima;
 				});
-			}
-			
+			};			
 			$scope.carregaGraficosAgregacao = function() {
 				var a = $scope.agregacaoSelecionada;
 				var ano = $scope.anoSelecionado.ano;

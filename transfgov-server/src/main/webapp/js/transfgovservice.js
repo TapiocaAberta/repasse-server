@@ -22,6 +22,10 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
       {
     	  nome: "Programa",
           valor: "PROGRAMA"		  
+      },      
+      {
+    	  nome: "Favorecido",
+          valor: "FAVORECIDO"		  
       }
 ];
 

@@ -97,6 +97,12 @@ var TransfGovService = function($http) {
 				return 0;
 
 			});
+			for( i in estados) {
+				var sigla = estados[i].sigla;
+				if(sigla == 'OM' || sigla == 'EX'){
+					estados.splice(i, 1);
+				}
+			}
 			sucesso(estados);
 		});
 	};

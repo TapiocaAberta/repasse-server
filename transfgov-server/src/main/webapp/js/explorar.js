@@ -77,6 +77,7 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaApp = function() {
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
+				$scope.carregaDadosMes();
 				$scope.municipioBusca = $scope.municipioSelecionado;				
 				var mapa = {};
 				mapa['sigla'] = $scope.estadoSelecionado.sigla;

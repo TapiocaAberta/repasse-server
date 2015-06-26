@@ -166,7 +166,8 @@ appExplorar.controller('ExplorarController',
 								$scope.valorTotalMes += agregacao.dadosAgregados[i];
 								dados.push({
 									name: nome,
-									y:	agregacao.dadosAgregados[i]
+									y:	agregacao.dadosAgregados[i],
+									color: CORES_COLUNAS[nome]
 								});
 							}					
 							$('#containerGraficoAgregacaoPizza').highcharts(
@@ -244,18 +245,21 @@ function criaGraficoAnoArea(agregacoesAno) {
 			var valor = 0;
 			if(agregacaoAno.dadosAgregados[s]) {
 				valor = agregacaoAno.dadosAgregados[s];
+			
 			}
 			seriesMap[s].push(valor);
 		}		
 	});	
 	
 	for (s in seriesMap) {
-		var nome = s;
+		var nome = s;		
 		if(nome == 'Encargos Especiais')
 			nome = 'Uso Geral';
+		console.log(nome + " - " + CORES_COLUNAS[nome])
 		series.push({
 			name : nome,
-			data : seriesMap[s]
+			data : seriesMap[s],
+			color: CORES_COLUNAS[nome]
 		});
 	}
 	$('#divGraficoAreaPorAno').highcharts({

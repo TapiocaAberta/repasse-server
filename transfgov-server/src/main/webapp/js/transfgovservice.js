@@ -29,9 +29,19 @@ var AGREGACOES_SUPORTADAS_COMPARACAO = [
       }
 ];
 
+var CORES_COLUNAS = {
+  "Uso Geral":"#CC0066",
+  "Saúde":"#3333FF",
+  "Educação":"#FF9900",
+  "Cultura":"#00FF00",
+  "Urbanismo":"#000029",
+  "Assistência Social":"#E6B800"
+};
+
+// Isso é temporário até fazermos toda a carga dos dados, assim não fica limpando o cache e deixando o server lerdo em prd
 var ANOS = [
 	{	
-		ano: 2015, meses: [ 1, 2, 3, 4 ],
+		ano: 2015, meses: [ 1, 2, 3, 4, 5 ],
 	},
 	{	
 		ano: 2014, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
@@ -41,12 +51,14 @@ var ANOS = [
 	},
 	{	
 		ano: 2012, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
+	},
+	{	
+		ano: 2011, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
 	}
 ];
 
 var SEPARADOR_URL = '&';
 
-// Parâmetros (TODO: Remover no futuro, usar RESTEasy Ajax Client)
 var MUNICIPIO = "{MUNICIPIO}";
 var ANO = "{ANO}";
 var MES = "{MES}";
@@ -80,7 +92,6 @@ var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 
 var URL_PORTAL_TRANSP = "http://transparencia.gov.br/PortalTransparenciaListaAcoes.asp?Exercicio="+ANO+"&SelecaoUF=1&SiglaUF="+SIGLA+"&CodMun={SIAFI}&ordem=0"
 
-// TODO: matar o http e usar resteasy
 var TransfGovService = function($http) {
 
 	this.anos = function(sucesso) {

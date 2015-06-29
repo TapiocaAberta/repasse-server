@@ -47,12 +47,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="cidades" class="control-label col-xs-2">Município</label>
+					<label for="municipios" class="control-label col-xs-2">Município</label>
 					<div class="col-xs-4">
-						<select id="municipios" class="form-control"
-							ng-model="municipioSelecionado" ng-disabled="!estadoSelecionado"
-							ng-options="municipio.nome for municipio in municipios">
-						</select>
+					<input type="text" id="municipiosAutoComplete" class="form-control" 
+					ng-disabled="!estadoSelecionado || !municipios" onkeydown="removerAcentos(this)"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -61,7 +59,7 @@
 							<div id="radioBtn" class="btn-group">
 								<a class="btn btn-primary btn-sm"
 									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
-									ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
+									ng-click="selecionaAno(a)" ng-repeat="a in anos" ng-disabled="!municipioSelecionado">{{a.ano}}</a>
 							</div>
 						</div>
 					</div>

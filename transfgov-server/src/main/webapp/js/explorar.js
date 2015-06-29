@@ -63,18 +63,45 @@ appExplorar.controller('ExplorarController',
 				});
 			});
 			$scope.carregaMunicipios = function() {
+				$scope.municipioSelecionado = null;
+				$scope.municipios = null;
 				transfGovService.municipiosPorEstado(
 						$scope.estadoSelecionado.sigla, function(municipios) {
+							var nomesMunicipios = [];
 							$scope.municipios = municipios;
 							$.each(municipios, function(i, m) {
+								nomesMunicipios.push(m.nome);
 								if(m.id == paramsUrl['id']){
 									$scope.municipioSelecionado = m;
+									$("#municipiosAutoComplete").val(m.nome);
 									$scope.carregaApp();
 								}
 							});
+							$("#municipiosAutoComplete").autocomplete({
+							      source: nomesMunicipios,
+							      change: function(evt, ui){
+							    	  var e = evt.target
+							    	  if(!$scope.municipioSelecionado){
+							    		  e.value = "";
+							    	  }
+							    	  if($scope.municipioSelecionado.nome != e.value){
+							    		  e.value = $scope.municipioSelecionado.nome;
+							    	  }
+							      },
+							      select: function(evt, ui) {
+							    	  $.each(municipios, function(i, m) {							    
+							    		  if(m.nome == ui.item.value){							    			  
+							    			  $scope.municipioSelecionado = m;
+							    			  $scope.$apply();
+							    		  }
+							    	  });
+							      }
+						    });							
 				});
 			};			
 			$scope.carregaApp = function() {
+				if(!$scope.municipioSelecionado) 
+					return;
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
 				$scope.carregaDadosMes();
@@ -255,7 +282,6 @@ function criaGraficoAnoArea(agregacoesAno) {
 		var nome = s;		
 		if(nome == 'Encargos Especiais')
 			nome = 'Uso Geral';
-		console.log(nome + " - " + CORES_COLUNAS[nome])
 		series.push({
 			name : nome,
 			data : seriesMap[s],

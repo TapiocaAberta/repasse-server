@@ -259,3 +259,21 @@ function parseLink(l) {
 function linkFontePorAno(ano, sigla, siafi) {
 	return URL_PORTAL_TRANSP.replace(ANO, ano). replace(SIGLA, sigla).replace('{SIAFI}', siafi);
 }
+
+// got from https://gist.github.com/alisterlf/3490957
+function removerAcentos(t) {
+	var strAccents = t.value;
+	var strAccents = strAccents.split('');
+	var strAccentsOut = new Array();
+	var strAccentsLen = strAccents.length;
+	var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+	var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
+	for (var y = 0; y < strAccentsLen; y++) {
+		if (accents.indexOf(strAccents[y]) != -1) {
+			strAccentsOut[y] = accentsOut.substr(accents.indexOf(strAccents[y]), 1);
+		} else
+			strAccentsOut[y] = strAccents[y];
+	}
+	strAccentsOut = strAccentsOut.join('');
+	t.value = strAccentsOut;
+}

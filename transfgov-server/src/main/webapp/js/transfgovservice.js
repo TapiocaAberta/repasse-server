@@ -262,18 +262,23 @@ function linkFontePorAno(ano, sigla, siafi) {
 
 // got from https://gist.github.com/alisterlf/3490957
 function removerAcentos(t) {
+	var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+	var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
 	var strAccents = t.value;
 	var strAccents = strAccents.split('');
 	var strAccentsOut = new Array();
 	var strAccentsLen = strAccents.length;
-	var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
-	var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
+	var hasAccents = false;
 	for (var y = 0; y < strAccentsLen; y++) {
 		if (accents.indexOf(strAccents[y]) != -1) {
+			hasAccents = true;
 			strAccentsOut[y] = accentsOut.substr(accents.indexOf(strAccents[y]), 1);
 		} else
 			strAccentsOut[y] = strAccents[y];
 	}
-	strAccentsOut = strAccentsOut.join('');
-	t.value = strAccentsOut;
+	console.log(hasAccents);
+	if(hasAccents) {
+		strAccentsOut = strAccentsOut.join('');
+		t.value = strAccentsOut;
+	}
 }

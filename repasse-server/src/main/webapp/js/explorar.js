@@ -1,6 +1,6 @@
-var appExplorar = angular.module('TransfGovApp', [ 'datatables' ]).factory(
-		'transfGovService', function($http) {
-			return new TransfGovService($http)
+var appExplorar = angular.module('RepasseApp', [ 'datatables' ]).factory(
+		'repasseService', function($http) {
+			return new RepasseService($http)
 		}).run(function(DTDefaultOptions) {
 	DTDefaultOptions.setDisplayLength(30);
 });
@@ -9,7 +9,7 @@ var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 		"Set", "Out", "Nov", "Dez" ];
 
 appExplorar.controller('ExplorarController',
-		function($scope, transfGovService) {
+		function($scope, repasseService) {
 			Highcharts.setOptions({
 			    lang: {
 			        decimalPoint: ',',
@@ -38,7 +38,7 @@ appExplorar.controller('ExplorarController',
 			$scope.prefixoMeses = prefixoMeses;
 			
 			/* REMOVIDO TEMPORARIAMENTE ENQUANTO FAZEMOS CARGAS
-			transfGovService.anos(function(anos) {
+			repasseService.anos(function(anos) {
 				$scope.anos = anos;
 				$.each(anos, function(i, ano) { 
 					if(ano.ano == paramsUrl['ano']){
@@ -53,7 +53,7 @@ appExplorar.controller('ExplorarController',
 				}
 			});
 			
-			transfGovService.estados(function(estados) {
+			repasseService.estados(function(estados) {
 				$scope.estados = estados;
 				$.each(estados, function(i, estado) {
 					if(estado.sigla == paramsUrl['sigla']) {
@@ -65,7 +65,7 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaMunicipios = function() {
 				$scope.municipioSelecionado = null;
 				$scope.municipios = null;
-				transfGovService.municipiosPorEstado(
+				repasseService.municipiosPorEstado(
 						$scope.estadoSelecionado.sigla, function(municipios) {
 							var nomesMunicipios = [];
 							$scope.municipios = municipios;
@@ -122,7 +122,7 @@ appExplorar.controller('ExplorarController',
 				$scope.anoBusca = ano;
 				$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 				$scope.municipioBusca = $scope.municipioSelecionado;
-				transfGovService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
+				repasseService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
 			};
 			$scope.carregaDadosMes = function() {
 				if (!$scope.mesSelecionado) {
@@ -132,7 +132,7 @@ appExplorar.controller('ExplorarController',
 				var mes = $scope.mesSelecionado;
 				var id = $scope.municipioSelecionado.id;
 				$scope.carregaGraficosAgregacao();
-				transfGovService.transfPorAnoMesMunicipio(ano, mes, id,
+				repasseService.transfPorAnoMesMunicipio(ano, mes, id,
 						function(transfMes, linkAnterior, linkProxima) {
 							$scope.transferenciasMes = transfMes;
 							$scope.linkAnterior = linkAnterior;
@@ -140,7 +140,7 @@ appExplorar.controller('ExplorarController',
 						});
 			};
 			$scope.carregaTransferencias = function(url) {
-				transfGovService.dadosPaginados(url, function(transfMes,
+				repasseService.dadosPaginados(url, function(transfMes,
 						linkAnterior, linkProxima) {
 					$scope.transferenciasMes = transfMes;
 					$scope.linkAnterior = linkAnterior;
@@ -155,7 +155,7 @@ appExplorar.controller('ExplorarController',
 				if (!a)
 					return;
 				$scope.gerandoGraficoAgregacao = true;
-				transfGovService.comparaPorAnoMesAgregaPorArea(ano, mes, id, function(dados){
+				repasseService.comparaPorAnoMesAgregaPorArea(ano, mes, id, function(dados){
 					var categorias = [];
 					var series = new Array();
 					for(i in dados[$scope.municipioSelecionado.nome]) {
@@ -173,7 +173,7 @@ appExplorar.controller('ExplorarController',
 					}
 					criaGraficoBarra('#containerGraficoAgregacao', 'Comparação <em>per capita</em>', categorias, series);					
 				});
-				transfGovService.agregacaoPorAnoMesMun('AREA', ano, mes, id,
+				repasseService.agregacaoPorAnoMesMun('AREA', ano, mes, id,
 						function(agregacao) {
 							$scope.dadosAgregados = agregacao.dadosAgregados;							
 							var dados = new Array();

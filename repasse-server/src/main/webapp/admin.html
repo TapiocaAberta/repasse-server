@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>TransfGov - Página Inicial</title>
+<title>Repasse - Administração</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/jquery-ui.min.css" rel="stylesheet">
 <link href="css/jquery-ui.theme.min.css" rel="stylesheet">
@@ -10,10 +10,12 @@
 </head>
 
 <body ng-controller="AdminController" ng-app="AppAdmin">
-	<nav class="navbar navbar-inverse navbar-fixed-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="./index.html">TransfGov</a>
+				<a class="navbar-brand" href="./index.html"><img
+					style="max-width: 80px; height: 50px; margin-top: -18px"
+					src="/imagens/repasse_logo_mini.gif"></a>
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="explorar.html">Explorar</a></li>
@@ -27,7 +29,7 @@
 
 	<div class="jumbotron">
 		<div class="container">
-			<h1>TransGov Administração</h1>
+			<h1>Repasse Administração</h1>
 			<p>Verifique os repasses monetários do governo federal para sua
 				cidade e exija melhorias!</p>
 		</div>
@@ -196,5 +198,15 @@
 	<script src="js/angular-datatables.min.js"></script>
 
 	<script src="js/admin.js"></script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-64745535-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </body>
 </html>

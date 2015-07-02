@@ -171,13 +171,6 @@ appExplorar.controller('ExplorarController',
 						}
 						series.push(serie);
 					}
-					// renomear categoria de outras transferências para nome mais popular
-					for(i in categorias) {
-						if(categorias[i] == 'Encargos Especiais') {
-							categorias[i] = 'Uso Geral';
-							break;	
-						}
-					}
 					criaGraficoBarra('#containerGraficoAgregacao', 'Comparação <em>per capita</em>', categorias, series);					
 				});
 				transfGovService.agregacaoPorAnoMesMun('AREA', ano, mes, id,
@@ -186,15 +179,11 @@ appExplorar.controller('ExplorarController',
 							var dados = new Array();
 							$scope.valorTotalMes = 0;
 							for (i in agregacao.dadosAgregados) {
-								var nome = i; 
-								if(i == 'Encargos Especiais') {
-									nome  = 'Uso Geral';
-								}
 								$scope.valorTotalMes += agregacao.dadosAgregados[i];
 								dados.push({
-									name: nome,
+									name: i,
 									y:	agregacao.dadosAgregados[i],
-									color: CORES_COLUNAS[nome]
+									color: CORES_COLUNAS[i]
 								});
 							}					
 							$('#containerGraficoAgregacaoPizza').highcharts(
@@ -279,13 +268,10 @@ function criaGraficoAnoArea(agregacoesAno) {
 	});	
 	
 	for (s in seriesMap) {
-		var nome = s;		
-		if(nome == 'Encargos Especiais')
-			nome = 'Uso Geral';
 		series.push({
-			name : nome,
+			name : s,
 			data : seriesMap[s],
-			color: CORES_COLUNAS[nome]
+			color: CORES_COLUNAS[s]
 		});
 	}
 	$('#divGraficoAreaPorAno').highcharts({

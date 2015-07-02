@@ -154,8 +154,10 @@ public class CargaDadosTransfController {
 		String siglaEstado = campos[0];
 		String siafiMunicipio = campos[1];
 		String nomeMunicipio = campos[2];
-		long codigoFuncao = Long.parseLong(campos[3]);
-		String nomeFuncao = campos[4];
+		// move transferências do FUNDEB(nome popular da ação) para a área de educação (ID 12 até a data de JUL/2015)
+		long codigoFuncao = campos[11].equals("FUNDEB")? 12 :Long.parseLong(campos[3]);
+		// renomear area de "Encargos Especiais" para "Uso Geral"
+		String nomeFuncao = campos[4].equals("Encargos Especiais")? "Uso Geral" : campos[4];
 		long codigoSubFuncao = Long.parseLong(campos[5]);
 		String nomeSubFuncao = campos[6];
 		long codigoPrograma = Long.parseLong(campos[7]);

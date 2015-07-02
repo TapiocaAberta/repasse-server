@@ -66,7 +66,7 @@ var AGREGACAO = "{AGREGACAO}";
 var SIGLA = "{SIGLA}";
 var AREA = "{AREA}";
 
-var URL_BASE = "/transfgov/rest/";
+var URL_BASE = "rest/";
 var URL_ANOS = URL_BASE + "ano";
 var URL_ESTADOS = URL_BASE + "estado";
 var URL_AGREGACAO = URL_BASE + "agregacao";
@@ -92,7 +92,7 @@ var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
 
 var URL_PORTAL_TRANSP = "http://transparencia.gov.br/PortalTransparenciaListaAcoes.asp?Exercicio="+ANO+"&SelecaoUF=1&SiglaUF="+SIGLA+"&CodMun={SIAFI}&ordem=0"
 
-var TransfGovService = function($http) {
+var RepasseService = function($http) {
 
 	this.anos = function(sucesso) {
 		$http.get(URL_ANOS).success(sucesso);

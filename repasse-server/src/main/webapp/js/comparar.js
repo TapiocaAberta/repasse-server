@@ -1,7 +1,7 @@
-angular.module('TransfGovApp', []).factory('transfGovService',
+angular.module('RepasseApp', []).factory('repasseService',
 		function($http) {
-			return new TransfGovService($http)
-		}).controller('CompararController', function($scope, transfGovService) {
+			return new RepasseService($http)
+		}).controller('CompararController', function($scope, repasseService) {
 	Highcharts.setOptions({
 	    lang: {
 	        decimalPoint: ',',
@@ -68,18 +68,18 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 		}
 	};
 	
-	transfGovService.estados(function(d) {
+	repasseService.estados(function(d) {
 		$scope.estados = d;
 	});
 	/* REMOVIDO TEMPORARIAMENTE
-	transfGovService.anos(function(d) {
+	repasseService.anos(function(d) {
 		$scope.anos = d;
 	});
 	*/
 	$scope.anos = ANOS;
 	$scope.carregaMunicipios = function() {
 		var sigla = $scope.estadoSelecionado.sigla;
-		transfGovService.municipiosPorEstado(sigla, function(d) {
+		repasseService.municipiosPorEstado(sigla, function(d) {
 			$scope.municipios = d;
 		});
 	};
@@ -119,13 +119,13 @@ angular.module('TransfGovApp', []).factory('transfGovService',
 			 ids.push(m.id);
 		 });	
 		 
-		 transfGovService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
+		 repasseService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
 			 organizaColunas(agregacoes);
 			 $scope.agregacoes = agregacoes;
 			 atualizaTodosGraficosAgregacao();
 		 });
 		 
-		 transfGovService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
+		 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
 			 organizaColunas(agregacoes);
 			 $scope.agregacoesPerCapita = agregacoes;
 			 atualizaTodosGraficosAgregacao();

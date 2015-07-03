@@ -1,6 +1,7 @@
 package org.jugvale.transfgov.resource.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.transferencia.Transferencia;
+import org.jugvale.transfgov.model.transferencia.TransferenciaConcisa;
 import org.jugvale.transfgov.resource.TransferenciaResource;
 import org.jugvale.transfgov.service.impl.CargaTransfInfoService;
 import org.jugvale.transfgov.service.impl.MunicipioService;
@@ -62,6 +64,15 @@ public class TransferenciaResourceImpl implements TransferenciaResource {
 		} catch (Exception e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
 		}		
+	}
+
+	@Override
+	public Response porAnoMesMunicipioConciso(int ano, int mes,
+			long municipioId) {
+		Municipio municipio = JaxrsUtils.lanca404SeNulo(municipioService.buscarPorId(municipioId), Municipio.class);
+		List<Transferencia> transferencias = transferenciaService.buscarPorAnoMesMunicipio(ano, mes, municipio);
+		List<TransferenciaConcisa> resultado = transferencias.stream().map(TransferenciaConcisa::new).collect(Collectors.toList());
+		return Response.ok().entity(resultado).build();
 	}	
 
 }

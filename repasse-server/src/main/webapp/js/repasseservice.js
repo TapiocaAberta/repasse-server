@@ -72,7 +72,7 @@ var URL_ESTADOS = URL_BASE + "estado";
 var URL_AGREGACAO = URL_BASE + "agregacao";
 var URL_AREAS = URL_BASE + "area";
 var URL_TRANF_POR_MES_MUN = URL_BASE + "transferencia/" + ANO + "/" + MES
-		+ "/municipio/" + MUNICIPIO;
+		+ "/municipio/" + MUNICIPIO + "/conciso";
 var URL_AGREGA_ANO_MES_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/"
 		+ MES + "/municipio/" + MUNICIPIO;
 var URL_AGREGA_ANO_MUN = URL_AGREGACAO + "/ANO/" + ANO + "/" + AGREGACAO
@@ -135,7 +135,7 @@ var RepasseService = function($http) {
 	this.transfPorAnoMesMunicipio = function(ano, mes, id, sucesso) {
 		var url = URL_TRANF_POR_MES_MUN.replace(ANO, ano).replace(MES, mes)
 				.replace(MUNICIPIO, id);
-		this.dadosPaginados(url, sucesso);
+		$http.get(url).success(sucesso);
 	};
 	
 	this.tranfComparaPorAnoAgregadoPerCapita = function(agregacao, ano, id, sucesso) {

@@ -106,7 +106,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>transfgov</finalName>
+		<finalName>repasse</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>

@@ -153,22 +153,10 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div class="row">
 		<h3>Todas transferências de {{prefixoMeses[mesSelecionado -
 			1]}}/{{anoSelecionado.ano}} para {{municipioBusca.nome}}</h3>
-		<div class="row">
-			<div class="col-sm-2">
-				<a href="javascript:void(0)" ng-show="linkAnterior"
-					ng-click="carregaTransferencias(linkAnterior.url)"><span
-					class="glyphicon glyphicon-backward"></span> {{linkAnterior.title}}</a><br />
-			</div>
-			<div class="col-lg-2">
-				<a href="javascript:void(0)" ng-show="linkProxima"
-					ng-click="carregaTransferencias(linkProxima.url)">{{linkProxima.title}}<span
-					class="glyphicon glyphicon-forward" style="margin-left: 5px"></span></a>
-			</div>
-		</div>
-		<div class="row">
-
 			<table id="tblTransferencias" datatable="ng" class="row-border hover"
 				style="background: #FFFFDD">
 				<thead>
@@ -183,11 +171,11 @@
 
 				</thead>
 				<tr ng-repeat="t in transferenciasMes">
-					<td>{{ t.programa.nome }}</td>
-					<td>{{ t.acao.nome }}</td>
-					<td>{{ t.area.nome }}</td>
-					<td>{{ t.subFuncao.nome }}</td>
-					<td>{{ t.favorecido.nome }}</td>
+					<td>{{ t.programa }}</td>
+					<td>{{ t.acao }}</td>
+					<td>{{ t.area }}</td>
+					<td>{{ t.subFuncao }}</td>
+					<td>{{ t.favorecido }}</td>
 					<td>R$ {{ t.valor.toLocaleString() }}</td>
 				</tr>
 			</table>

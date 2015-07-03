@@ -133,10 +133,8 @@ appExplorar.controller('ExplorarController',
 				var id = $scope.municipioSelecionado.id;
 				$scope.carregaGraficosAgregacao();
 				repasseService.transfPorAnoMesMunicipio(ano, mes, id,
-						function(transfMes, linkAnterior, linkProxima) {
+						function(transfMes) {
 							$scope.transferenciasMes = transfMes;
-							$scope.linkAnterior = linkAnterior;
-							$scope.linkProxima = linkProxima;
 						});
 			};
 			$scope.carregaTransferencias = function(url) {

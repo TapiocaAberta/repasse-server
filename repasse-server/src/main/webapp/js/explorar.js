@@ -2,7 +2,7 @@ var appExplorar = angular.module('RepasseApp', [ 'datatables' ]).factory(
 		'repasseService', function($http) {
 			return new RepasseService($http)
 		}).run(function(DTDefaultOptions) {
-	DTDefaultOptions.setDisplayLength(30);
+	DTDefaultOptions.setDisplayLength(10);
 });
 
 var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",

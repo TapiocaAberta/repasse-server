@@ -102,6 +102,7 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaApp = function() {
 				if(!$scope.municipioSelecionado) 
 					return;
+				$scope.estadoBusca = $scope.estadoSelecionado;
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
 				$scope.carregaDadosMes();

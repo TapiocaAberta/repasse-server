@@ -103,9 +103,6 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaApp = function() {
 				if(!$scope.municipioSelecionado) 
 					return;
-			    $('html, body').animate({
-			        scrollTop: $("#explorar-resultado").offset().top - 60
-			    }, 1000);
 				$scope.estadoBusca = $scope.estadoSelecionado;
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
@@ -127,7 +124,14 @@ appExplorar.controller('ExplorarController',
 				$scope.anoBusca = ano;
 				$scope.mesSelecionado = $scope.anoSelecionado.meses[0];
 				$scope.municipioBusca = $scope.municipioSelecionado;
-				repasseService.agregacaoPorAnoMun(agreg, ano, id, criaGraficoAnoArea);
+				repasseService.agregacaoPorAnoMun(agreg, ano, id, function(dados){					
+					criaGraficoAnoArea(dados);
+				    $('html, body').animate({
+				        scrollTop: $("#explorar-resultado").offset().top - 60
+				    }, 1000);
+				});
+				
+
 			};
 			$scope.carregaDadosMes = function() {
 				if (!$scope.mesSelecionado) {

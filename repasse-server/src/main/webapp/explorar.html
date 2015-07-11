@@ -38,38 +38,49 @@
 	</div>
 
 	<div class="container">
-		<div class="row">
-			<form class="form-horizontal">
-				<div class="form-group">
-					<label for="estados" class="control-label col-xs-2">Estado</label>
-					<div class="col-xs-4">
-						<select id="estados" class="form-control"
-							ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
-							ng-options="estado.sigla for estado in estados"
-							ng-disabled="!estados">
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="municipios" class="control-label col-xs-2">Município</label>
-					<div class="col-xs-4">
-					<input type="text" id="municipiosAutoComplete" class="form-control" 
-					ng-disabled="!estadoSelecionado || !municipios" onkeydown="removerAcentos(this)"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-offset-2 col-xs-4">
-						<div class="input-group">
-							<div id="radioBtn" class="btn-group">
-								<a class="btn btn-primary btn-sm"
-									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
-									ng-click="selecionaAno(a)" ng-repeat="a in anos" ng-disabled="!municipioSelecionado">{{a.ano}}</a>
+		<div class="panel panel-default">
+			<div class="panel-heading">Escolha o Estado, Município e ano
+				para explorar</div>
+			<div class="panel-body">
+				<div class="row">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="estados" class="control-label col-xs-1">Estado</label>
+							<div class="col-xs-4">
+								<select id="estados" class="form-control"
+									ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
+									ng-options="estado.sigla for estado in estados"
+									ng-disabled="!estados">
+								</select>
 							</div>
 						</div>
-					</div>
+						<div class="form-group">
+							<label for="municipios" class="control-label col-xs-1">Município</label>
+							<div class="col-xs-4">
+								<input type="text" id="municipiosAutoComplete"
+									class="form-control"
+									ng-disabled="!estadoSelecionado || !municipios"
+									onkeydown="removerAcentos(this)" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="anos" class="control-label col-xs-1">Ano</label>
+							<div class="col-xs-6">
+								<div class="input-group">
+									<div id="radioBtn" class="btn-group" name="anos">
+										<a class="btn btn-primary btn-lg" style="margin-left: 5px"
+											ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
+											ng-click="selecionaAno(a)" ng-repeat="a in anos"
+											ng-disabled="!municipioSelecionado">{{a.ano}}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
+
 				<div class="form-group">
-					<div class="col-xs-offset-2 col-xs-2">
+					<div class="col-xs-offset-2 col-xs-3">
 						<button type="submit" class="btn btn-primary"
 							ng-click="carregaApp()" ng-disabled="!municipioSelecionado"
 							style="font-size: 25px">
@@ -78,109 +89,127 @@
 						</button>
 					</div>
 				</div>
-			</form>
+
+			</div>
 		</div>
 	</div>
 	<hr />
-	<div class="container" ng-show="municipioBusca"
-		style="background: #FFFFDD">
-		<h3>
-			Repasses anuais para <strong>{{municipioBusca.nome}} -
-				{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>!
-		</h3>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="input-group">
-					<div id="radioBtn" class="btn-group">
-						<a class="btn btn-primary btn-sm"
-							ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
-							ng-click="selecionaAgregacao(a)"
-							ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
+	<div class="container" ng-show="municipioBusca" id="explorar-resultado">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Repasses anuais para <strong>{{municipioBusca.nome}} -
+					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>!
+			</div>
+			<div class="panel-body">
+
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="input-group">
+							<span class="input-group-addon" id="label-agregacao">Mostrar
+								dados por</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
+								<a class="btn btn-primary btn-lg" style="margin-left: 5px"
+									ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
+									ng-click="selecionaAgregacao(a)"
+									ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div id="divGraficoAreaPorAno"></div>
-		</div>
-		<div class="row">
-			<div class="col-md-4 col-md-offset-8">
-				<em><a href="{{linkFontePorAno}}">Fonte dos dados no Portal
-						da Transparência</a></em>
+				<div class="row">
+					<div id="divGraficoAreaPorAno"></div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-md-offset-8">
+						<em><a href="{{linkFontePorAno}}">Fonte dos dados no
+								Portal da Transparência</a></em>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container" ng-show="municipioBusca"
-		style="background: #FFFFDD">
-		<div class="row">
-			<h2>Destino do repasse</h2>
-			<form class="form-horizontal">
-				<div class="form-group">
-					<div class="col-md-1"></div>
-					<label for="meses" class="control-label col-md-2">Mês</label>
-					<div class="col-md-4">
-						<select id="meses" class="form-control" ng-model="mesSelecionado"
-							ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
-							ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
-						</select>
-					</div>
-					<div class="col-md-5"></div>
+	<div class="container" ng-show="municipioBusca">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Destino do repasse para <strong>{{prefixoMeses[mesSelecionado
+					- 1]}}/{{anoSelecionado.ano}}</strong>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<div class="col-md-1"></div>
+							<label for="meses" class="control-label col-md-2">Mês</label>
+							<div class="col-md-4">
+								<select id="meses" class="form-control"
+									ng-model="mesSelecionado"
+									ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
+									ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
+								</select>
+							</div>
+						</div>
+					</form>
 				</div>
-			</form>
+				<div class="row">
+					<h3 style="text-align: center">
+						Foram repassados <strong>R$
+							{{valorTotalMes.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
+							- {{estadoSelecionado.sigla}}</strong> em <strong>{{prefixoMeses[mesSelecionado
+							- 1]}}/{{anoSelecionado.ano}}</strong>!
+					</h3>
+					<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
+					<div class="col-md-6" id="containerGraficoAgregacao"></div>
+				</div>
+				<div class="row">
+					<table id="tblAgregacao" class="table"
+						style="text-overflow: ellipsis">
+						<thead>
+							<tr>
+								<th>Área</th>
+								<th>Valor</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="(key, value) in dadosAgregados">
+								<td>{{ key }}</td>
+								<td>R$ {{ value.toLocaleString() }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 		<div class="row">
-			<h3>
-				Foram repassados <strong>R$
-					{{valorTotalMes.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
-					- {{estadoSelecionado.sigla}}</strong> em <strong>{{prefixoMeses[mesSelecionado
-					- 1]}}/{{anoSelecionado.ano}}</strong>!
-			</h3>
-			<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
-			<div class="col-md-6" id="containerGraficoAgregacao"></div>
-		</div>
-		<div class="row">
-			<table id="tblAgregacao" class="table"
-				style="text-overflow: ellipsis">
-				<thead>
-					<tr>
-						<th>Dado</th>
-						<th>Valor</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="(key, value) in dadosAgregados">
-						<td>{{ key }}</td>
-						<td>R$ {{ value.toLocaleString() }}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Todas transferências de
+					{{prefixoMeses[mesSelecionado - 1]}}/{{anoSelecionado.ano}} para
+					{{municipioBusca.nome}}</div>
+				<div class="panel-body">
+					<table id="tblTransferencias" datatable="ng"
+						class="row-border hover" style="background: #FFFFDD">
+						<thead>
+							<tr>
+								<th>Programa</th>
+								<th>Ação</th>
+								<th>Area</th>
+								<th>Sub Função</th>
+								<th>Favorecido</th>
+								<th>Valor</th>
+							</tr>
 
-		<div class="row">
-		<h3>Todas transferências de {{prefixoMeses[mesSelecionado -
-			1]}}/{{anoSelecionado.ano}} para {{municipioBusca.nome}}</h3>
-			<table id="tblTransferencias" datatable="ng" class="row-border hover"
-				style="background: #FFFFDD">
-				<thead>
-					<tr>
-						<th>Programa</th>
-						<th>Ação</th>
-						<th>Area</th>
-						<th>Sub Função</th>
-						<th>Favorecido</th>
-						<th>Valor</th>
-					</tr>
-
-				</thead>
-				<tr ng-repeat="t in transferenciasMes">
-					<td>{{ t.programa }}</td>
-					<td>{{ t.acao }}</td>
-					<td>{{ t.area }}</td>
-					<td>{{ t.subFuncao }}</td>
-					<td>{{ t.favorecido }}</td>
-					<td>R$ {{ t.valor.toLocaleString() }}</td>
-				</tr>
-			</table>
+						</thead>
+						<tr ng-repeat="t in transferenciasMes">
+							<td>{{ t.programa }}</td>
+							<td>{{ t.acao }}</td>
+							<td>{{ t.area }}</td>
+							<td>{{ t.subFuncao }}</td>
+							<td>{{ t.favorecido }}</td>
+							<td>R$ {{ t.valor.toLocaleString() }}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 
 	</div>

@@ -65,6 +65,7 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaMunicipios = function() {
 				$scope.municipioSelecionado = null;
 				$scope.municipios = null;
+				$("#municipiosAutoComplete").val('');
 				repasseService.municipiosPorEstado(
 						$scope.estadoSelecionado.sigla, function(municipios) {
 							var nomesMunicipios = [];
@@ -102,6 +103,10 @@ appExplorar.controller('ExplorarController',
 			$scope.carregaApp = function() {
 				if(!$scope.municipioSelecionado) 
 					return;
+			    $('html, body').animate({
+			        scrollTop: $("#explorar-resultado").offset().top - 60
+			    }, 1000);
+				$scope.estadoBusca = $scope.estadoSelecionado;
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
 				$scope.carregaDadosMes();

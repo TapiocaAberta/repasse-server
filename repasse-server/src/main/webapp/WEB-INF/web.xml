@@ -29,4 +29,8 @@
 	<security-role>
 		<role-name>admin</role-name>
 	</security-role>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/nao-encontrado.html</location>
+	</error-page>
 </web-app>

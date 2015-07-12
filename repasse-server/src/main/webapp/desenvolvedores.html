@@ -18,17 +18,24 @@
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
 				<a class="navbar-brand" href="./index.html"><img
 					style="max-width: 80px; height: 50px; margin-top: -18px"
 					src="/imagens/repasse_logo_mini.gif"></a>
 			</div>
-			<ul class="nav navbar-nav">
-				<li><a href="explorar.html">Explorar</a></li>
-				<li><a href="comparar.html">Comparar</a></li>
-				<li class="active"><a href="desenvolvedores.html">Desenvolvedores</a></li>
-				<li><a href="sobre.html">Sobre</a></li>
-				<li><a href="admin.html">Administração</a></li>
-			</ul>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="explorar.html">Explorar</a></li>
+					<li><a href="comparar.html">Comparar</a></li>
+					<li class="active"><a href="desenvolvedores.html">Desenvolvedores</a></li>
+					<li><a href="sobre.html">Sobre</a></li>
+					<li><a href="admin.html">Administração</a></li>
+				</ul>
+			</div>
 		</div>
 	</nav>
 
@@ -58,8 +65,7 @@
 
 		<div class="row">
 			<div class="embed-responsive embed-responsive-4by3">
-				<iframe
-					src="api-explorer;index.html?raml=/raml/repasse.raml"></iframe>
+				<iframe src="api-explorer;index.html?raml=/raml/repasse.raml"></iframe>
 			</div>
 		</div>
 		<hr>

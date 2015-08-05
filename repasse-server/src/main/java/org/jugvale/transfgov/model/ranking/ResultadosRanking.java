@@ -10,10 +10,6 @@ package org.jugvale.transfgov.model.ranking;
 public class ResultadosRanking {
 
 	/**
-	 * A sigla do estado da cidade
-	 */
-	private String siglaEstado;
-	/**
 	 * O nome da cidade
 	 */
 	private String nomeCidade;
@@ -29,13 +25,18 @@ public class ResultadosRanking {
 	 * O valor Per Capita
 	 */
 	private double valorPerCapita;
-
-	public String getSiglaEstado() {
-		return siglaEstado;
+	
+	public ResultadosRanking() {
+		super();
 	}
 
-	public void setSiglaEstado(String siglaEstado) {
-		this.siglaEstado = siglaEstado;
+	public ResultadosRanking(String nomeCidade, int populacao,
+			double valorTotal, double valorPerCapita) {
+		super();
+		this.nomeCidade = nomeCidade;
+		this.populacao = populacao;
+		this.valorTotal = valorTotal;
+		this.valorPerCapita = valorPerCapita;
 	}
 
 	public String getNomeCidade() {
@@ -69,5 +70,4 @@ public class ResultadosRanking {
 	public void setValorPerCapita(double valorPerCapita) {
 		this.valorPerCapita = valorPerCapita;
 	}
-
 }

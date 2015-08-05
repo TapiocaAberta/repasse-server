@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
@@ -16,6 +18,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Municipio;
 
+/**
+ * 
+ * Coluna que representa os dados de transferência vindos do portal da
+ * transparências para anos depois de 2011, pois antes os dados tinham outro
+ * formato
+ * 
+ * @author wsiqueir
+ *
+ */
 @XmlRootElement
 @Entity
 @Table(name = "transferencia", indexes = { @Index(columnList = "tra_ano"),
@@ -38,7 +49,13 @@ import org.jugvale.transfgov.model.base.Municipio;
 		@NamedQuery(name = "Transferencia.porAnoAgrupadoPorAcao", query = "SELECT concat(t.acao.nome, ' - ', t.acao.codigo), sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio.nome <> 'Governo do Estado' AND t.municipio.estado.sigla NOT IN ('OM', 'EX') GROUP BY t.acao", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.porAnoAgrupadoPorPrograma", query = "SELECT t.programa.nome, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio.nome <> 'Governo do Estado' AND t.municipio.estado.sigla NOT IN ('OM', 'EX') GROUP BY t.programa", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "Transferencia.porAnoAgrupadoPorSubFuncao", query = "SELECT t.subFuncao, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio.nome <> 'Governo do Estado' AND t.municipio.estado.sigla NOT IN ('OM', 'EX') GROUP BY t.subFuncao", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
-		@NamedQuery(name = "Transferencia.porAnoAgrupadoPorFavorecido", query = "SELECT t.favorecido, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio.nome <> 'Governo do Estado' AND t.municipio.estado.sigla NOT IN ('OM', 'EX') GROUP BY t.favorecido", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }), })
+		@NamedQuery(name = "Transferencia.porAnoAgrupadoPorFavorecido", query = "SELECT t.favorecido, sum(t.valor) from Transferencia t WHERE t.ano = :ano AND t.municipio.nome <> 'Governo do Estado' AND t.municipio.estado.sigla NOT IN ('OM', 'EX') GROUP BY t.favorecido", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+// @NamedQuery(name = "Ranking.porAno", query =
+// "select concat(mun_nome, ' - ', est_sigla) as MUNICIPIO, truncate(sum(t.tra_valor) / d.populacao, 2), sum(t.tra_valor), d.populacao from transferencia t inner join municipio on t.municipio_mun_id = mun_id  inner join dados_municipio d on mun_id = d.municipio_mun_id inner join estado on estado_est_id = est_id where t.tra_ano = :ano AND  d.ano = :ano group by MUNICIPIO order by truncate(sum(t.tra_valor) / populacao, 2) desc",
+// hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+})
+// essa query tem que ser nativa... mais performática que a gerada pelo JPA
+@NamedNativeQueries({ @NamedNativeQuery(name = "Ranking.porAno", query = "select concat(mun_nome, ' - ', est_sigla) as MUNICIPIO, truncate(sum(t.tra_valor) / d.populacao, 2), sum(t.tra_valor), d.populacao from transferencia t inner join municipio on t.municipio_mun_id = mun_id  inner join dados_municipio d on mun_id = d.municipio_mun_id inner join estado on estado_est_id = est_id where t.tra_ano = :ano AND  d.ano = :ano group by MUNICIPIO order by truncate(sum(t.tra_valor) / populacao, 2) desc") })
 public class Transferencia {
 
 	@Id

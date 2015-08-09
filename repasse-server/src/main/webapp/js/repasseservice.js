@@ -213,6 +213,10 @@ var RepasseService = function($http) {
 					sucesso(agregacoesFiltradas);
 				});
 	}
+	
+	this.rankingPorAno = function(ano, sucesso) {
+		$http.get("rest/ranking/2014").success(sucesso);
+	}
 }
 
 /**

@@ -13,7 +13,7 @@ angular.module('RepasseApp', []).factory('repasseService', function($http) {
 	$scope.anos = ANOS;
 	
 	$scope.carregaRanking = function() {
-		var ano  = $scope.anoSelecionado;
+		var ano  = $scope.anoSelecionado.ano;
 		$scope.carregando = true;
 		repasseService.rankingPorAno(ano, function(ranking){
 			$scope.carregando = false;

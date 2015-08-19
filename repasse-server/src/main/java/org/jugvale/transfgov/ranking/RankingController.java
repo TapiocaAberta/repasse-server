@@ -24,8 +24,8 @@ import org.jugvale.transfgov.model.ranking.ResultadosRanking;
 @RequestScoped
 public class RankingController {
 
-	private static final String TITULO_RANKING_ANO = "Municípios que mais receberam recursos no ano";
-	private static final int TAMANHO_RANKING = 10;
+	private static final String TITULO_RANKING_ANO = "Municípios que mais receberam recursos no ano ";
+	private static final int TAMANHO_RANKING = 50;
 	
 	@PersistenceContext
 	EntityManager em;	
@@ -40,7 +40,9 @@ public class RankingController {
 	 * @return
 	 */
 	public RankingTransferencias rankingPorAno(int ano) {
-		return cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
+		RankingTransferencias ranking =  cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
+		ranking.setResultados(ranking.getResultados().subList(0, TAMANHO_RANKING));
+		return ranking;
 	}
 
 	public RankingTransferencias rankingPorAnoArea(int ano, String area) {
@@ -69,7 +71,7 @@ public class RankingController {
 		Query buscaRanking = em.createNamedQuery("Ranking.porAno");
 		RankingTransferencias ranking = new RankingTransferencias();
 		@SuppressWarnings("unchecked")
-		List<Object[]> resultado = buscaRanking.setParameter("ano", ano).setMaxResults(TAMANHO_RANKING).getResultList();	
+		List<Object[]> resultado = buscaRanking.setParameter("ano", ano).getResultList();	
 		List<ResultadosRanking> resultadosRanking = resultado.stream().map(r -> {
 				Object[] o = (Object[]) r;
 				String municipio = String.valueOf(o[0]);
@@ -79,7 +81,7 @@ public class RankingController {
 				return new ResultadosRanking(municipio, populacao.intValue(), total, totalPerCapita);
 			}).collect(Collectors.toList());
 		ranking.setResultados(resultadosRanking);
-		ranking.setNome(TITULO_RANKING_ANO);
+		ranking.setNome(TITULO_RANKING_ANO + ano);
 		ranking.setAno(ano);
 		return ranking;
 	}

@@ -18,8 +18,16 @@ angular.module('RepasseApp', []).factory('repasseService', function($http) {
 		repasseService.rankingPorAno(ano, function(ranking){
 			$scope.carregando = false;
 			montarGraficoRanking(ranking);
+			$scope.resultadosRanking = ranking.resultados;
 		});
 	}
+	
+	$('#lblCarregar').each(function() {
+		var elem = $(this);
+		setInterval(function() {
+			elem.fadeToggle(600);
+		}, 400);
+	});
 });
 
 function montarGraficoRanking(ranking) {
@@ -27,8 +35,10 @@ function montarGraficoRanking(ranking) {
 	var titulo = ranking.nome;
 	var categorias = [];
 	var dados = [];
-	for(i in ranking.resultados) {
-		var res = ranking.resultados[i];
+	// pegamos só os 10 primeiros para montar o gráfico
+	var resultados = ranking.resultados.slice(0, 10);
+	for(i in resultados) {
+		var res = resultados[i];
 		categorias.push(res.nomeCidade);
 		dados.push(
 			 res.valorPerCapita
@@ -65,6 +75,7 @@ function montarGraficoRanking(ranking) {
 		            useHTML: true
 		        },
 		        series: [{
+		        	showInLegend: false, 
 		        	data: dados
 		        }]
 		});

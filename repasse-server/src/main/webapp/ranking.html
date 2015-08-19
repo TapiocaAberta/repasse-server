@@ -77,15 +77,36 @@
 				</div>
 				<br />
 				<button type="submit" class="btn btn-primary"
-					ng-click="carregaRanking()" ng-disabled="!anoSelecionado || carregando"
-					style="font-size: 20px">
+					ng-click="carregaRanking()"
+					ng-disabled="!anoSelecionado || carregando" style="font-size: 20px">
 					<span class="glyphicon glyphicon-search" style="margin-right: 10px"></span>Ver
 					Ranking
 				</button>
+
 			</div>
-			<div class="col-lg-9">
-			<h2 ng-show="carregando">carregando...</h2>
-				<div id="graficoRanking"></div>
+			<div class="col-lg-10">
+				<label class="label label-danger" ng-show="carregando"
+					style="font-size: 15px" id="lblCarregar">Carregando...</label>
+				<div ng-hide="carregando">
+					<div id="graficoRanking"></div>
+					<h2>Os 50 primeiros municípios do ranking</h2>
+					<table class="table" class="row-border hover">
+						<thead>
+							<tr>
+								<th>Município</th>
+								<th>População</th>
+								<th>Valor Total</th>
+								<th>Total <em>per capita</em></th>
+							</tr>
+						</thead>
+						<tr ng-repeat="r in resultadosRanking">
+							<td>{{ r.nomeCidade }}</td>
+							<td>{{ r.populacao }}</td>
+							<td>R$ {{ r.valorTotal }}</td>
+							<td>R$ {{ r.valorPerCapita }}</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 

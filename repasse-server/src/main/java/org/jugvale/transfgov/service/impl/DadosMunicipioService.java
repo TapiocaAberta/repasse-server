@@ -74,11 +74,16 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 	}
 	
 	public Long somaPorAnoOuMaisRecente(int ano) {
+		ano = anoOuMaisRecente(ano);
+		return somaPopulacaoPorAno(ano);
+	}
+	
+	public int anoOuMaisRecente(int ano) {
 		if(!temDadosParaAno(ano)) {
 			TypedQuery<Integer> buscaAnoMaisRecente = em.createNamedQuery("DadosMunicipio.anoMaisRecente", Integer.class);
 			ano = buscaAnoMaisRecente.getSingleResult().intValue();
 		}
-		return somaPopulacaoPorAno(ano);
+		return ano;
 	}
 	
 }

@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jugvale.transfgov.model.ranking.RankingTransferencias;
 import org.jugvale.transfgov.ranking.RankingController;
+import org.jugvale.transfgov.service.impl.DadosMunicipioService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
 import org.jugvale.transfgov.utils.JaxrsUtils;
 
@@ -26,6 +27,9 @@ public class RankingResource {
 	
 	@Inject
 	RankingController controller;
+	
+	@Inject
+	DadosMunicipioService dadosMunicipioService;
 
 	@PathParam("ano")
 	int ano;
@@ -36,6 +40,7 @@ public class RankingResource {
 	
 	@GET
 	public RankingTransferencias rankingPorAno() {
+		ano = dadosMunicipioService.anoOuMaisRecente(ano);
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
 		return controller.rankingPorAno(ano);
 	} 
@@ -57,7 +62,7 @@ public class RankingResource {
 	@GET
 	@Path("programa/{programa}")
 	public RankingTransferencias rankingPorAnoPrograma(@PathParam("programa") String programa) {
-		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));		
 		return controller.rankingPorAnoPrograma(ano, programa);
 	} 
 	

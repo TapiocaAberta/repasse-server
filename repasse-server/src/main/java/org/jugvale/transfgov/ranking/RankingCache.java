@@ -24,7 +24,7 @@ public class RankingCache {
 	WeakHashMap<Integer, RankingTransferencias> cacheRanking;
 	
 	@PostConstruct
-	private void inicializa() {
+	private void inicializa() {		
 		cacheRanking = new WeakHashMap<>();
 	}	
 	

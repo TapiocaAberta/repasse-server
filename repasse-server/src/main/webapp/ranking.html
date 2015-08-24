@@ -103,8 +103,8 @@
 						<tr ng-repeat="r in resultadosRanking">
 							<td>{{ r.nomeCidade }}</td>
 							<td>{{ r.populacao }}</td>
-							<td>R$ {{ r.valorTotal }}</td>
-							<td>R$ {{ r.valorPerCapita }}</td>
+							<td>R$ {{ r.valorTotal.toLocaleString() }}</td>
+							<td>R$ {{ r.valorPerCapita.toLocaleString() }}</td>
 						</tr>
 					</table>
 				</div>

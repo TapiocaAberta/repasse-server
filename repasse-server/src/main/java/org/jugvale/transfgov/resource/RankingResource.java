@@ -34,7 +34,6 @@ public class RankingResource {
 	@PathParam("ano")
 	int ano;
 	
-	
 	@Inject
 	TransferenciaService transferenciaService;
 	

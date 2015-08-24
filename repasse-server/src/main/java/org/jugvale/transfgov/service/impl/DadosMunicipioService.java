@@ -68,9 +68,9 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 	
 
 	public boolean temDadosParaAno(int ano) {
-		TypedQuery<Long> buscaContagemPorAno = em.createNamedQuery("DadosMunicipio.contaLinhasPorAno", Long.class);
-		buscaContagemPorAno.setParameter("ano", ano);
-		return buscaContagemPorAno.getFirstResult() > 0;
+		TypedQuery<Boolean> buscaContagemPorAno = em.createNamedQuery("DadosMunicipio.temDadosParaAno", Boolean.class);
+		buscaContagemPorAno.setParameter("ano", ano); 
+		return buscaContagemPorAno.getSingleResult();
 	}
 	
 	public Long somaPorAnoOuMaisRecente(int ano) {

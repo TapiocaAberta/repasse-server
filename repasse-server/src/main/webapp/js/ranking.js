@@ -21,7 +21,8 @@ angular.module('RepasseApp', []).factory('repasseService', function($http) {
 			$scope.resultadosRanking = ranking.resultados;
 		});
 	}
-	
+	$scope.anoSelecionado = ANOS[0];
+	$scope.carregaRanking();
 	$('#lblCarregar').each(function() {
 		var elem = $(this);
 		setInterval(function() {

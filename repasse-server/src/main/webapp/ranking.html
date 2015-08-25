@@ -43,6 +43,9 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
+				<a class="navbar-brand" href="/"><img
+					style="max-width: 80px; height: 50px; margin-top: -18px"
+					src="/imagens/repasse_logo_mini.gif"></a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
@@ -103,8 +106,8 @@
 						<tr ng-repeat="r in resultadosRanking">
 							<td>{{ r.nomeCidade }}</td>
 							<td>{{ r.populacao }}</td>
-							<td>R$ {{ r.valorTotal }}</td>
-							<td>R$ {{ r.valorPerCapita }}</td>
+							<td>R$ {{ r.valorTotal.toLocaleString() }}</td>
+							<td>R$ {{ r.valorPerCapita.toLocaleString() }}</td>
 						</tr>
 					</table>
 				</div>

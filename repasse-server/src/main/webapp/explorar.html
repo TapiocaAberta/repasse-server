@@ -8,7 +8,8 @@
 <meta property="og:title"
 	content="Explore os repasses monetários do governo federal para municípios">
 <meta property="og:site_name" content="Repasse Explorar">
-<meta property="og:description" content="Saiba o destino de cada repasse monetário do governo federal para a sua cidade, conheça os beneficiados e como os repasses foram distribuídos ao longo do ano aqui.">
+<meta property="og:description"
+	content="Saiba o destino de cada repasse monetário do governo federal para a sua cidade, conheça os beneficiados e como os repasses foram distribuídos ao longo do ano aqui.">
 <meta property="og:image"
 	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -16,9 +17,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@apprepasse">
 <meta name="twitter:creator" content="@william_antonio">
-<meta name="twitter:title" content="Repasses monetários do governo federal para municípios">
-<meta name="twitter:description" content="Saiba o destino de cada repasse monetário do governo federal para a sua cidade, conheça os beneficiados e como os repasses foram distribuídos ao longo do ano aqui.">
-<meta name="twitter:image" content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
+<meta name="twitter:title"
+	content="Repasses monetários do governo federal para municípios">
+<meta name="twitter:description"
+	content="Saiba o destino de cada repasse monetário do governo federal para a sua cidade, conheça os beneficiados e como os repasses foram distribuídos ao longo do ano aqui.">
+<meta name="twitter:image"
+	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
 
 <link rel="icon" href="/imagens/favicon.ico">
 
@@ -46,7 +50,7 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="explorar.html">Explorar</a></li>
 					<li><a href="comparar.html">Comparar</a></li>
-					<li><a href="ranking.html">Ranking</a></li>					
+					<li><a href="ranking.html">Ranking</a></li>
 					<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
 					<li><a href="sobre.html">Sobre</a></li>
 				</ul>
@@ -125,7 +129,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Repasses anuais para <strong>{{municipioBusca.nome}} -
-					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>!
+					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <br /> <br />
+				<em ng-show="ranking">{{municipioBusca.nome}} está em {{ranking.posicao}}º no <a
+					href="ranking.html" >ranking</a> com repasse per capita de
+				R$ {{ranking.valorPerCapita.toLocaleString() }} em {{anoSelecionado.ano}}</em>
 			</div>
 			<div class="panel-body">
 				<div class="row">

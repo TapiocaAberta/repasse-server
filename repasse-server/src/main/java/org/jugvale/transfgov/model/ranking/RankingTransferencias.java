@@ -1,5 +1,6 @@
 package org.jugvale.transfgov.model.ranking;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +47,17 @@ public class RankingTransferencias {
 
 	public void setResultados(List<ResultadosRanking> resultados) {
 		this.resultados = resultados;
+	}	
+
+	@Override
+	public RankingTransferencias clone() {
+		RankingTransferencias clone = new RankingTransferencias();
+		clone.setAno(this.getAno());
+		clone.setNome(this.nome);
+		List<ResultadosRanking> r = new ArrayList<>();
+		this.getResultados().forEach(r::add);
+		clone.setResultados(r);
+		return clone;
 	}
 
 }

@@ -8,6 +8,12 @@ package org.jugvale.transfgov.model.ranking;
  *
  */
 public class ResultadosRanking {
+	
+	/**
+	 * A posição no ranking
+	 */
+	private int posicao;
+	
 
 	/**
 	 * O nome da cidade
@@ -28,6 +34,16 @@ public class ResultadosRanking {
 	
 	public ResultadosRanking() {
 		super();
+	}
+
+	public ResultadosRanking(int posicao, String nomeCidade, int populacao,
+			double valorTotal, double valorPerCapita) {
+		super();
+		this.posicao = posicao;
+		this.nomeCidade = nomeCidade;
+		this.populacao = populacao;
+		this.valorTotal = valorTotal;
+		this.valorPerCapita = valorPerCapita;
 	}
 
 	public ResultadosRanking(String nomeCidade, int populacao,
@@ -70,4 +86,13 @@ public class ResultadosRanking {
 	public void setValorPerCapita(double valorPerCapita) {
 		this.valorPerCapita = valorPerCapita;
 	}
+
+	public int getPosicao() {
+		return posicao;
+	}
+
+	public void setPosicao(int posicao) {
+		this.posicao = posicao;
+	}
+	
 }

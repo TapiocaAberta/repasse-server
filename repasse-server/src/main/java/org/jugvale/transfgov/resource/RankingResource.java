@@ -7,9 +7,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.ranking.RankingTransferencias;
+import org.jugvale.transfgov.model.ranking.ResultadosRanking;
 import org.jugvale.transfgov.ranking.RankingController;
 import org.jugvale.transfgov.service.impl.DadosMunicipioService;
+import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
 import org.jugvale.transfgov.utils.JaxrsUtils;
 
@@ -30,6 +33,9 @@ public class RankingResource {
 	
 	@Inject
 	DadosMunicipioService dadosMunicipioService;
+	
+	@Inject
+	MunicipioService municipioService;
 
 	@PathParam("ano")
 	int ano;
@@ -42,6 +48,16 @@ public class RankingResource {
 		ano = dadosMunicipioService.anoOuMaisRecente(ano);
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
 		return controller.rankingPorAno(ano);
+	} 
+	
+	
+	@GET
+	@Path("/{sigla}/{nome}")
+	public ResultadosRanking rankingPorAnoMunicipio(@PathParam("sigla") String sigla, @PathParam("nome") String nome) {
+		ano = dadosMunicipioService.anoOuMaisRecente(ano);
+		Municipio m = municipioService.buscaPorNomeEEstado(sigla, nome);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
+		return controller.buscaRankingMunicipio(ano, m);
 	} 
 	
 	@GET

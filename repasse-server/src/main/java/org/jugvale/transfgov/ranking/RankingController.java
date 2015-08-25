@@ -2,6 +2,7 @@ package org.jugvale.transfgov.ranking;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.jboss.resteasy.spi.NotImplementedYetException;
+import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.ranking.RankingTransferencias;
 import org.jugvale.transfgov.model.ranking.ResultadosRanking;
 
@@ -40,9 +42,22 @@ public class RankingController {
 	 * @return
 	 */
 	public RankingTransferencias rankingPorAno(int ano) {
-		RankingTransferencias ranking =  cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
+		// usa um clone para manter a lista cheia em cache
+		RankingTransferencias ranking =  (cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano))).clone();
 		ranking.setResultados(ranking.getResultados().subList(0, TAMANHO_RANKING));
 		return ranking;
+	}
+	
+	/**
+	 * 
+	 * Retorna os dados de ranking para um município específico
+	 * @param ano
+	 * @param m
+	 * @return
+	 */
+	public ResultadosRanking buscaRankingMunicipio(int ano, Municipio m) {
+		RankingTransferencias ranking =  cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
+		return ranking.getResultados().stream().filter(r -> r.getNomeCidade().equals(m.toString())).findFirst().get();
 	}
 
 	public RankingTransferencias rankingPorAnoArea(int ano, String area) {
@@ -71,14 +86,15 @@ public class RankingController {
 		Query buscaRanking = em.createNamedQuery("Ranking.porAno");
 		RankingTransferencias ranking = new RankingTransferencias();
 		@SuppressWarnings("unchecked")
-		List<Object[]> resultado = buscaRanking.setParameter("ano", ano).getResultList();	
+		List<Object[]> resultado = buscaRanking.setParameter("ano", ano).getResultList();
+		AtomicInteger posicao = new AtomicInteger(1);
 		List<ResultadosRanking> resultadosRanking = resultado.stream().map(r -> {
 				Object[] o = (Object[]) r;
 				String municipio = String.valueOf(o[0]);
 				double totalPerCapita = (double) o[1];
 				double total = (double) o[2];				
 				BigInteger populacao = (BigInteger) o[3];
-				return new ResultadosRanking(municipio, populacao.intValue(), total, totalPerCapita);
+				return new ResultadosRanking(posicao.getAndIncrement(), municipio, populacao.intValue(), total, totalPerCapita);
 			}).collect(Collectors.toList());
 		ranking.setResultados(resultadosRanking);
 		ranking.setNome(TITULO_RANKING_ANO + ano);

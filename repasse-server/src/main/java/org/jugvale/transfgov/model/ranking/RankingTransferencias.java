@@ -47,8 +47,8 @@ public class RankingTransferencias {
 
 	public void setResultados(List<ResultadosRanking> resultados) {
 		this.resultados = resultados;
-	}
-	
+	}	
+
 	@Override
 	public RankingTransferencias clone() {
 		RankingTransferencias clone = new RankingTransferencias();

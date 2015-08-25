@@ -104,6 +104,7 @@ appExplorar.controller('ExplorarController',
 				if(!$scope.municipioSelecionado) 
 					return;
 				$scope.estadoBusca = $scope.estadoSelecionado;
+				$scope.carregaRanking();
 				$scope.carregaAgregacaoAno();
 				$scope.carregaGraficosAgregacao();
 				$scope.carregaDadosMes();
@@ -153,7 +154,16 @@ appExplorar.controller('ExplorarController',
 					$scope.linkAnterior = linkAnterior;
 					$scope.linkProxima = linkProxima;
 				});
-			};			
+			};	
+			$scope.carregaRanking = function() {
+				$scope.ranking = null;
+				var sigla = $scope.estadoSelecionado.sigla;
+				var nome = $scope.municipioSelecionado.nome;
+				var ano = $scope.anoSelecionado.ano;
+				repasseService.rankingPorAnoCidade(ano, sigla, nome, function(ranking) {
+					$scope.ranking = ranking;
+				});
+			}
 			$scope.carregaGraficosAgregacao = function() {
 				var a = $scope.agregacaoSelecionada;
 				var ano = $scope.anoSelecionado.ano;

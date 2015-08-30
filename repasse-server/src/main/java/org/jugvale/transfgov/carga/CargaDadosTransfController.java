@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -78,6 +81,14 @@ public class CargaDadosTransfController {
 	@PersistenceContext
 	private EntityManager em;
 
+	private NumberFormat nfPtBr;
+
+	@PostConstruct
+	private void inicializa() {
+		Locale ptBr = new Locale("pt", "BR");
+		nfPtBr = NumberFormat.getNumberInstance(ptBr);
+	}
+	
 	/**
 	 * Irá carregar o arquivo passado no banco de dados. Linha a linha será
 	 * inserida.
@@ -167,8 +178,7 @@ public class CargaDadosTransfController {
 		String nomePopular = campos[11];
 		String codigoFavorecido = campos[12];
 		String nomeFavorecido = campos[13];
-		// GAMBIARRA PARA EVITAR PROBLEMAS COM LOCALE DE FLOATS
-		float valor = Float.parseFloat(campos[17].replaceAll("\\,", ""));
+		float valor = nfPtBr.parse(campos[17]).floatValue();
 		Estado estado = estadoService.buscaEstadoPorSiglaOuCria(siglaEstado,
 				() -> new Estado(siglaEstado));
 		Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(

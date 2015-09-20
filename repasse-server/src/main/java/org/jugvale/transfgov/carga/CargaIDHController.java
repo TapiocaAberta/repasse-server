@@ -1,9 +1,9 @@
 package org.jugvale.transfgov.carga;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -14,6 +14,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.service.impl.DadosMunicipioService;
@@ -48,12 +49,15 @@ public class CargaIDHController {
 
 	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public String fazCargaIDH() throws IOException {
-		logger.info("Iniciando carga de dados para população"); 
+		logger.info("Iniciando carga de dados do IDH"); 
 		StringBuffer relatorioFinal = new StringBuffer("Carga iniciada em: " + new Date());
 		ArrayList<String> naoEncontrados = new ArrayList<>();
-		for (int i = 0; i < ARQUIVOS_IDH.length; i++) {		
-			String url = getClass().getResource(ARQUIVOS_IDH[i]).getFile();
-			Path arquivo = Paths.get(url);
+		for (int i = 0; i < ARQUIVOS_IDH.length; i++) {
+			// Não funciona para WAR; URL também não
+			//String url = getClass().getResource(ARQUIVOS_IDH[i]).getFile();
+			InputStream is = getClass().getResourceAsStream(ARQUIVOS_IDH[i]);
+			Path arquivo = Files.createTempFile("idh", "");
+			Files.write(arquivo, IOUtils.toByteArray(is));
 			Files.lines(arquivo).skip(1).forEach(l -> {
 				// ANO	UF	Município	IDHM	IDHM_E	IDHM_L	IDHM_R
 				String[] col = l.split(SEPARADOR);
@@ -73,6 +77,7 @@ public class CargaIDHController {
 					naoEncontrados.add(ano + ": \"" + nomeCidade  +  "\" - \"" + uf + "\"" );
 				}
 			});
+			Files.delete(arquivo);
 			relatorioFinal.append("<br />erro ao inserir dados de IDH para os seguintes municipio: (provavelmente por incompatibilidades entre os dados, veja os logs): <br />");
 			relatorioFinal.append(naoEncontrados.stream().collect(Collectors.joining("<br/>")));
 			logger.info("Fim carga de dados de IDH"); 

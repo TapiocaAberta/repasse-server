@@ -72,6 +72,13 @@ public interface CargaDadosResource {
 	@POST
 	@Path("populacao")
 	@Produces(MediaType.TEXT_HTML)
-	public Response cargaDadosPop();
+	public Response cargaDadosPop();	
+	
+	@POST
+	@Path("idh")
+	@Produces(MediaType.TEXT_HTML)
+	public Response cargaDadosIDH();
+	
+	
 	
 }

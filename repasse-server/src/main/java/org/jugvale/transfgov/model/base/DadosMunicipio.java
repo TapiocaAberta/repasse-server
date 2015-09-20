@@ -40,7 +40,20 @@ public class DadosMunicipio {
 	@JoinColumn(name = "municipio_mun_id")
 	private Municipio municipio;
 	private long populacao;
-
+	private float idhm;
+	/**
+	 * IDH educação
+	 */
+	private float idhEducacao;
+	/**
+	 * IDH Longetividade
+	 */
+	private float idhLongevidade;
+	/**
+	 * IDH Renda
+	 */
+	private float idhRenda;
+	
 	public int getAno() {
 		return ano;
 	}
@@ -65,4 +78,43 @@ public class DadosMunicipio {
 		this.populacao = populacao;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public float getIdhm() {
+		return idhm;
+	}
+
+	public void setIdhm(float idhm) {
+		this.idhm = idhm;
+	}
+
+	public float getIdhEducacao() {
+		return idhEducacao;
+	}
+
+	public void setIdhEducacao(float idhe) {
+		this.idhEducacao = idhe;
+	}
+
+	public float getIdhLongevidade() {
+		return idhLongevidade;
+	}
+
+	public void setIdhLongevidade(float idhl) {
+		this.idhLongevidade = idhl;
+	}
+
+	public float getIdhRenda() {
+		return idhRenda;
+	}
+
+	public void setIdhRenda(float idhr) {
+		this.idhRenda = idhr;
+	}
 }

@@ -19,6 +19,7 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.jugvale.transfgov.carga.CargaDadosPopController;
 import org.jugvale.transfgov.carga.CargaDadosTransfController;
+import org.jugvale.transfgov.carga.CargaIDHController;
 import org.jugvale.transfgov.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.base.AnoMes;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
@@ -53,6 +54,9 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 
 	@Inject
 	CargaTransfInfoService cargaTransfInfoService;
+	
+	@Inject
+	CargaIDHController cargaIDHController;
 	
 	@Inject
 	AnoService anoService;
@@ -153,6 +157,19 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 			}
 		}
 		return resumos;
+	}
+
+	@Override
+	public Response cargaDadosIDH() {
+		logger.info("Iniciando carga de dados do IDH");
+		try {
+			return Response
+					.ok(cargaIDHController.fazCargaIDH())
+					.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().entity(e.getMessage()).build();
+		}
 	}
 
 }

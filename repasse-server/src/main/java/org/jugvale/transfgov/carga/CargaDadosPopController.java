@@ -55,7 +55,8 @@ public class CargaDadosPopController {
 		StringBuffer relatorioFinal = new StringBuffer("Carga iniciada em: " + new Date());
 		ArrayList<String> naoEncontrados = new ArrayList<>();
 		Set<Integer> anos = new HashSet<>();
-		for (int i = 0; i < ARQUIVOS_POP.length; i++) {		
+		for (int i = 0; i < ARQUIVOS_POP.length; i++) {	
+			// TODO: Arrumar como feito em CargaIDHController, isso não funciona dentro de WAR.
 			String url = getClass().getResource(ARQUIVOS_POP[i]).getFile();
 			Path arquivo = Paths.get(url);
 			String nomeColunas[] = Files.lines(arquivo).findFirst().get()

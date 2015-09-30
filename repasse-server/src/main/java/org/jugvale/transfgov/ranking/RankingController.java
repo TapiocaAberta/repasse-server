@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.jboss.resteasy.spi.NotImplementedYetException;
+import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.ranking.RankingTransferencias;
 import org.jugvale.transfgov.model.ranking.ResultadosRanking;
@@ -87,9 +88,12 @@ public class RankingController {
 	
 	private RankingTransferencias buscaRankingPorAno(int ano) {
 		RankingTransferencias rankingTransferencias = dadosBaseRanking(ano);
-		List<Long> idMunicipios = rankingTransferencias.getResultados().stream().map(r -> r.getIdMunicipio()).collect(Collectors.toList());
+		List<Long> idMunicipios = rankingTransferencias.getResultados().stream()
+				.limit(TAMANHO_RANKING)
+				.map(r -> r.getIdMunicipio()).collect(Collectors.toList());
 		// Vamos preencher o IDHM, poderia também vir  da query Transferencia.Ranking.porAno?
-		dadosMunicipioService.buscaIDHParaMunicipiosAnoMaisRecente(idMunicipios, ano).forEach(d -> {
+		List<DadosMunicipio> dadosIDH = dadosMunicipioService.buscaIDHParaMunicipiosAnoMaisRecente(idMunicipios, ano);
+		dadosIDH.forEach(d -> {
 			rankingTransferencias.getResultados().stream()
 			.filter(r -> r.getIdMunicipio() == d.getMunicipio().getId())
 			.findFirst().ifPresent(r -> {

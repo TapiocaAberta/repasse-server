@@ -34,6 +34,8 @@ public class ResultadosRanking {
 	
 	private long idMunicipio; 
 	
+	private float idhm;
+	
 	public ResultadosRanking() {
 		super();
 	}
@@ -104,6 +106,14 @@ public class ResultadosRanking {
 
 	public void setIdMunicipio(long idMunicipio) {
 		this.idMunicipio = idMunicipio;
+	}
+
+	public float getIdhm() {
+		return idhm;
+	}
+
+	public void setIdhm(float idhm) {
+		this.idhm = idhm;
 	}		
 	
 }

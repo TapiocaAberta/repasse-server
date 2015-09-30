@@ -86,9 +86,10 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 		return ano;
 	}
 
-	public List<DadosMunicipio> buscaIDHParaMunicipios(List<Long> idMunicipios) {
+	public List<DadosMunicipio> buscaIDHParaMunicipiosAnoMaisRecente(List<Long> idMunicipios, int ano) {
 		TypedQuery<DadosMunicipio> buscaContagemPorAno = em.createNamedQuery("DadosMunicipio.ultimoIDHParaMunicipios", DadosMunicipio.class);
 		buscaContagemPorAno.setParameter("ids", idMunicipios); 
+		buscaContagemPorAno.setParameter("ano", ano); 
 		return buscaContagemPorAno.getResultList();
 	}
 	

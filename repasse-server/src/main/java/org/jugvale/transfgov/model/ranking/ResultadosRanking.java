@@ -32,18 +32,21 @@ public class ResultadosRanking {
 	 */
 	private double valorPerCapita;
 	
+	private long idMunicipio; 
+	
 	public ResultadosRanking() {
 		super();
 	}
 
 	public ResultadosRanking(int posicao, String nomeCidade, int populacao,
-			double valorTotal, double valorPerCapita) {
+			double valorTotal, double valorPerCapita, long idMunicipio) {
 		super();
 		this.posicao = posicao;
 		this.nomeCidade = nomeCidade;
 		this.populacao = populacao;
 		this.valorTotal = valorTotal;
 		this.valorPerCapita = valorPerCapita;
+		this.idMunicipio = idMunicipio;
 	}
 
 	public ResultadosRanking(String nomeCidade, int populacao,
@@ -94,5 +97,13 @@ public class ResultadosRanking {
 	public void setPosicao(int posicao) {
 		this.posicao = posicao;
 	}
+
+	public long getIdMunicipio() {
+		return idMunicipio;
+	}
+
+	public void setIdMunicipio(long idMunicipio) {
+		this.idMunicipio = idMunicipio;
+	}		
 	
 }

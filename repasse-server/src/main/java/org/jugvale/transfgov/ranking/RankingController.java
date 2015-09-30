@@ -94,7 +94,8 @@ public class RankingController {
 				double totalPerCapita = (double) o[1];
 				double total = (double) o[2];				
 				BigInteger populacao = (BigInteger) o[3];
-				return new ResultadosRanking(posicao.getAndIncrement(), municipio, populacao.intValue(), total, totalPerCapita);
+				BigInteger idMunicipio = (BigInteger) o[4];
+				return new ResultadosRanking(posicao.getAndIncrement(), municipio, populacao.intValue(), total, totalPerCapita, idMunicipio.longValue());
 			}).collect(Collectors.toList());
 		ranking.setResultados(resultadosRanking);
 		ranking.setNome(TITULO_RANKING_ANO + ano);

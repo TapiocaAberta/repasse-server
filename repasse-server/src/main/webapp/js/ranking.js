@@ -34,21 +34,21 @@ angular.module('RepasseApp', []).factory('repasseService', function($http) {
 function montarGraficoRanking(ranking) {
 	var ano = ranking.ano;
 	var titulo = ranking.nome;
-	var categorias = [];
-	var dados = [];
+	var categorias = [], dadosRanking = [], dadosIDH = [];
 	// pegamos só os 10 primeiros para montar o gráfico
 	var resultados = ranking.resultados.slice(0, 10);
 	for(i in resultados) {
 		var res = resultados[i];
 		categorias.push(res.nomeCidade);
-		dados.push(
+		dadosRanking.push(
 			 res.valorPerCapita
 		);
+		dadosIDH.push(
+				 res.idhm
+		);		
 	}
 	$("#graficoRanking").highcharts({
-			 chart: {
-		            type: 'column'
-		        },
+
 		        title: {
 		            text: titulo
 		        },			       
@@ -59,26 +59,44 @@ function montarGraficoRanking(ranking) {
 		            categories: categorias,
 		            crosshair: true
 		        },
-		        yAxis: {
+		        yAxis: [{
 		            title: {
 		                text: 'Valor <i>per capita</i>'
 		            },
-			        labels: {
-			            enabled: false
+			        labels: {			          
+		                format: 'R$ {value}',
+		                style: {
+		                    color: Highcharts.getOptions().colors[0]
+		                }
+			            
 			        }
-		        },
+		        },{
+	        	  title: {
+		                text: 'IDH'
+		            },
+			        labels: {
+			            style: {
+		                    color: Highcharts.getOptions().colors[1]
+		                }
+			        },
+			        opposite: true
+		        }],
 		        tooltip: {
-		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-		            pointFormat: '<tr><td style="color:{series.color};padding:0">Valor <i>per capita</i>: </td>' +
-		                '<td style="padding:0"><b>R$ {point.y:,.3f} </b></td></tr>',
-		            footerFormat: '</table>',
-		            shared: true,
-		            useHTML: true
+		            shared: true
 		        },
 		        series: [{
-		        	showInLegend: false, 
-		        	data: dados
-		        }]
+		            	yAxis: 0,
+		        		name: 'Total <i>per capita</i>',
+			        	type: 'column',
+			        	data: dadosRanking
+		        	},
+		        	{
+		        		yAxis: 1,
+		        		name: 'IDH',
+		        		type: 'spline',
+		        		data:dadosIDH
+		        	}
+		        ]
 		});
 	
 }

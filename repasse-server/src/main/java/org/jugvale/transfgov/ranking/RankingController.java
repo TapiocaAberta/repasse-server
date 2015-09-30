@@ -89,7 +89,7 @@ public class RankingController {
 		RankingTransferencias rankingTransferencias = dadosBaseRanking(ano);
 		List<Long> idMunicipios = rankingTransferencias.getResultados().stream().map(r -> r.getIdMunicipio()).collect(Collectors.toList());
 		// Vamos preencher o IDHM, poderia também vir  da query Transferencia.Ranking.porAno?
-		dadosMunicipioService.buscaIDHParaMunicipios(idMunicipios).forEach(d -> {
+		dadosMunicipioService.buscaIDHParaMunicipiosAnoMaisRecente(idMunicipios, ano).forEach(d -> {
 			rankingTransferencias.getResultados().stream()
 			.filter(r -> r.getIdMunicipio() == d.getMunicipio().getId())
 			.findFirst().ifPresent(r -> {

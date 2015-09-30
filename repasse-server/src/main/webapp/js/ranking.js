@@ -53,7 +53,7 @@ function montarGraficoRanking(ranking) {
 		            text: titulo
 		        },			       
 		        subtitle: {
-		            text: 'Municípios que mais receberam repasse do governo federal <i>per capita</i>'
+		            text: 'Municipios que mais receberam repasse do governo federal (<i>per capita</i>) frente ao IDH'
 		        },
 		        xAxis: {
 		            categories: categorias,

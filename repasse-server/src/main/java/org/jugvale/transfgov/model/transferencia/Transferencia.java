@@ -55,7 +55,7 @@ import org.jugvale.transfgov.model.base.Municipio;
 // hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 })
 // essa query tem que ser nativa... mais performática que a gerada pelo JPA
-@NamedNativeQueries({ @NamedNativeQuery(name = "Ranking.porAno", query = "select concat(mun_nome, ' - ', est_sigla) as MUNICIPIO, truncate(sum(t.tra_valor) / d.populacao, 2), sum(t.tra_valor), d.populacao from transferencia t inner join municipio on t.municipio_mun_id = mun_id  inner join dados_municipio d on mun_id = d.municipio_mun_id inner join estado on estado_est_id = est_id where t.tra_ano = :ano AND  d.ano = :ano group by MUNICIPIO order by truncate(sum(t.tra_valor) / populacao, 2) desc") })
+@NamedNativeQueries({ @NamedNativeQuery(name = "DadosMunicipio.Ranking.porAno", query = "select concat(mun_nome, ' - ', est_sigla) as MUNICIPIO, truncate(sum(t.tra_valor) / d.populacao, 2), sum(t.tra_valor), d.populacao from transferencia t inner join municipio on t.municipio_mun_id = mun_id  inner join dados_municipio d on mun_id = d.municipio_mun_id inner join estado on estado_est_id = est_id where t.tra_ano = :ano AND  d.ano = :ano group by MUNICIPIO order by truncate(sum(t.tra_valor) / populacao, 2) desc") })
 public class Transferencia {
 
 	@Id

@@ -83,7 +83,7 @@ public class RankingController {
 	
 	private RankingTransferencias buscaRankingPorAno(int ano) {
 		// Devido HHH-9111, fazer cache desse método manualmente 
-		Query buscaRanking = em.createNamedQuery("Ranking.porAno");
+		Query buscaRanking = em.createNamedQuery("DadosMunicipio.Ranking.porAno");
 		RankingTransferencias ranking = new RankingTransferencias();
 		@SuppressWarnings("unchecked")
 		List<Object[]> resultado = buscaRanking.setParameter("ano", ano).getResultList();

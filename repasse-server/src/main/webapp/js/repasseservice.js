@@ -290,3 +290,25 @@ function removerAcentos(t) {
 		t.value = strAccentsOut;
 	}
 }
+
+/*
+ * 
+ * Visualização do IDHM de acordo com o ranking do Atlas
+ * 
+ * http://www.atlasbrasil.org.br/2013/pt/o_atlas/idhm/
+ *
+ * 
+*/
+function dadosIDHM(idhm){
+	if(idhm < 0.499) {
+		return {texto: "MUITO BAIXO", cor: "#FF0000"};
+	} else if(idhm < 0.599)  {
+		return {texto: "BAIXO", cor: "#FF9900"};	
+	} else if(idhm < 0.699) {
+		return {texto: "MÉDIO", cor: "#FFFF00"};	
+	} else if(idhm < 0.799) {
+		return {texto: "ALTO", cor: "#99FF00"};
+	} else if(idhm < 1) {
+		return {texto: "MUITO ALTO", cor: "#0000FF"};		
+	};
+}

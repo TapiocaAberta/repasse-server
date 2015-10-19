@@ -104,6 +104,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			salvaMapaUrl([]);
 			return;
 		}
+		$scope.carregando = true;
 		var params = {};
 		params['ano'] = $scope.anoSelecionado.ano;
 		params['municipios'] = new Array();
@@ -197,6 +198,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			        },
 			        series: series
 			    });
+			 $scope.carregando = false;
 			 
 	};
 
@@ -235,4 +237,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 		});
 		$scope.atualizaGraficos();
 	}
+	$('#lblCarregar').each(function() {
+		var elem = $(this);
+		setInterval(function() {
+			elem.fadeToggle(600);
+		}, 400);
+	});
 });

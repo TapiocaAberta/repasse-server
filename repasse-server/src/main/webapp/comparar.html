@@ -3,20 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:url" content="http://repasse.ufabc.edu.br/comparar.html">
+<meta property="og:url"
+	content="http://repasse.ufabc.edu.br/comparar.html">
 <meta property="og:title"
 	content="Compare repasses monetários do governo federal entre municípios">
 <meta property="og:site_name" content="Repasse Comparar">
 <meta property="og:description"
 	content="Será que o governo está destinando o dinheiro para a área que a sua cidade precisa? Como sabemos se sua cidade recebe o mesmo que outros municípios? Veja nessa aplicação">
-<meta property="og:image" content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
+<meta property="og:image"
+	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@apprepasse">
 <meta name="twitter:creator" content="@william_antonio">
-<meta name="twitter:title" content="Repasses monetários do governo federal para municípios">
-<meta name="twitter:description" content="Será que o governo está destinando o dinheiro para a área que a sua cidade precisa? Como sabemos se sua cidade recebe o mesmo que outros municípios? Veja nessa aplicação">
-<meta name="twitter:image" content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
+<meta name="twitter:title"
+	content="Repasses monetários do governo federal para municípios">
+<meta name="twitter:description"
+	content="Será que o governo está destinando o dinheiro para a área que a sua cidade precisa? Como sabemos se sua cidade recebe o mesmo que outros municípios? Veja nessa aplicação">
+<meta name="twitter:image"
+	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
 
 <link rel="icon" href="/imagens/favicon.ico">
 <title>Repasse - Comparar</title>
@@ -42,7 +47,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="explorar.html">Explorar</a></li>
 					<li class="active"><a href="comparar.html">Comparar</a></li>
-					<li><a href="ranking.html">Ranking</a></li>					
+					<li><a href="ranking.html">Ranking</a></li>
 					<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
 					<li><a href="sobre.html">Sobre</a></li>
 				</ul>
@@ -142,8 +147,10 @@
 				<div class="row" style="margin-top: 20px; margin-bottom: 10px">
 					<div class="col-md-12">
 						<div class="input-group">
-						<span class="input-group-addon" id="label-agregacao">Ano para comparar</span>
-							<div id="radioBtn" class="btn-group" aria-describedby="label-agregacao">
+							<span class="input-group-addon" id="label-agregacao">Ano
+								para comparar</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
 								<a class="btn btn-primary btn-md"
 									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
 									ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
@@ -155,14 +162,15 @@
 				<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							Comparação <em>per capita</em> de cada município
+							Comparação <em>per capita</em> de cada município <label class="label label-danger" ng-show="carregando"
+							style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
 						</div>
 						<div class="panel-body">
 							<div id="graficoPerCapitaComparacaoAgregacao"></div>
 						</div>
 					</div>
 				</div>
-	<!-- 			<div class="row">
+				<!-- 			<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading">Comparação em valores totais de
 							cada município</div>

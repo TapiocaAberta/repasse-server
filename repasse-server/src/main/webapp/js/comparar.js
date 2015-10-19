@@ -63,7 +63,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 	$scope.agregacoesSuportadas = [];
 	for(i in AGREGACOES_SUPORTADAS_COMPARACAO) {
 		var a = AGREGACOES_SUPORTADAS_COMPARACAO[i];
-		if(a. valor != 'FAVORECIDO') {
+		if(a.valor != 'FAVORECIDO') {
 			$scope.agregacoesSuportadas.push(a);
 		}
 	};
@@ -113,7 +113,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 		params['agregacao'] = $scope.agregacaoSelecionada.valor;
 		salvaMapaUrl(params);
 		
-		 var ids = new Array();
+		 var ids = [];
 		 
 		 $.each($scope.municipiosSelecionados, function (i, m){
 			 ids.push(m.id);

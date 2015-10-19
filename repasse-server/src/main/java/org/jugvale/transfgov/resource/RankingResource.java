@@ -1,5 +1,9 @@
 package org.jugvale.transfgov.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -58,6 +62,27 @@ public class RankingResource {
 		Municipio m = municipioService.buscaPorNomeEEstado(sigla, nome);
 		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
 		return controller.buscaRankingMunicipio(ano, m);
+	} 
+	
+	
+	/**
+	 * 
+	 * Monta o ranking levando em conta os IDs passados como parâmetros.
+	 * 
+	 * @param idsMunicipios
+	 * @return
+	 */
+	@GET
+	@Path("municipios/{idsMunicipios}")
+	public List<ResultadosRanking>  rankingPorAnoMunicipios(@PathParam("idsMunicipios") String idsMunicipios) {
+		List<ResultadosRanking> resultado = new ArrayList<>();
+		ano = dadosMunicipioService.anoOuMaisRecente(ano);
+		JaxrsUtils.lanca404SeFalso(transferenciaService.temTranferencia(ano));
+		Stream.of(idsMunicipios.split("\\,")).forEach(id -> {
+			Municipio m = municipioService.buscarPorId(Long.parseLong(id));
+			resultado.add(controller.buscaRankingMunicipio(ano, m));
+		});
+		return resultado;
 	} 
 	
 	@GET

@@ -65,8 +65,15 @@ public class RankingResource {
 	} 
 	
 	
+	/**
+	 * 
+	 * Monta o ranking levando em conta os IDs passados como parâmetros.
+	 * 
+	 * @param idsMunicipios
+	 * @return
+	 */
 	@GET
-	@Path("/{idsMunicipios}")
+	@Path("municipios/{idsMunicipios}")
 	public List<ResultadosRanking>  rankingPorAnoMunicipios(@PathParam("idsMunicipios") String idsMunicipios) {
 		List<ResultadosRanking> resultado = new ArrayList<>();
 		ano = dadosMunicipioService.anoOuMaisRecente(ano);

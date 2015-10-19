@@ -145,7 +145,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 	}
 	
 	var atualizaTodosGraficosAgregacao = function () {
-		atualizaGraficoAgregacao('#graficoComparacaoAgregacao', 'Total (R$)', $scope.agregacoes);
+	//	atualizaGraficoAgregacao('#graficoComparacaoAgregacao', 'Total (R$)', $scope.agregacoes);
 		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
 	}
 	

@@ -48,7 +48,7 @@ public class RankingController {
 	 */
 	public RankingTransferencias rankingPorAno(int ano) {
 		// usa um clone para manter a lista cheia em cache
-		RankingTransferencias ranking =  (cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano))).clone();
+		RankingTransferencias ranking =  (cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano)));
 		ranking.setResultados(ranking.getResultados().subList(0, TAMANHO_RANKING));
 		return ranking;
 	}

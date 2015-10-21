@@ -221,6 +221,10 @@ var RepasseService = function($http) {
 	this.rankingPorAnoCidade = function(ano, sigla, nome, sucesso) {
 		$http.get("rest/ranking/" + ano + "/" + sigla + "/" + nome).success(sucesso);
 	}
+	
+	this.rankingMunicipiosSelecionados = function(ano, ids, sucesso) {
+		$http.get("rest/ranking/" + ano + "/municipios/" + ids.join(",")).success(sucesso);
+	}
 }
 
 /**

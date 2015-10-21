@@ -36,7 +36,7 @@ public class RankingCache {
 			resultados = busca.get();
 			cacheRanking.put(chave, resultados);
 		}		
-		return resultados;
+		return resultados.clone();
 	}
 
 }

@@ -48,7 +48,7 @@ public class RankingController {
 	 */
 	public RankingTransferencias rankingPorAno(int ano) {
 		// usa um clone para manter a lista cheia em cache
-		RankingTransferencias ranking =  (cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano))).clone();
+		RankingTransferencias ranking =  (cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano)));
 		ranking.setResultados(ranking.getResultados().subList(0, TAMANHO_RANKING));
 		return ranking;
 	}
@@ -61,7 +61,7 @@ public class RankingController {
 	 * @return
 	 */
 	public ResultadosRanking buscaRankingMunicipio(int ano, Municipio m) {
-		RankingTransferencias ranking =  rankingPorAno(ano);
+		RankingTransferencias ranking =  cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
 		return ranking.getResultados().stream().filter(r -> r.getNomeCidade().equals(m.toString())).findFirst().get();
 	}
 

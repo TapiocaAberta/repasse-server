@@ -39,7 +39,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			 $scope.todasCategorias.splice(pos,1);
 			 $scope.categoriaRemovidas.push(v);
 		});
-		atualizaTodosGraficosAgregacao();
+		atualizaTodosGraficos();
 		$scope.categoriaParaRemover = null;
 	};
 	
@@ -49,7 +49,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			 $scope.categoriaRemovidas.splice(pos, 1);
 			 $scope.todasCategorias.push(v);				
 		});			
-		atualizaTodosGraficosAgregacao();
+		atualizaTodosGraficos();
 		$scope.categoriaParaAdicionar = null;
 	};
 
@@ -118,18 +118,12 @@ angular.module('RepasseApp', []).factory('repasseService',
 		 
 		 $.each($scope.municipiosSelecionados, function (i, m){
 			 ids.push(m.id);
-		 });	
-		 
-		 repasseService.anoAgregadoAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
-			 organizaColunas(agregacoes);
-			 $scope.agregacoes = agregacoes;
-			 atualizaTodosGraficosAgregacao();
-		 });
-		 
+		 });	 
+		 $scope.ids = ids;
 		 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
 			 organizaColunas(agregacoes);
 			 $scope.agregacoesPerCapita = agregacoes;
-			 atualizaTodosGraficosAgregacao();
+			 atualizaTodosGraficos(ids);
 		 });
 	};
 	
@@ -145,9 +139,12 @@ angular.module('RepasseApp', []).factory('repasseService',
 		 });		
 	}
 	
-	var atualizaTodosGraficosAgregacao = function () {
+	var atualizaTodosGraficos = function () {
 	//	atualizaGraficoAgregacao('#graficoComparacaoAgregacao', 'Total (R$)', $scope.agregacoes);
 		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+		 repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
+			 montarGraficoRanking(resultados);
+		 });
 	}
 	
 	var atualizaGraficoAgregacao = function(divGrafico, tituloY, agregacoes) {
@@ -244,3 +241,83 @@ angular.module('RepasseApp', []).factory('repasseService',
 		}, 400);
 	});
 });
+// código copiado do ranking.js
+function montarGraficoRanking(resultados) {
+	var categorias = [], dadosRanking = [], dadosIDH = [];
+	for(i in resultados) {
+		var res = resultados[i];
+		categorias.push(res.nomeCidade);
+		dadosRanking.push( 
+				res.valorPerCapita
+		);
+		dadosIDH.push(
+				 res.idhm
+		);		
+	}
+	$("#graficoRanking").highcharts({
+		        title: {
+		            text: 'Total <em>per capita</em> e IDH e posição no ranking'
+		        },			       
+		        subtitle: {
+		            text: 'Repasse anual do governo federal (<i>per capita</i>) frente ao IDH'
+		        },
+		        xAxis: {
+		            categories: categorias,
+		            crosshair: true
+		        },
+		        yAxis: [{
+		            title: {
+		                text: 'Valor <i>per capita</i>'
+		            },
+			        labels: {			          
+		                format: 'R$ {value}',
+		                style: {
+		                    color: Highcharts.getOptions().colors[0]
+		                }
+			            
+			        }
+		        },{
+	        	  title: {
+		                text: 'IDH'
+		            },
+			        labels: {
+			            style: {
+		                    color: Highcharts.getOptions().colors[1]
+		                }
+			        },
+			        opposite: true
+		        }],
+		        tooltip: {
+		            shared: true
+		        },
+		        series: [{
+		            	yAxis: 0,
+		        		name: 'Total <i>per capita</i>',
+			        	type: 'column',
+			        	data: dadosRanking,
+			        	 dataLabels: {
+			        	//	 	inside:false,
+		                        enabled: true,
+		                        color: '#000',
+		                        style: {fontWeight: 'bolder'},
+		                        formatter: function() {	                        	
+		                        	var nome = this.x;
+		                        	var r = $.grep(resultados, function(res){ 
+		                        		return res.nomeCidade == nome; 
+		                        	});
+		                        	console.log(r);
+		                        	return r[0].posicao + "º";
+		                        },
+		               //         rotation: 270
+		                    }
+		        	},
+		        	{
+		        		yAxis: 1,
+		        		name: 'IDH',
+		        		type: 'spline',
+		        		data:dadosIDH
+		        	}
+		        ]
+		});
+	
+}

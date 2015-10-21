@@ -61,7 +61,7 @@ public class RankingController {
 	 * @return
 	 */
 	public ResultadosRanking buscaRankingMunicipio(int ano, Municipio m) {
-		RankingTransferencias ranking =  cache.retornaOuAdiciona(ano, () -> buscaRankingPorAno(ano));
+		RankingTransferencias ranking =  rankingPorAno(ano);
 		return ranking.getResultados().stream().filter(r -> r.getNomeCidade().equals(m.toString())).findFirst().get();
 	}
 

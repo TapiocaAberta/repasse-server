@@ -91,4 +91,15 @@ public interface AgregacaoResource {
 	@Path("percapita/AREA/ANO/{ano}/{mes}/municipio/{municipioId}/compara")
 	public Map<String, Map<Object, Double>> comparaComMediaNacionalAgrupadoPorAreaPerCapita(@PathParam("ano") int ano, @PathParam("mes") int mes, @PathParam("municipioId") long municipioId);
 	
+	
+	@GET
+	@Path("/{tipoAgregacao}/{ano}/regiao/{regiao}")	
+	@JsonView(MunicipioConcisoView.class)
+	public List<Agregacao> agrupaPorAnoAreaRegiao(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("regiao") String regiao);
+	
+	@GET
+	@Path("/percapita/{tipoAgregacao}/{ano}/regiao/{regiao}")	
+	@JsonView(MunicipioConcisoView.class)
+	public List<Agregacao> agrupaPerCapitaPorAnoAreaRegiao(@PathParam("tipoAgregacao") TipoAgregacao tipoAgregacao, @PathParam("ano") int ano, @PathParam("regiao") String regiao);
+	
 }

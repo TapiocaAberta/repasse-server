@@ -29,14 +29,8 @@ public class RankingCache {
 	}	
 	
 	public RankingTransferencias retornaOuAdiciona(Integer chave, Supplier<RankingTransferencias> busca) {
-		RankingTransferencias resultados;
-		if(cacheRanking.containsKey(chave)) {
-			resultados = cacheRanking.get(chave);
-		} else {
-			resultados = busca.get();
-			cacheRanking.put(chave, resultados);
-		}		
-		return resultados;
+		cacheRanking.computeIfAbsent(chave, i -> busca.get());		
+		return cacheRanking.get(chave);
 	}
 
 }

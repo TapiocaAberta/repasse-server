@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jugvale.transfgov.model.base.Estado;
@@ -46,6 +47,13 @@ public class MunicipioService extends Service<Municipio>{
 		TypedQuery<Municipio> buscaMunicipios = em.createNamedQuery("Municipio.porSigla", Municipio.class);
 		buscaMunicipios.setParameter("sigla", sigla);
 		return buscaMunicipios.getResultList();	
+	}
+	
+	public void atualizaRegiao(long munId, String regiao) {
+		Query atualizaRegiao = em.createNativeQuery("UPDATE municipio SET mun_regiao = :regiao WHERE mun_id = :munId");
+		atualizaRegiao.setParameter("regiao", regiao);
+		atualizaRegiao.setParameter("munId", munId);
+		atualizaRegiao.executeUpdate();
 	}
 
 }

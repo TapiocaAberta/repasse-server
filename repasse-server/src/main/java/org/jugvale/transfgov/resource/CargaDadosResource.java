@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
-import org.jugvale.transfgov.carga.ResumoDadosTransferencia;
+import org.jugvale.transfgov.model.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 
 /**
@@ -79,6 +79,9 @@ public interface CargaDadosResource {
 	@Produces(MediaType.TEXT_HTML)
 	public Response cargaDadosIDH();
 	
-	
+	@POST
+	@Path("regiao")
+	@Produces(MediaType.TEXT_HTML)
+	public Response cargaDadosRegiao();
 	
 }

@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.jugvale.transfgov.resource.config.jsonview.MunicipioConcisoView;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @XmlRootElement
 @Entity

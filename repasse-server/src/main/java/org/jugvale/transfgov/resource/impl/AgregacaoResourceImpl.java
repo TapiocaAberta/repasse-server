@@ -176,15 +176,18 @@ public class AgregacaoResourceImpl implements AgregacaoResource {
 	@Override
 	public List<Agregacao> agrupaPorAnoAreaRegiao(TipoAgregacao tipoAgregacao,
 			int ano, String regiao) {
-		// TODO IMPLEMENTAR
-		return null;
+		List<Municipio> municipios = municipioService.buscaMunicipiosPorRegiao(regiao);
+		Set<Long> ids = municipios.stream().map(Municipio::getId).collect(Collectors.toSet());
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, ids, false);
 	}
 
 	@Override
 	public List<Agregacao> agrupaPerCapitaPorAnoAreaRegiao(
 			TipoAgregacao tipoAgregacao, int ano, String regiao) {
-		// TODO IMPLEMENTAR
-		return null;
+		List<Municipio> municipios = municipioService.buscaMunicipiosPorRegiao(regiao);
+		Set<Long> ids = municipios.stream().map(Municipio::getId).collect(Collectors.toSet());
+		return criarAgregacaoPorAnoMunicipio(tipoAgregacao, ano, ids, true);
+		
 	}
 	private List<Agregacao> criarAgregacaoPorAnoMunicipio(TipoAgregacao tipoAgregacao,
 			int ano, Set<Long> ids, boolean ehPercapita) {

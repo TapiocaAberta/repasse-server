@@ -69,56 +69,63 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Selecione municípios para comparar:</div>
 				<div class="panel-body">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label for="estados" class="control-label col-xs-2">Estado</label>
-							<div class="col-xs-4">
+					<div class="row">
+						<div class="col-xs-2">
+							<div class="input-group">
+								<span id="label-estados" class="input-group-addon">Estado</span>
 								<select id="estados" class="form-control"
+									aria-describedby="label-municipios"
 									ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
 									ng-options="estado.sigla for estado in estados"
 									ng-disabled="!estados">
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="cidades" class="control-label col-xs-2">Município</label>
-							<div class="col-xs-4">
+						<div class="col-xs-4">
+							<div class="input-group">
+								<span class="input-group-addon" id="label-municipios">Município</span>
 								<select id="municipios" class="form-control"
+									aria-describedby="label-municipios"
 									ng-model="municipioSelecionado"
 									ng-disabled="!estadoSelecionado"
 									ng-options="municipio.nome for municipio in municipios">
 								</select>
 							</div>
-							<div class="col-xs-4">
-								<button type="submit" class="btn btn-primary"
-									ng-click="addMunicipio()" ng-disabled="!municipioSelecionado">
-									<span class="glyphicon glyphicon-plus"></span>
-								</button>
-							</div>
 						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div class="row" ng-show="municipiosSelecionados.length">
-			<div class="panel panel-default">
-				<div class="panel-heading">Municípios selecionados</div>
-				<div class="panel-body">
-					<span class="label label-success"
-						ng-repeat="m in municipiosSelecionados"
-						style="margin-left: 10px; font-size: small"> {{ m.nome }} -
-						{{ m.estado.sigla }} <span class="glyphicon glyphicon-minus-sign"
-						style="cursor: pointer" ng-click="removerMunicipio($index)"></span>
-					</span>
+						<div class="col-xs-2">
+							<button type="submit" class="btn btn-primary"
+								ng-class="{active: porRegiao, notActive: !porRegiao}"
+								ng-click="selecionaPorRegiao()">Comparar por região?</button>
+						</div>
+						<div class="col-xs-2">
+							<button type="submit" class="btn btn-primary"
+								ng-click="addMunicipio()"
+								ng-disabled="!municipioSelecionado || carregando">
+								<span ng-show="!porRegiao" class="glyphicon glyphicon-plus"></span>
+								<span ng-show="porRegiao" class="glyphicon glyphicon-refresh"></span>
+							</button>
+						</div>
+						<div class="col-xs-1">
+							<button type="submit" class="btn btn-danger" ng-click="limpar()"
+								ng-disabled="carregando">
+								Limpar <span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
-	<div class="container" ng-show="municipiosSelecionados.length">
+	<div class="container" ng-show="municipiosSelecionados.length"
+		ng-disabled="carregando">
 		<div class="panel panel-default">
-			<div class="panel-heading">Comparação</div>
+			<div class="panel-heading">
+				Comparação <span ng-show="regiaoSelecionada"> (região
+					{{regiaoSelecionada}})</span> <em ng-show="carregando"
+					style="margin-left: 10px">(aguarde a última requisição para
+					editar os municípios selecionados)</em>
+			</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-8">
@@ -158,17 +165,44 @@
 						</div>
 					</div>
 				</div>
+				<div class="row" ng-disabled="carregando">
+					<hr />
+					<div class="col-md-1">
+						<strong> <em>Municípios: </em>
+						</strong>
+					</div>
+					<div class="col-md-11">
+						<span class="label label-success"
+							ng-repeat="m in municipiosSelecionados"
+							style="margin-left: 10px; margin-top: 5px; font-size: smaller; display: inline-block;">
+							{{ m.nome }} - {{ m.estado.sigla }} <span
+							class="glyphicon glyphicon-minus-sign"
+							ng-style="montaCor($index)" style="cursor: pointer"
+							ng-click="removerMunicipio($index)"></span>
+						</span>
+					</div>
+				</div>
+				<hr />
 				<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
 				<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							Comparação <em>per capita</em> de cada município <label class="label label-danger" ng-show="carregando"
-							style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
+							Comparação <em>per capita</em> de cada município <label
+								class="label label-danger" ng-show="carregandoRanking"
+								style="font-size: 15px; margin-left: 15px"
+								id="lblCarregarRanking">Carregando Ranking...</label><label
+								class="label label-danger" ng-show="carregando"
+								style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
+
 						</div>
 						<div class="panel-body">
-							<div id="graficoPerCapitaComparacaoAgregacao"></div> <br />
-							<div id="graficoRanking"></div> <br />
-							<h3>Veja o  <a href="/ranking.html"><em>Ranking</em></a></h3>
+							<div id="graficoPerCapitaComparacaoAgregacao"></div>
+							<br />
+							<div id="graficoRanking"></div>
+							<br />
+							<h3>
+								Veja o <a href="/ranking.html"><em>Ranking</em></a>
+							</h3>
 						</div>
 					</div>
 				</div>

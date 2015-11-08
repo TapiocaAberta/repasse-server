@@ -225,6 +225,13 @@ var RepasseService = function($http) {
 	this.rankingMunicipiosSelecionados = function(ano, ids, sucesso) {
 		$http.get("rest/ranking/" + ano + "/municipios/" + ids.join(",")).success(sucesso);
 	}
+	
+	this.anoAgregadoPerCapitaAreaRegiao = function(agregacao, ano, regiao, sucesso) {
+		var url = "rest/agregacao/percapita/" + agregacao + "/" + ano + "/regiao/" + regiao;
+		console.log(url);
+		$http.get(url).success(sucesso);
+	}
+	
 }
 
 /**

@@ -7,7 +7,8 @@ angular.module('RepasseApp', []).factory('repasseService',
 	        decimalPoint: ',',
 	        thousandsSep: '.'
 	    }
-	});			
+	});	
+	$scope.porRegiao = false;
 	$scope.municipiosSelecionados = new Array();
 	$scope.configurarCategorias = function() {
 		var d = $("#dialogoSelecionarCategorias").dialog({
@@ -22,7 +23,15 @@ angular.module('RepasseApp', []).factory('repasseService',
 		      }
 		});
 	};
-				
+	$scope.montaCor = function(i) {
+		var total = Highcharts.getOptions().colors.length;
+		var c = (i - parseInt(i/total) * total)
+		return { color:   Highcharts.getOptions().colors[c] };	
+	}
+	
+	$scope.selecionaPorRegiao = function() {
+		$scope.porRegiao = !$scope.porRegiao
+	}		
 	$scope.selecionaAgregacao = function(agregacao) {
 		$scope.agregacaoSelecionada = agregacao;
 		$scope.atualizaGraficos();
@@ -90,11 +99,20 @@ angular.module('RepasseApp', []).factory('repasseService',
 		if($scope.municipiosSelecionados.indexOf(m) == -1) {
 			$scope.municipiosSelecionados.push(m);		
 		}
+		if($scope.porRegiao) {
+			$scope.regiaoSelecionada = $scope.municipioSelecionado.regiao;
+			$scope.municipiosSelecionados = [];
+			$scope.municipiosSelecionados.push(m);
+		}
 		$scope.municipioSelecionado = null;
 		$scope.atualizaGraficos();
 	};
 	
 	$scope.removerMunicipio = function(i) {
+		if($scope.carregando)
+			return;
+		$scope.porRegiao = false;
+		$scope.regiaoSelecionada = null;
 		$scope.municipiosSelecionados.splice(i, 1);
 		$scope.atualizaGraficos();
 	};
@@ -105,27 +123,40 @@ angular.module('RepasseApp', []).factory('repasseService',
 			return;
 		}
 		$scope.carregando = true;
-		var params = {};
-		params['ano'] = $scope.anoSelecionado.ano;
-		params['municipios'] = new Array();
-		$.each($scope.municipiosSelecionados, function(i, m){
-			params['municipios'].push(m.id + ';' + encodeURI(m.nome) + ';' + m.estado.sigla);
-		});
-		params['agregacao'] = $scope.agregacaoSelecionada.valor;
-		salvaMapaUrl(params);
-		
-		 var ids = [];
-		 
-		 $.each($scope.municipiosSelecionados, function (i, m){
-			 ids.push(m.id);
-		 });	 
-		 $scope.ids = ids;
-		 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, ids, function(agregacoes){
-			 organizaColunas(agregacoes);
-			 $scope.agregacoesPerCapita = agregacoes;
-			 atualizaTodosGraficos(ids);
-		 });
+		$scope.ids = [];
+		 if($scope.porRegiao) {
+			 repasseService.anoAgregadoPerCapitaAreaRegiao($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, $scope.regiaoSelecionada, function(agregacoes){
+				 $scope.municipiosSelecionados = [];
+				 $.each(agregacoes, function (i, a){
+					 a.municipio.estado = a.estado;
+					 $scope.municipiosSelecionados.push(a.municipio);
+					 $scope.ids.push(a.municipio.id);
+				 });	 
+				 organizaColunas(agregacoes);
+				 $scope.agregacoesPerCapita = agregacoes;
+				 atualizaTodosGraficos($scope.ids);
+				 salvaParametrosSelecionados();
+			 });
+		 } else {	 
+			 $.each($scope.municipiosSelecionados, function (i, m){
+				 $scope.ids.push(m.id);			 
+			 });
+			 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano,  $scope.ids, function(agregacoes){
+				 organizaColunas(agregacoes);
+				 $scope.agregacoesPerCapita = agregacoes;
+				 atualizaTodosGraficos($scope.ids);
+				 salvaParametrosSelecionados();
+			 });
+		 }
 	};
+	
+	$scope.limpar = function() {
+		$scope.municipiosSelecionados = [];
+		$scope.regiaoSelecionada = null;
+		$('#graficoPerCapitaComparacaoAgregacao').html('');
+		$("#graficoRanking").html('');
+		$scope.atualizaGraficos();
+	}
 	
 	var organizaColunas = function (agregacoes) {
 		 $scope.categoriaRemovidas = new Array();
@@ -140,14 +171,16 @@ angular.module('RepasseApp', []).factory('repasseService',
 	}
 	
 	var atualizaTodosGraficos = function () {
-	//	atualizaGraficoAgregacao('#graficoComparacaoAgregacao', 'Total (R$)', $scope.agregacoes);
 		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+		$scope.carregandoRanking = true;
 		 repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
 			 montarGraficoRanking(resultados);
+			 $scope.carregandoRanking = false;
 		 });
 	}
 	
 	var atualizaGraficoAgregacao = function(divGrafico, tituloY, agregacoes) {
+			$scope.carregando = false;
 			 var series = new Array();
 			 var categorias = $scope.todasCategorias;	 
 			 categorias.sort();
@@ -195,9 +228,22 @@ angular.module('RepasseApp', []).factory('repasseService',
 			        },
 			        series: series
 			    });
-			 $scope.carregando = false;
 			 
 	};
+	
+	var salvaParametrosSelecionados = function() {
+		var params = {};
+		params['ano'] = $scope.anoSelecionado.ano;
+		params['municipios'] = new Array();
+		$.each($scope.municipiosSelecionados, function(i, m){
+			params['municipios'].push(m.id + ';' + encodeURI(m.nome) + ';' + m.estado.sigla);
+		});
+		if($scope.regiaoSelecionada) {
+			params['regiaoSelecionada'] = $scope.regiaoSelecionada
+		}
+		params['agregacao'] = $scope.agregacaoSelecionada.valor;
+		salvaMapaUrl(params);
+	}
 
 	// por fim vamos atualizar a tela com os parâmetros de URL	
 	var paramsUrl = recuperaMapaUrl(); 
@@ -218,6 +264,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 			}
 		});
 	} 
+	if(paramsUrl['regiaoSelecionada']) { 
+		$scope.regiaoSelecionada = paramsUrl['regiaoSelecionada'];
+		$scope.porRegiao = true;
+	}
 	if(!$scope.agregacaoSelecionada){
 		$scope.agregacaoSelecionada = AGREGACOES_SUPORTADAS_COMPARACAO[0];
 	}
@@ -235,6 +285,12 @@ angular.module('RepasseApp', []).factory('repasseService',
 		$scope.atualizaGraficos();
 	}
 	$('#lblCarregar').each(function() {
+		var elem = $(this);
+		setInterval(function() {
+			elem.fadeToggle(600);
+		}, 400);
+	});
+	$('#lblCarregarRanking').each(function() {
 		var elem = $(this);
 		setInterval(function() {
 			elem.fadeToggle(600);
@@ -305,10 +361,8 @@ function montarGraficoRanking(resultados) {
 		                        	var r = $.grep(resultados, function(res){ 
 		                        		return res.nomeCidade == nome; 
 		                        	});
-		                        	console.log(r);
 		                        	return r[0].posicao + "º";
-		                        },
-		               //         rotation: 270
+		                        }
 		                    }
 		        	},
 		        	{

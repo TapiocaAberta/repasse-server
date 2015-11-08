@@ -56,4 +56,10 @@ public class MunicipioService extends Service<Municipio>{
 		atualizaRegiao.executeUpdate();
 	}
 
+	public List<Municipio> buscaMunicipiosPorRegiao(String regiao) {
+		TypedQuery<Municipio> buscaMunicipios = em.createNamedQuery("Municipio.porRegiao", Municipio.class);
+		buscaMunicipios.setParameter("regiao", regiao);
+		return buscaMunicipios.getResultList();	
+	}
+
 }

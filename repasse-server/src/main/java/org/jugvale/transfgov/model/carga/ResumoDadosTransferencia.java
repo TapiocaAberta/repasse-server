@@ -1,4 +1,4 @@
-package org.jugvale.transfgov.carga;
+package org.jugvale.transfgov.model.carga;
 
 public class ResumoDadosTransferencia {
 	

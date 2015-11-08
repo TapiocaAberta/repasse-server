@@ -20,8 +20,9 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.jugvale.transfgov.carga.CargaDadosPopController;
 import org.jugvale.transfgov.carga.CargaDadosTransfController;
 import org.jugvale.transfgov.carga.CargaIDHController;
-import org.jugvale.transfgov.carga.ResumoDadosTransferencia;
+import org.jugvale.transfgov.carga.CargaMicroRegiaoController;
 import org.jugvale.transfgov.model.base.AnoMes;
+import org.jugvale.transfgov.model.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 import org.jugvale.transfgov.resource.CargaDadosResource;
 import org.jugvale.transfgov.service.AnoService;
@@ -54,12 +55,15 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 
 	@Inject
 	CargaTransfInfoService cargaTransfInfoService;
-	
+
 	@Inject
 	CargaIDHController cargaIDHController;
-	
+
 	@Inject
 	AnoService anoService;
+
+	@Inject
+	CargaMicroRegiaoController cargaMicroRegiaoController;
 
 	public Response baixaECarrega(int ano, int mes) throws IOException {
 		verificaSeJaFoiCarregado(ano, mes);
@@ -147,9 +151,11 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 				ResumoDadosTransferencia resumo = new ResumoDadosTransferencia();
 				resumo.setAno(ano);
 				resumo.setMes(mes);
-				resumo.setTotalTransferencias(transferenciaService.contaPorAnoMesMunicipio(ano, mes));
+				resumo.setTotalTransferencias(transferenciaService
+						.contaPorAnoMesMunicipio(ano, mes));
 				try {
-					resumo.setContagemLinhas(ArquivoTransfUtils.contaLinhasdoSite(ano, mes));
+					resumo.setContagemLinhas(ArquivoTransfUtils
+							.contaLinhasdoSite(ano, mes));
 				} catch (IOException e) {
 					resumo.setContagemLinhas(-1);
 				}
@@ -163,8 +169,18 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	public Response cargaDadosIDH() {
 		logger.info("Iniciando carga de dados do IDH");
 		try {
-			return Response
-					.ok(cargaIDHController.fazCargaIDH())
+			return Response.ok(cargaIDHController.fazCargaIDH()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+	}
+
+	@Override
+	public Response cargaDadosRegiao() {
+		logger.info("Iniciando carga de dados de Região");
+		try {
+			return Response.ok(cargaMicroRegiaoController.fazCargaRegiao())
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -34,12 +34,12 @@ angular.module('RepasseApp', []).factory('repasseService',
 	}		
 	$scope.selecionaAgregacao = function(agregacao) {
 		$scope.agregacaoSelecionada = agregacao;
-		 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+		$scope.atualizaTodosGraficos();
 	};
 
 	$scope.selecionaAno = function(ano) {
 		$scope.anoSelecionado = ano;
-		$scope.atualizaGraficos();
+		$scope.atualizaTodosGraficos();
 	};	
 	
 	$scope.removeCategoria = function() {
@@ -104,7 +104,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			$scope.municipiosSelecionados.push(m);
 		}
 		$scope.municipioSelecionado = null;
-		$scope.atualizaGraficos();
+		$scope.atualizaTodosGraficos();
 	};
 	
 	$scope.removerMunicipio = function(i) {
@@ -113,48 +113,15 @@ angular.module('RepasseApp', []).factory('repasseService',
 		$scope.porRegiao = false;
 		$scope.regiaoSelecionada = null;
 		$scope.municipiosSelecionados.splice(i, 1);
-		$scope.atualizaGraficos();
-	};
-	
-	$scope.atualizaGraficos = function() {
-		if(!$scope.anoSelecionado || !$scope.municipiosSelecionados.length){ 
-			salvaMapaUrl([]);
-			return;
-		}
-		$scope.carregando = true;
-		$scope.ids = [];
-		 if($scope.porRegiao) {
-			 repasseService.anoAgregadoPerCapitaAreaRegiao($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, $scope.regiaoSelecionada, function(agregacoes){
-				 $scope.municipiosSelecionados = [];
-				 $.each(agregacoes, function (i, a){
-					 a.municipio.estado = a.estado;
-					 $scope.municipiosSelecionados.push(a.municipio);
-					 $scope.ids.push(a.municipio.id);
-				 });	 
-				 organizaColunas(agregacoes);
-				 $scope.agregacoesPerCapita = agregacoes;
-				 atualizaTodosGraficos($scope.ids);
-				 salvaParametrosSelecionados();
-			 });
-		 } else {	 
-			 $.each($scope.municipiosSelecionados, function (i, m){
-				 $scope.ids.push(m.id);			 
-			 });
-			 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano,  $scope.ids, function(agregacoes){
-				 organizaColunas(agregacoes);
-				 $scope.agregacoesPerCapita = agregacoes;
-				 atualizaTodosGraficos($scope.ids);
-				 salvaParametrosSelecionados();
-			 });
-		 }
-	};
+		$scope.atualizaTodosGraficos();
+	};	
 	
 	$scope.limpar = function() {
 		$scope.municipiosSelecionados = [];
 		$scope.regiaoSelecionada = null;
 		$('#graficoPerCapitaComparacaoAgregacao').html('');
 		$("#graficoRanking").html('');
-		$scope.atualizaGraficos();
+		$scope.atualizaTodosGraficos();
 	}
 	
 	var organizaColunas = function (agregacoes) {
@@ -169,14 +136,49 @@ angular.module('RepasseApp', []).factory('repasseService',
 		 });		
 	}
 	
-	var atualizaTodosGraficos = function () {
+	$scope.atualizaTodosGraficos = function () {
+		if(!$scope.anoSelecionado || !$scope.municipiosSelecionados.length){ 
+			salvaMapaUrl([]);
+			return;
+		}
+		salvaParametrosSelecionados();
+		$scope.carregando = true;
 		$scope.carregandoRanking = true;
-		 repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
+		$scope.ids = [];
+		if($scope.porRegiao) {
+			 repasseService.anoAgregadoPerCapitaAreaRegiao($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano, $scope.regiaoSelecionada, function(agregacoes){
+				 $scope.municipiosSelecionados = [];
+				 $.each(agregacoes, function (i, a){
+					 a.municipio.estado = a.estado;
+					 $scope.municipiosSelecionados.push(a.municipio);
+					 $scope.ids.push(a.municipio.id);
+				 });	 
+				 carregaDadosRanking();
+				 $scope.agregacoesPerCapita = agregacoes;
+				 montaGraficoPerCapita();
+			 });
+		 } else {	 
+			 carregaDadosRanking();
+			 $.each($scope.municipiosSelecionados, function (i, m){
+				 $scope.ids.push(m.id);			 
+			 });
+			 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano,  $scope.ids, function(agregacoes){		 
+				 $scope.agregacoesPerCapita = agregacoes;
+				 montaGraficoPerCapita();
+			 });
+		 }
+	}
+	
+	var montaGraficoPerCapita = function() {
+		organizaColunas($scope.agregacoesPerCapita);
+		 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+	}
+	
+	var carregaDadosRanking = function() {
+		repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
 			 montarGraficoRanking(resultados);
 			 $scope.carregandoRanking = false;
-			 // vamos atualizar só depois que mostrar o ranking, pois ele é o principal agora.
-			 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
-		 });
+		 });		
 	}
 	
 	var atualizaGraficoAgregacao = function(divGrafico, tituloY, agregacoes) {
@@ -282,7 +284,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 				}
 			});
 		});
-		$scope.atualizaGraficos();
+		$scope.atualizaTodosGraficos();
 	}
 	$('#lblCarregar').each(function() {
 		var elem = $(this);

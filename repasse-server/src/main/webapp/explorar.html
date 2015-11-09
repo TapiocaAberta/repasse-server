@@ -130,9 +130,14 @@
 			<div class="panel-heading">
 				Repasses anuais para <strong>{{municipioBusca.nome}} -
 					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <br /> <br />
-				<em ng-show="ranking">{{municipioBusca.nome}} está em {{ranking.posicao}}º no <a
-					href="ranking.html" >ranking</a> com repasse per capita de
-				R$ {{ranking.valorPerCapita.toLocaleString() }} em {{anoSelecionado.ano}} <span ng-show="ranking.idhm > 0">com IDH <strong style="background-color: gray; color : {{ranking.dadosIDHM.cor}}">{{ranking.dadosIDHM.texto}}</strong></span></em>
+				<em ng-show="ranking">{{municipioBusca.nome}} está em
+					{{ranking.posicao}}º no <a href="ranking.html">ranking</a> com
+					repasse per capita de R$ {{ranking.valorPerCapita.toLocaleString()
+					}} em {{anoSelecionado.ano}} <span ng-show="ranking.idhm > 0">com
+						IDH <strong
+						style="background-color: gray; color: {{ranking.dadosIDHM.cor">{{ranking.dadosIDHM.texto}}</strong>
+				</span>
+				</em>
 			</div>
 			<div class="panel-body">
 				<div class="row">
@@ -165,60 +170,35 @@
 	<div class="container" ng-show="municipioBusca">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Destino do repasse para <strong>{{prefixoMeses[mesSelecionado
-					- 1]}}/{{anoSelecionado.ano}}</strong>
+				Destinos dos repasses em <select id="meses" class="form-control"
+					style="max-width: 80px; display: inline-block;"
+					ng-model="mesSelecionado"
+					ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
+					ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()"></select>
+				de <strong>{{anoSelecionado.ano}}</strong>
 			</div>
-			<div class="panel-body">
-				<div class="row">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<div class="col-md-1"></div>
-							<label for="meses" class="control-label col-md-2">Mês</label>
-							<div class="col-md-4">
-								<select id="meses" class="form-control"
-									ng-model="mesSelecionado"
-									ng-options="mes as prefixoMeses[mes-1] for mes in anoSelecionado.meses"
-									ng-disabled="!anoSelecionado" ng-change="carregaDadosMes()">
-								</select>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="row">
-					<h3 style="text-align: center">
-						Foram repassados <strong>R$
-							{{valorTotalMes.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
-							- {{estadoSelecionado.sigla}}</strong> em <strong>{{prefixoMeses[mesSelecionado
-							- 1]}}/{{anoSelecionado.ano}}</strong>!
-					</h3>
-					<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
-					<div class="col-md-6" id="containerGraficoAgregacao"></div>
-				</div>
-				<div class="row">
-					<table id="tblAgregacao" class="table"
-						style="text-overflow: ellipsis">
-						<thead>
-							<tr>
-								<th>Área</th>
-								<th>Valor</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="(key, value) in dadosAgregados">
-								<td>{{ key }}</td>
-								<td>R$ {{ value.toLocaleString() }}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			<div class="row">
+				<h3 style="text-align: center">
+					Foram repassados <strong>R$
+						{{valorTotalMes.toLocaleString()}}</strong> para <strong>{{municipioBusca.nome}}
+						- {{estadoSelecionado.sigla}}</strong> em <strong>{{prefixoMeses[mesSelecionado
+						- 1]}}/{{anoSelecionado.ano}}</strong>!
+				</h3>
+				<div class="col-md-6" id="containerGraficoAgregacaoPizza"></div>
+				<div class="col-md-6" id="containerGraficoAgregacao"></div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">Todas transferências de
-					{{prefixoMeses[mesSelecionado - 1]}}/{{anoSelecionado.ano}} para
-					{{municipioBusca.nome}}</div>
-				<div class="panel-body">
+			<br />
+			<br />
+			<br />
+			<div class="row">
+				<h3>
+					<em class="panel-heading"
+						ng-click="verTodasTransferencias = !verTodasTransferencias"
+						style="cursor: pointer;">Clique para ver todas as
+						transferências de {{prefixoMeses[mesSelecionado -
+						1]}}/{{anoSelecionado.ano}} para {{municipioBusca.nome}}</em>
+				</h3>
+				<div ng-show="verTodasTransferencias">
 					<table id="tblTransferencias" datatable="ng"
 						class="row-border hover" style="background: #FFFFDD">
 						<thead>
@@ -244,7 +224,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 	<div class="container">
 		<hr>

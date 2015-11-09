@@ -116,7 +116,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="container" ng-show="municipiosSelecionados.length"
 		ng-disabled="carregando">
 		<div class="panel panel-default">
@@ -124,9 +123,48 @@
 				Comparação <span ng-show="regiaoSelecionada"> (região
 					{{regiaoSelecionada}})</span> <em ng-show="carregando"
 					style="margin-left: 10px">(aguarde a última requisição para
-					editar os municípios selecionados)</em>
+					editar os municípios selecionados)</em> <label
+					class="label label-danger" ng-show="carregandoRanking"
+					style="font-size: 15px; margin-left: 15px" id="lblCarregarRanking">Carregando
+					Ranking...</label><label class="label label-danger" ng-show="carregando"
+					style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
 			</div>
 			<div class="panel-body">
+				<div class="row" ng-disabled="carregando">
+					<div class="col-md-1">
+						<strong> <em>Municípios: </em>
+						</strong>
+					</div>
+					<div class="col-md-11">
+						<span class="label label-success"
+							ng-repeat="m in municipiosSelecionados"
+							style="margin-left: 10px; margin-top: 5px; font-size: smaller; display: inline-block;">
+							{{ m.nome }} - {{ m.estado.sigla }} <span
+							class="glyphicon glyphicon-minus-sign"
+							ng-style="montaCor($index)" style="cursor: pointer"
+							ng-click="removerMunicipio($index)"></span>
+						</span>
+					</div>
+				</div>
+				<hr />
+				<div class="row" style="margin-top: 20px; margin-bottom: 10px">
+					<div class="col-md-12">
+						<div class="input-group">
+							<span class="input-group-addon" id="label-agregacao">Ano
+								para comparar</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
+								<a class="btn btn-primary btn-md"
+									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
+									ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="graficoRanking"></div>
+				</div>
+				<hr />
 				<div class="row">
 					<div class="col-md-8">
 						<div class="input-group">
@@ -151,61 +189,11 @@
 						</em>
 					</div>
 				</div>
-				<div class="row" style="margin-top: 20px; margin-bottom: 10px">
-					<div class="col-md-12">
-						<div class="input-group">
-							<span class="input-group-addon" id="label-agregacao">Ano
-								para comparar</span>
-							<div id="radioBtn" class="btn-group"
-								aria-describedby="label-agregacao">
-								<a class="btn btn-primary btn-md"
-									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
-									ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row" ng-disabled="carregando">
-					<hr />
-					<div class="col-md-1">
-						<strong> <em>Municípios: </em>
-						</strong>
-					</div>
-					<div class="col-md-11">
-						<span class="label label-success"
-							ng-repeat="m in municipiosSelecionados"
-							style="margin-left: 10px; margin-top: 5px; font-size: smaller; display: inline-block;">
-							{{ m.nome }} - {{ m.estado.sigla }} <span
-							class="glyphicon glyphicon-minus-sign"
-							ng-style="montaCor($index)" style="cursor: pointer"
-							ng-click="removerMunicipio($index)"></span>
-						</span>
-					</div>
-				</div>
-				<hr />
-				<!--  INICIANDO A PARTE DE VISUALIZAÇÃO -->
 				<div class="row">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Comparação <em>per capita</em> de cada município <label
-								class="label label-danger" ng-show="carregandoRanking"
-								style="font-size: 15px; margin-left: 15px"
-								id="lblCarregarRanking">Carregando Ranking...</label><label
-								class="label label-danger" ng-show="carregando"
-								style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
-
-						</div>
-						<div class="panel-body">
-							<div id="graficoPerCapitaComparacaoAgregacao"></div>
-							<br />
-							<div id="graficoRanking"></div>
-							<br />
-							<h3>
-								Veja o <a href="/ranking.html"><em>Ranking</em></a>
-							</h3>
-						</div>
-					</div>
+					<div id="graficoPerCapitaComparacaoAgregacao"></div>
+					<br />
 				</div>
+
 				<!-- 			<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading">Comparação em valores totais de
@@ -217,40 +205,41 @@
 				</div>
  -->
 			</div>
-			<div id="dialogoSelecionarCategorias" style="display: none"
-				title="Configurar Categorias">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">Categorias Adicionadas</div>
-							<div class="panel-body">
-								<select class="form-control" ng-model="categoriaParaRemover"
-									ng-options="c for c in todasCategorias" size="10" multiple></select>
-								<button class="btn" ng-disabled="!categoriaParaRemover"
-									ng-click="removeCategoria()">
-									<span class="glyphicon glyphicon-chevron-right"></span>
-								</button>
-							</div>
+		</div>
+		<div id="dialogoSelecionarCategorias" style="display: none"
+			title="Configurar Categorias">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Categorias Adicionadas</div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="categoriaParaRemover"
+								ng-options="c for c in todasCategorias" size="10" multiple></select>
+							<button class="btn" ng-disabled="!categoriaParaRemover"
+								ng-click="removeCategoria()">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+							</button>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Categorias Removidas</h3>
-							</div>
-							<div class="panel-body">
-								<select class="form-control" ng-model="categoriaParaAdicionar"
-									ng-options="c for c in categoriaRemovidas" size="10" multiple></select>
-								<button class="btn" ng-disabled="!categoriaParaAdicionar"
-									ng-click="adicionaCategoria()">
-									<span class="glyphicon glyphicon-chevron-left"></span>
-								</button>
-							</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Categorias Removidas</h3>
+						</div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="categoriaParaAdicionar"
+								ng-options="c for c in categoriaRemovidas" size="10" multiple></select>
+							<button class="btn" ng-disabled="!categoriaParaAdicionar"
+								ng-click="adicionaCategoria()">
+								<span class="glyphicon glyphicon-chevron-left"></span>
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<div class="container">
 		<hr>

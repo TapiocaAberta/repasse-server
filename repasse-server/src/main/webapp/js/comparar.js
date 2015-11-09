@@ -34,7 +34,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 	}		
 	$scope.selecionaAgregacao = function(agregacao) {
 		$scope.agregacaoSelecionada = agregacao;
-		$scope.atualizaGraficos();
+		 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
 	};
 
 	$scope.selecionaAno = function(ano) {
@@ -80,11 +80,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 	repasseService.estados(function(d) {
 		$scope.estados = d;
 	});
-	/* REMOVIDO TEMPORARIAMENTE
+	// retornando a carga dinâmica de anos
 	repasseService.anos(function(d) {
 		$scope.anos = d;
 	});
-	*/
 	$scope.anos = ANOS;
 	$scope.carregaMunicipios = function() {
 		var sigla = $scope.estadoSelecionado.sigla;
@@ -171,11 +170,12 @@ angular.module('RepasseApp', []).factory('repasseService',
 	}
 	
 	var atualizaTodosGraficos = function () {
-		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
 		$scope.carregandoRanking = true;
 		 repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
 			 montarGraficoRanking(resultados);
 			 $scope.carregandoRanking = false;
+			 // vamos atualizar só depois que mostrar o ranking, pois ele é o principal agora.
+			 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
 		 });
 	}
 	
@@ -372,6 +372,5 @@ function montarGraficoRanking(resultados) {
 		        		data:dadosIDH
 		        	}
 		        ]
-		});
-	
+		});	
 }

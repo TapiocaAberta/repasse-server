@@ -37,7 +37,6 @@ appExplorar.controller('ExplorarController',
 			var paramsUrl = recuperaMapaUrl();
 			$scope.prefixoMeses = prefixoMeses;
 			
-			/* REMOVIDO TEMPORARIAMENTE ENQUANTO FAZEMOS CARGAS
 			repasseService.anos(function(anos) {
 				$scope.anos = anos;
 				$.each(anos, function(i, ano) { 
@@ -45,8 +44,8 @@ appExplorar.controller('ExplorarController',
 						$scope.anoSelecionado = ano;
 					}
 				});
-			});*/
-			$scope.anos = ANOS;
+			});
+			// retornando a carga dinâmica de anos - vários anos antigos já foram carregados
 			$.each(ANOS, function(i, ano) { 
 				if(ano.ano == paramsUrl['ano']){
 					$scope.anoSelecionado = ano;

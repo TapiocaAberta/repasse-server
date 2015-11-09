@@ -164,45 +164,37 @@
 				<div class="row">
 					<div id="graficoRanking"></div>
 				</div>
+				<hr />
 				<div class="row">
-					<div class="col-lg-11"></div>
-					<div class="col-lg-1">
-						<strong><a href="/ranking.html"><em>Ranking</em></a>
-						</strong>
-					</div>
-				</div>
-			</div>
-			<hr />
-			<div class="row">
-				<div class="col-md-8">
-					<div class="input-group">
-						<span class="input-group-addon" id="label-agregacao">Mostrar
-							dados por</span>
-						<div id="radioBtn" class="btn-group"
-							aria-describedby="label-agregacao">
-							<a class="btn btn-primary btn-md"
-								ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
-								ng-click="selecionaAgregacao(a)"
-								ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
+					<div class="col-md-8">
+						<div class="input-group">
+							<span class="input-group-addon" id="label-agregacao">Mostrar
+								dados por</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
+								<a class="btn btn-primary btn-md"
+									ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
+									ng-click="selecionaAgregacao(a)"
+									ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
+							</div>
 						</div>
 					</div>
+					<div class="col-md-4">
+						<em class="pull-right"> Mostrando {{todasCategorias.length }}
+							de {{ todasCategorias.length + categoriaRemovidas.length }}
+							categorias
+							<button class="btn btn-primary" ng-click="configurarCategorias()">
+								<span class="glyphicon glyphicon-wrench"></span>
+							</button>
+						</em>
+					</div>
 				</div>
-				<div class="col-md-4">
-					<em class="pull-right"> Mostrando {{todasCategorias.length }}
-						de {{ todasCategorias.length + categoriaRemovidas.length }}
-						categorias
-						<button class="btn btn-primary" ng-click="configurarCategorias()">
-							<span class="glyphicon glyphicon-wrench"></span>
-						</button>
-					</em>
+				<div class="row">
+					<div id="graficoPerCapitaComparacaoAgregacao"></div>
+					<br />
 				</div>
-			</div>
-			<div class="row">
-				<div id="graficoPerCapitaComparacaoAgregacao"></div>
-				<br />
-			</div>
 
-			<!-- 			<div class="row">
+				<!-- 			<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading">Comparação em valores totais de
 							cada município</div>
@@ -212,6 +204,7 @@
 					</div>
 				</div>
  -->
+			</div>
 		</div>
 		<div id="dialogoSelecionarCategorias" style="display: none"
 			title="Configurar Categorias">

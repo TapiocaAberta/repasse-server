@@ -80,12 +80,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 	repasseService.estados(function(d) {
 		$scope.estados = d;
 	});
-	/* REMOVIDO TEMPORARIAMENTE
+	// retornando a carga dinâmica de anos
 	repasseService.anos(function(d) {
 		$scope.anos = d;
 	});
-	*/
-	$scope.anos = ANOS;
 	$scope.carregaMunicipios = function() {
 		var sigla = $scope.estadoSelecionado.sigla;
 		repasseService.municipiosPorEstado(sigla, function(d) {

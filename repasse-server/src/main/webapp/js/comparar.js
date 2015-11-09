@@ -84,6 +84,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 	repasseService.anos(function(d) {
 		$scope.anos = d;
 	});
+	$scope.anos = ANOS;
 	$scope.carregaMunicipios = function() {
 		var sigla = $scope.estadoSelecionado.sigla;
 		repasseService.municipiosPorEstado(sigla, function(d) {

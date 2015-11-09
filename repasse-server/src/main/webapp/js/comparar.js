@@ -158,10 +158,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 				 montaGraficoPerCapita();
 			 });
 		 } else {	 
-			 carregaDadosRanking();
 			 $.each($scope.municipiosSelecionados, function (i, m){
 				 $scope.ids.push(m.id);			 
 			 });
+			 carregaDadosRanking();
 			 repasseService.anoAgregadoPerCapitaAreaVariosMun($scope.agregacaoSelecionada.valor, $scope.anoSelecionado.ano,  $scope.ids, function(agregacoes){		 
 				 $scope.agregacoesPerCapita = agregacoes;
 				 montaGraficoPerCapita();

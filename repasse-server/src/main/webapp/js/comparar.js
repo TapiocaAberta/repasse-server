@@ -80,9 +80,6 @@ angular.module('RepasseApp', []).factory('repasseService',
 	repasseService.estados(function(d) {
 		$scope.estados = d;
 	});
-	//repasseService.anos(function(d) {
-	//	$scope.anos = d;
-	//});
 	$scope.anos = ANOS;
 	$scope.carregaMunicipios = function() {
 		var sigla = $scope.estadoSelecionado.sigla;
@@ -248,15 +245,10 @@ angular.module('RepasseApp', []).factory('repasseService',
 
 	// por fim vamos atualizar a tela com os parâmetros de URL	
 	var paramsUrl = recuperaMapaUrl(); 
-	if(paramsUrl['ano']) {
-		$.each($scope.anos, function (i, v){
-			if(i.ano == paramsUrl['ano']){
-				$scope.anoSelecionado = i;
-			}
-		})		
-	}
-	if(!$scope.anoSelecionado) {
-		$scope.anoSelecionado = ANOS[0];
+	if(paramsUrl['ano']){
+		$scope.anoSelecionado = $.grep($scope.anos, function(a) {
+			  return a.ano == paramsUrl['ano'];
+			})[0];
 	}
 	if(paramsUrl['agregacao']) {
 		$.each($scope.agregacoesSuportadas, function (i, v){ 

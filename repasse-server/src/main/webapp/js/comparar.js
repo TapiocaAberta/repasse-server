@@ -249,6 +249,8 @@ angular.module('RepasseApp', []).factory('repasseService',
 		$scope.anoSelecionado = $.grep($scope.anos, function(a) {
 			  return a.ano == paramsUrl['ano'];
 			})[0];
+	} else {
+		$scope.anoSelecionado = ANOS[0];
 	}
 	if(paramsUrl['agregacao']) {
 		$.each($scope.agregacoesSuportadas, function (i, v){ 
@@ -329,6 +331,8 @@ function montarGraficoRanking(resultados) {
 	        	  title: {
 		                text: 'IDH'
 		            },
+		            max: 1.0,
+		            min: 0.4, 
 			        labels: {
 			            style: {
 		                    color: Highcharts.getOptions().colors[1]

@@ -74,6 +74,8 @@ function montarGraficoRanking(ranking) {
 	        	  title: {
 		                text: 'IDH'
 		            },
+		            max: 1.0,
+		            min: 0.4, 
 			        labels: {
 			            style: {
 		                    color: Highcharts.getOptions().colors[1]

@@ -49,10 +49,12 @@ public class MunicipioService extends Service<Municipio>{
 		return buscaMunicipios.getResultList();	
 	}
 	
-	public void atualizaRegiao(long munId, String regiao) {
-		Query atualizaRegiao = em.createNativeQuery("UPDATE municipio SET mun_regiao = :regiao WHERE mun_id = :munId");
+	public void atualizaDadosGeograficos(long munId, String regiao, float lat, float lon) {
+		Query atualizaRegiao = em.createNativeQuery("UPDATE municipio SET mun_regiao = :regiao, mun_latitude = :lat, mun_longitude = :lon WHERE mun_id = :munId");
 		atualizaRegiao.setParameter("regiao", regiao);
 		atualizaRegiao.setParameter("munId", munId);
+		atualizaRegiao.setParameter("lat", lat);
+		atualizaRegiao.setParameter("lon", lon);
 		atualizaRegiao.executeUpdate();
 	}
 

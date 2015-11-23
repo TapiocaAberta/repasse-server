@@ -20,7 +20,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.jugvale.transfgov.carga.CargaDadosPopController;
 import org.jugvale.transfgov.carga.CargaDadosTransfController;
 import org.jugvale.transfgov.carga.CargaIDHController;
-import org.jugvale.transfgov.carga.CargaMicroRegiaoController;
+import org.jugvale.transfgov.carga.CargaDadosGeograficosController;
 import org.jugvale.transfgov.model.base.AnoMes;
 import org.jugvale.transfgov.model.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
@@ -63,7 +63,7 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	AnoService anoService;
 
 	@Inject
-	CargaMicroRegiaoController cargaMicroRegiaoController;
+	CargaDadosGeograficosController cargaMicroRegiaoController;
 
 	public Response baixaECarrega(int ano, int mes) throws IOException {
 		verificaSeJaFoiCarregado(ano, mes);
@@ -180,7 +180,7 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	public Response cargaDadosRegiao() {
 		logger.info("Iniciando carga de dados de Região");
 		try {
-			return Response.ok(cargaMicroRegiaoController.fazCargaRegiao())
+			return Response.ok(cargaMicroRegiaoController.fazCargaDadosGeográficos())
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();

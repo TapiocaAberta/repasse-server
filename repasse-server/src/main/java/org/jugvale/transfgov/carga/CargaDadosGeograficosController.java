@@ -22,7 +22,7 @@ import org.jugvale.transfgov.service.impl.MunicipioService;
 import org.jugvale.transfgov.utils.TextoUtils;
 
 @Stateless
-public class CargaMicroRegiaoController {
+public class CargaDadosGeograficosController {
 
 	final String ARQUIVOS_REGIAO[] = { "/dados/divisao_regioes.csv" };
 
@@ -38,8 +38,8 @@ public class CargaMicroRegiaoController {
 	private EntityManager em;
 
 	@TransactionAttribute(TransactionAttributeType.NEVER)
-	public String fazCargaRegiao() throws IOException {
-		logger.info("Iniciando carga de dados de micro região dos municípios");
+	public String fazCargaDadosGeográficos() throws IOException {
+		logger.info("Iniciando carga de dados geográficos dos municípios");
 		StringBuffer relatorioFinal = new StringBuffer("Carga iniciada em: "
 				+ new Date());
 		ArrayList<String> naoEncontrados = new ArrayList<>();
@@ -59,10 +59,18 @@ public class CargaMicroRegiaoController {
 									.transformaNomeCidade(col[0]);
 							String uf = col[1];
 							String regiao = col[2];
+							float lat = 0, lon = 0;
+							try {
+								lat = TextoUtils.ptBrFloat(col[3]);
+								lon = TextoUtils.ptBrFloat(col[4]);
+								logger.info(nomeMun + " - " + lat + " - " + lon);
+							} catch (Exception e1) {	
+								logger.info("Sem latitude/longitude para " + nomeMun);
+							}
 							logger.info("Buscando município: " + nomeMun + " - " + uf
 									+ ". Região: " + regiao);
 							try {
-								buscaESalvaMunicipio(nomeMun, uf, regiao);
+								buscaESalvaMunicipio(nomeMun, uf, regiao, lat, lon);
 							} catch (Exception e) {
 								e.printStackTrace();
 								naoEncontrados.add("\"" + nomeMun + "\" - \""
@@ -81,10 +89,10 @@ public class CargaMicroRegiaoController {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	private Municipio buscaESalvaMunicipio(String nomeMun, String uf, String regiao) {
+	private Municipio buscaESalvaMunicipio(String nomeMun, String uf, String regiao, float lat, float lon) {
 		Municipio m = municipioService.buscaPorNomeEEstado(uf, nomeMun);
 		// deve ser atualizado diretamente no banco, pois está no cache
-		municipioService.atualizaRegiao(m.getId(), regiao);
+		municipioService.atualizaDadosGeograficos(m.getId(), regiao, lat, lon);
 		return m;
 	}
 

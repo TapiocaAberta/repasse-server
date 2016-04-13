@@ -1,5 +1,7 @@
 # Repasse: Transferências monetárias do governo federal para municípios
 
+[![Join the chat at https://gitter.im/transparenciasjc/repasse-server](https://badges.gitter.im/transparenciasjc/repasse-server.svg)](https://gitter.im/transparenciasjc/repasse-server?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Projetos e dados para permitir o cidadão entender e monitorar os recursos vindos do governo federal para municípios.
 
 

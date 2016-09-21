@@ -1,9 +1,9 @@
 package org.jugvale.transfgov.carga;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.jugvale.transfgov.model.base.DadosMunicipio;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.service.impl.DadosMunicipioService;
@@ -56,9 +57,9 @@ public class CargaDadosPopController {
 		ArrayList<String> naoEncontrados = new ArrayList<>();
 		Set<Integer> anos = new HashSet<>();
 		for (int i = 0; i < ARQUIVOS_POP.length; i++) {	
-			// TODO: Arrumar como feito em CargaIDHController, isso não funciona dentro de WAR.
-			String url = getClass().getResource(ARQUIVOS_POP[i]).getFile();
-			Path arquivo = Paths.get(url);
+			InputStream is = getClass().getResourceAsStream(ARQUIVOS_POP[i]);
+			Path arquivo = Files.createTempFile("pop", "");
+			Files.write(arquivo, IOUtils.toByteArray(is));
 			String nomeColunas[] = Files.lines(arquivo).findFirst().get()
 					.split(SEPARADOR);
 			Files.lines(arquivo).skip(1).forEach(l -> {
@@ -78,6 +79,7 @@ public class CargaDadosPopController {
 					naoEncontrados.add("\"" + nomeCidade  +  "\" - \"" + uf + "\"" );
 				}
 			});
+			Files.delete(arquivo);
 			relatorioFinal.append("O seguintes anos foram carregados: <br />");
 			relatorioFinal.append(anos.stream().map(String::valueOf).collect(Collectors.joining(",")));
 			relatorioFinal.append("<br />erro ao inserir dados para os seguintes municipio: (provavelmente por incompatibilidades entre os dados): <br />");

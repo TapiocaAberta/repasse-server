@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -37,7 +37,7 @@ import org.jugvale.transfgov.utils.TextoUtils;
 public class CargaDadosPopController {
 
 	final String ARQUIVOS_POP[] = { "/dados/dados_pop_2009_2011.csv",
-			"/dados/dados_pop_2012_2014.csv" };
+			"/dados/dados_pop_2012_2014.csv", "/dados/dados_pop_2015.csv" };
 	
 	final String SEPARADOR = ";";
 	
@@ -54,7 +54,7 @@ public class CargaDadosPopController {
 	public String fazCargaDadosPopulacao() throws IOException {
 		logger.info("Iniciando carga de dados para população"); 
 		StringBuffer relatorioFinal = new StringBuffer("Carga iniciada em: " + new Date());
-		ArrayList<String> naoEncontrados = new ArrayList<>();
+		LinkedList<String> naoEncontrados = new LinkedList<>();
 		Set<Integer> anos = new HashSet<>();
 		for (int i = 0; i < ARQUIVOS_POP.length; i++) {	
 			InputStream is = getClass().getResourceAsStream(ARQUIVOS_POP[i]);

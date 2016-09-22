@@ -5,6 +5,36 @@
  * Nenhum tratamento de erro por enquanto.
  */
 
+var SIGLAS = {
+		"Acre":"AC",
+		"Alagoas":"AL",
+		"Amapá":"AP",
+		"Amazonas":"AM",
+		"Bahia":"BA",
+		"Ceará":"CE",
+		"Distrito Federal":"DF",
+		"Espírito Santo":"ES",
+		"Goiás":"GO",
+		"Maranhão":"MA",
+		"Mato Grosso":"MT",
+		"Mato Grosso do Sul":"MS",
+		"Minas Gerais":"MG",
+		"Pará":"PA",
+		"Paraíba":"PB",
+		"Paraná":"PR",
+		"Pernambuco":"PE",
+		"Piauí":"PI",
+		"Rio de Janeiro":"RJ",
+		"Rio Grande do Norte":"RN",
+		"Rio Grande do Sul":"RS",
+		"Rondônia":"RO",
+		"Roraima":"RR",
+		"Santa Catarina":"SC",
+		"São Paulo":"SP",
+		"Sergipe":"SE",
+		"Tocantins":"TO"
+}
+
 // Agregações suportadas para fazer a comparação de municípios
 var AGREGACOES_SUPORTADAS_COMPARACAO = [
       {
@@ -41,7 +71,10 @@ var CORES_COLUNAS = {
 // Isso é temporário até fazermos toda a carga dos dados, assim não fica limpando o cache e deixando o server lerdo em prd
 var ANOS = [
 	{	
-		ano: 2015, meses: [ 1, 2, 3, 4, 5, 6 ],
+		ano: 2016, meses: [ 1, 2, 3, 4, 5, 6 ],
+	},            
+	{	
+		ano: 2015, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
 	},
 	{	
 		ano: 2014, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
@@ -232,6 +265,21 @@ var RepasseService = function($http) {
 		$http.get(url).success(sucesso);
 	}
 	
+	this.localizacao = function(sucesso) {
+		$http.get("http://ipinfo.io/").then(function(loc){
+			var estado = removerAcentos(loc.data.region);
+			var sigla = SIGLAS[estado];
+			$.each(SIGLAS, function(e, s) { 
+				e = removerAcentos(e)
+				if(estado == e){
+					sigla = s;
+				}
+			});
+			var mun = removerAcentos(loc.data.city).toUpperCase();
+			sucesso(mun, sigla)
+		});
+	}
+	
 }
 
 /**
@@ -283,7 +331,7 @@ function linkFontePorAno(ano, sigla, siafi) {
 function removerAcentos(t) {
 	var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
 	var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
-	var strAccents = t.value;
+	var strAccents = t;
 	var strAccents = strAccents.split('');
 	var strAccentsOut = new Array();
 	var strAccentsLen = strAccents.length;
@@ -295,11 +343,11 @@ function removerAcentos(t) {
 		} else
 			strAccentsOut[y] = strAccents[y];
 	}
-	console.log(hasAccents);
 	if(hasAccents) {
 		strAccentsOut = strAccentsOut.join('');
-		t.value = strAccentsOut;
+		t = strAccentsOut;
 	}
+	return t;
 }
 
 /*
@@ -323,3 +371,4 @@ function dadosIDHM(idhm){
 		return {texto: "MUITO ALTO", cor: "#0000FF"};		
 	};
 }
+

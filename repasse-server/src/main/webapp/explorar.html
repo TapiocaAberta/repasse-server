@@ -69,7 +69,7 @@
 	</div>
 
 	<div class="container">
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="caixaBusca">
 			<div class="panel-heading">Escolha o Estado, Município e ano
 				para explorar</div>
 			<div class="panel-body">
@@ -129,13 +129,13 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Repasses anuais para <strong>{{municipioBusca.nome}} -
-					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <br /> <br />
+					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <a style="margin: 10px" ng-click="irParaCaixaBusca()"><em>Nova Busca</em> <span class="glyphicon glyphicon-search"></span> </a><br /> <br />
 				<em ng-show="ranking">{{municipioBusca.nome}} está em
 					{{ranking.posicao}}º no <a href="ranking.html">ranking</a> com
 					repasse per capita de R$ {{ranking.valorPerCapita.toLocaleString()
 					}} em {{anoSelecionado.ano}} <span ng-show="ranking.idhm > 0">com
 						IDH <strong
-						style="background-color: gray; color: {{ranking.dadosIDHM.cor">{{ranking.dadosIDHM.texto}}</strong>
+						style="background-color: gray; color: {{ranking.dadosIDHM.cor">{{ranking.dadosIDHM.texto}}</strong> 
 				</span>
 				</em>
 			</div>

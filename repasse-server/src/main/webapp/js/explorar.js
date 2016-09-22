@@ -17,6 +17,8 @@ appExplorar.controller('ExplorarController',
 			        numericSymbols:  [ " mil" , " milhões" , " bilhões" , "T" , "P" , "E"]
 			    }
 			});	
+			var paramsUrl = recuperaMapaUrl();
+			var localizacao = {};
 			$scope.agregacoesSuportadas = AGREGACOES_SUPORTADAS_COMPARACAO;
 			$scope.selecionaAgregacao = function(agregacao) {
 				$scope.agregacaoSelecionada = agregacao;
@@ -34,7 +36,6 @@ appExplorar.controller('ExplorarController',
 			};
 			$scope.anoSelecionado = ANOS[0];
 			$scope.agregacaoSelecionada = $scope.agregacoesSuportadas[0];
-			var paramsUrl = recuperaMapaUrl();
 			$scope.prefixoMeses = prefixoMeses;
 			
 			repasseService.anos(function(anos) {
@@ -60,6 +61,19 @@ appExplorar.controller('ExplorarController',
 						$scope.carregaMunicipios();
 					}
 				});
+				// se não tivemos parâmetros na URL, vamos ver se pegamos a localização
+				if(!paramsUrl['sigla']) {
+					repasseService.localizacao(function(mun, sigla){
+						localizacao.sigla = sigla;
+						localizacao.municipio = mun;
+						$.each(estados, function(i, estado) {
+							if(estado.sigla == sigla) {
+								$scope.estadoSelecionado = estado;
+								$scope.carregaMunicipios();
+							}
+						});
+					})
+				}
 			});
 			$scope.carregaMunicipios = function() {
 				$scope.municipioSelecionado = null;
@@ -71,12 +85,14 @@ appExplorar.controller('ExplorarController',
 							$scope.municipios = municipios;
 							$.each(municipios, function(i, m) {
 								nomesMunicipios.push(m.nome);
-								if(m.id == paramsUrl['id']){
+								if(m.id == paramsUrl['id'] || m.nome == localizacao.municipio ){
 									$scope.municipioSelecionado = m;
-									$("#municipiosAutoComplete").val(m.nome);
-									$scope.carregaApp();
 								}
 							});
+							if($scope.municipioSelecionado) {
+								$("#municipiosAutoComplete").val($scope.municipioSelecionado.nome);
+								$scope.carregaApp();
+							}
 							$("#municipiosAutoComplete").autocomplete({
 							      source: nomesMunicipios,
 							      change: function(evt, ui){
@@ -163,6 +179,11 @@ appExplorar.controller('ExplorarController',
 					ranking.dadosIDHM = dadosIDHM(ranking.idhm);
 					$scope.ranking = ranking;
 				});
+			}
+			$scope.irParaCaixaBusca = function() {
+			    $('html, body').animate({
+			        scrollTop: $("#caixaBusca").offset().top - 60
+			    }, 500);
 			}
 			$scope.carregaGraficosAgregacao = function() {
 				var a = $scope.agregacaoSelecionada;

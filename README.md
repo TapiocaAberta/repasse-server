@@ -13,3 +13,11 @@ Projetos e dados para permitir o cidadão entender e monitorar os recursos vindo
 * O trabalho foi também apresentado na [Campus Pary de 2016 ](http://campuse.ro/events/campus-party-brasil-2016/meeting/repasse-cpbr9/attendees/) pelo professor Mario Gazziro.
 
 
+## Acessando A API
+
+Caso você queria somente consumir a API REST, aqui vão as instruções:
+
+- Todos os endpoints da API estão disponíveis em: `http://repasse.ufabc.edu.br/desenvolvedores.html`
+- O endpoint público é: `http://repasse.ufabc.edu.br/rest`
+- Um exemplo: http://repasse.ufabc.edu.br/rest/ranking/2015/SP/SAO%20JOSE%20DOS%20CAMPOS
+- Tudo é em JSON.

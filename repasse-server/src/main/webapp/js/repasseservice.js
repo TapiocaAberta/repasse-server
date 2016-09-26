@@ -372,3 +372,19 @@ function dadosIDHM(idhm){
 	};
 }
 
+/*
+ * Cor do MIQLT criada de forma arbritária
+ * */
+function dadosMIQLT(miqlt){
+	if(miqlt < 0.499) {
+		return {texto: "MUITO BAIXO", cor: "#FF0000"};
+	} else if(miqlt < 0.599)  {
+		return {texto: "BAIXO", cor: "#FF9900"};	
+	} else if(miqlt < 0.699) {
+		return {texto: "MÉDIO", cor: "#FFFF00"};	
+	} else if(miqlt < 0.799) {
+		return {texto: "ALTO", cor: "#99FF00"};
+	} else if(miqlt < 1) {
+		return {texto: "MUITO ALTO", cor: "#0000FF"};		
+	};
+}

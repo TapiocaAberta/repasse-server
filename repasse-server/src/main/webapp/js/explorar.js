@@ -177,6 +177,7 @@ appExplorar.controller('ExplorarController',
 				var ano = $scope.anoSelecionado.ano;
 				repasseService.rankingPorAnoCidade(ano, sigla, nome, function(ranking) {
 					ranking.dadosIDHM = dadosIDHM(ranking.idhm);
+					ranking.dadosMIQLT = dadosMIQLT(ranking.miqlt);
 					$scope.ranking = ranking;
 				});
 			}

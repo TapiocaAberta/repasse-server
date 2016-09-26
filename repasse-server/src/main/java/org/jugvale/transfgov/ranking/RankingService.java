@@ -2,6 +2,7 @@ package org.jugvale.transfgov.ranking;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,12 @@ public class RankingService {
 		List<Long> idMunicipios = rankingTransferencias.getResultados()
 				.stream()
 				.map(r -> r.getIdMunicipio()).collect(Collectors.toList());
+		//TODO: Não será necessário quando tivermos o MIQL no banco. Ao fechar issue #180
+		List<String> nomesMunicipios = rankingTransferencias.getResultados()
+				.stream()
+				// Super gambiarra que será tirada quando tivermos a carga do MIQL
+				.map(r -> r.getNomeCidade().split("\\ \\-")[0])
+				.collect(Collectors.toList());
 		// Vamos preencher o IDHM, poderia também vir da query
 		// Transferencia.Ranking.porAno?
 		List<DadosMunicipio> dadosIDH = dadosMunicipioService
@@ -54,7 +61,21 @@ public class RankingService {
 						r.setIdhm(d.getIdhm());
 					});
 		});
-		;
+		Map<String, Float> buscaMiqlParaMunicipios = dadosMunicipioService.buscaMiqlParaMunicipios(nomesMunicipios, ano);
+		rankingTransferencias
+		.getResultados().forEach(r -> {
+			
+		});
+		System.out.println(buscaMiqlParaMunicipios);
+		buscaMiqlParaMunicipios.forEach((nome, miqlt) -> {
+			rankingTransferencias
+			.getResultados()
+			.stream()
+			.filter(r -> r.getNomeCidade().startsWith(nome))
+			.findFirst().ifPresent(r -> {
+				r.setMiqlt(miqlt);
+			});
+		});
 		return rankingTransferencias;
 	}
 

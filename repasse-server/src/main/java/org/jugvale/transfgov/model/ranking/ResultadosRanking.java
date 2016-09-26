@@ -36,6 +36,12 @@ public class ResultadosRanking {
 	
 	private float idhm;
 	
+	
+	/**
+	 * Posição no MIQL-M
+	 */
+	private float miqlt;
+	
 	public ResultadosRanking() {
 		super();
 	}
@@ -114,6 +120,13 @@ public class ResultadosRanking {
 
 	public void setIdhm(float idhm) {
 		this.idhm = idhm;
-	}		
+	}
+	public float getMiqlt() {
+		return miqlt;
+	}
+
+	public void setMiqlt(float miqlt) {
+		this.miqlt = miqlt;
+	}
 	
 }

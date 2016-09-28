@@ -66,7 +66,6 @@ public class RankingService {
 		.getResultados().forEach(r -> {
 			
 		});
-		System.out.println(buscaMiqlParaMunicipios);
 		buscaMiqlParaMunicipios.forEach((nome, miqlt) -> {
 			rankingTransferencias
 			.getResultados()

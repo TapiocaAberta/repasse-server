@@ -112,7 +112,6 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 	public Map<String, Float> buscaMiqlParaMunicipios(List<String> nomesMunicipios, int ano) {
 		// TODO: Ao termos acesso a todos os dados, melhorar isso para incluir o MIQL em DadosMunicipios
 		HashMap<String, Float> dados = new HashMap<>();
-		System.out.println(nomesMunicipios);
 		// TEMP 
 		final String ARQUIVOS_MIQL[] = { "/dados/miql_2010.csv" };
 		for (int i = 0; i < ARQUIVOS_MIQL.length; i++) {	

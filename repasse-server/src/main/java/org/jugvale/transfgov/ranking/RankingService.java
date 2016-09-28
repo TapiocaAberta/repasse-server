@@ -66,11 +66,12 @@ public class RankingService {
 		.getResultados().forEach(r -> {
 			
 		});
+		// mega gambiarra - trocar quando tivermos o MIQL-T completo! Assim teremos carga no banco e talz
 		buscaMiqlParaMunicipios.forEach((nome, miqlt) -> {
 			rankingTransferencias
 			.getResultados()
 			.stream()
-			.filter(r -> r.getNomeCidade().startsWith(nome))
+			.filter(r -> r.getNomeCidade().split("\\ \\-")[0].startsWith(nome))
 			.findFirst().ifPresent(r -> {
 				r.setMiqlt(miqlt);
 			});

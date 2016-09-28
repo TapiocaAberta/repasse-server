@@ -31,7 +31,7 @@
 		<user-data-constraint>
 			<transport-guarantee>NONE</transport-guarantee>
 		</user-data-constraint>
-	</security-constraint>	
+	</security-constraint>
 	<login-config>
 		<auth-method>BASIC</auth-method>
 		<realm-name>default</realm-name>
@@ -43,4 +43,7 @@
 		<error-code>404</error-code>
 		<location>/nao-encontrado.html</location>
 	</error-page>
+	<welcome-file-list>
+		<welcome-file>explorar.html</welcome-file>
+	</welcome-file-list>
 </web-app>

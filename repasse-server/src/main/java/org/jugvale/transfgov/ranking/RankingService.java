@@ -62,20 +62,25 @@ public class RankingService {
 					});
 		});
 		Map<String, Float> buscaMiqlParaMunicipios = dadosMunicipioService.buscaMiqlParaMunicipios(nomesMunicipios, ano);
-		rankingTransferencias
-		.getResultados().forEach(r -> {
-			
-		});
 		// mega gambiarra - trocar quando tivermos o MIQL-T completo! Assim teremos carga no banco e talz
-		buscaMiqlParaMunicipios.forEach((nome, miqlt) -> {
-			rankingTransferencias
-			.getResultados()
-			.stream()
-			.filter(r -> r.getNomeCidade().split("\\ \\-")[0].startsWith(nome))
-			.findFirst().ifPresent(r -> {
-				r.setMiqlt(miqlt);
-			});
-		});
+		rankingTransferencias
+				.getResultados()
+				.stream().forEach(r -> {
+					String nomeCidade = r.getNomeCidade().split("\\ \\-")[0];
+					buscaMiqlParaMunicipios.computeIfPresent(nomeCidade, (nome, miqlt) -> {
+						r.setMiqlt(miqlt);
+						return miqlt;
+					});
+				});
+//		buscaMiqlParaMunicipios.forEach((nome, miqlt) -> {
+//			rankingTransferencias
+//			.getResultados()
+//			.stream()
+//			.filter(r -> r.getNomeCidade().split("\\ \\-")[0].equals(nome))
+//			.findFirst().ifPresent(r -> {
+//				r.setMiqlt(miqlt);
+//			});
+//		});
 		return rankingTransferencias;
 	}
 

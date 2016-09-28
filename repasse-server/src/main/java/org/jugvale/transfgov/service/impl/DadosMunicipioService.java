@@ -124,7 +124,7 @@ public class DadosMunicipioService extends Service<DadosMunicipio> {
 					String nomeMun = TextoUtils.transformaNomeCidade(col[0]).replaceAll("\"", "");
 					float valorMiqlt = Float.parseFloat(col[9]);
 					nomesMunicipios.stream().filter(n -> n.equals(nomeMun)).findFirst().ifPresent(s -> {
-						dados.put(nomeMun, valorMiqlt);
+						dados.put(s, valorMiqlt);
 					});
 				});
 				Files.delete(arquivo);

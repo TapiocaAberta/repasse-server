@@ -3,9 +3,12 @@ package org.jugvale.transfgov.model.indicador;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,9 +28,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cacheable
 @Table(name = "foco_indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
+@NamedQueries({ @NamedQuery(name = "FocoIndicador.porNome", query = "SELECT fom FROM FocoIndicador fom WHERE fom.foco = :foco") })
 public class FocoIndicador {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "fom_id")
 	private long id;
 	
@@ -37,6 +42,15 @@ public class FocoIndicador {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "fom_ind_id")
 	private Indicador indicador;
+	
+	public FocoIndicador() {
+	}
+
+	public FocoIndicador(String foco, Indicador indicador) {
+		super();
+		this.foco = foco;
+		this.indicador = indicador;
+	}
 
 	public long getId() {
 		return id;
@@ -62,4 +76,10 @@ public class FocoIndicador {
 		this.indicador = indicador;
 	}
 
+	@Override
+	public String toString() {
+		return "FocoIndicador [id=" + id + ", foco=" + foco + ", indicador="
+				+ indicador + "]";
+	}
+	
 }

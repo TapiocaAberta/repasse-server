@@ -3,9 +3,12 @@ package org.jugvale.transfgov.model.indicador;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,9 +31,11 @@ import org.jugvale.transfgov.model.base.Area;
 @Cacheable
 @Table(name = "indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
+@NamedQueries({ @NamedQuery(name = "Indicador.porNome", query = "SELECT ind FROM Indicador ind WHERE ind.nome = :nome") })
 public class Indicador {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "ind_id")
 	private long id;
 
@@ -48,9 +53,19 @@ public class Indicador {
 	@JoinColumn(name = "ind_area_id")
 	private Area area;
 
-	@ManyToOne(optional = true)
+	@ManyToOne
 	@JoinColumn(name = "ind_fom_id")
-	private FocoIndicador focoIndicador;
+	private FocoIndicador foco;
+
+	
+	public Indicador() {
+	}
+
+	public Indicador(String nome, GrupoIndicador grupoMetrica, Area area) {
+		this.nome = nome;
+		this.grupoMetrica = grupoMetrica;
+		this.area = area;
+	}
 
 	public long getId() {
 		return id;
@@ -92,12 +107,19 @@ public class Indicador {
 		this.area = area;
 	}
 
-	public FocoIndicador getFocoIndicador() {
-		return focoIndicador;
+	public FocoIndicador getFoco() {
+		return foco;
 	}
 
-	public void setFocoIndicador(FocoIndicador focoIndicador) {
-		this.focoIndicador = focoIndicador;
+	public void setFoco(FocoIndicador foco) {
+		this.foco = foco;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Indicador [id=" + id + ", nome=" + nome + ", descricao="
+				+ descricao + ", grupoMetrica=" + grupoMetrica + ", area="
+				+ area + ", foco=" + foco + "]";
+	}
+
 }

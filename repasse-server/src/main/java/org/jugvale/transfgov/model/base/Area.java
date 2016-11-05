@@ -4,6 +4,8 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -21,6 +23,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @XmlRootElement
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
+@NamedQueries({
+	@NamedQuery(name = "Area.porNome", query = "SELECT a FROM Area a WHERE a.nome = :nome")
+})
 public class Area {
 
 	@Id

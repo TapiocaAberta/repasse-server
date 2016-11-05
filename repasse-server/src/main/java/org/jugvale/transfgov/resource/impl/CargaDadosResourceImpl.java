@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -17,11 +18,13 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
+import org.jugvale.transfgov.carga.CargaDadosGeograficosController;
 import org.jugvale.transfgov.carga.CargaDadosPopController;
 import org.jugvale.transfgov.carga.CargaDadosTransfController;
 import org.jugvale.transfgov.carga.CargaIDHController;
-import org.jugvale.transfgov.carga.CargaDadosGeograficosController;
+import org.jugvale.transfgov.carga.CargaIndicadorController;
 import org.jugvale.transfgov.model.base.AnoMes;
+import org.jugvale.transfgov.model.carga.DadosCargaIndicador;
 import org.jugvale.transfgov.model.carga.ResumoDadosTransferencia;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
 import org.jugvale.transfgov.resource.CargaDadosResource;
@@ -65,6 +68,9 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	@Inject
 	CargaDadosGeograficosController cargaMicroRegiaoController;
 
+	@Inject
+	CargaIndicadorController cargaIndicadorController;
+	
 	public Response baixaECarrega(int ano, int mes) throws IOException {
 		verificaSeJaFoiCarregado(ano, mes);
 		java.nio.file.Path arquivoCSV = null;
@@ -186,6 +192,16 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 			e.printStackTrace();
 			return Response.serverError().entity(e.getMessage()).build();
 		}
+	}
+
+	@Override
+	public Response cargaDadosIndicador(DadosCargaIndicador dadosCargaIndicador) {
+		logger.info("Iniciando carga de dados de Indicador");
+		List<String> carregaIndicadores = cargaIndicadorController.carregaIndicadores(dadosCargaIndicador);
+		String saidaHtml = "<h3>Resultado de carga de indicadores</h3> <div>";
+		saidaHtml += carregaIndicadores.stream().map( l -> "<p>" + l + "</p>").collect(Collectors.joining());
+		saidaHtml += "</div>";
+		return Response.ok(saidaHtml).build();
 	}
 
 }

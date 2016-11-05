@@ -3,7 +3,10 @@ package org.jugvale.transfgov.model.indicador;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,9 +30,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cacheable
 @Table(name = "grupo_indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
+@NamedQueries({
+	@NamedQuery(name = "GrupoIndicador.porNome", query = "SELECT grm FROM GrupoIndicador grm WHERE grm.nome = :nome")
+})
 public class GrupoIndicador {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "grm_id")
 	private long id;
 
@@ -38,6 +45,13 @@ public class GrupoIndicador {
 
 	@Column(name = "grm_descricao", length = 5000)
 	private String descricao;
+	
+	public GrupoIndicador() {
+	}
+
+	public GrupoIndicador(String nome) {
+		this.nome = nome;
+	}
 
 	public long getId() {
 		return id;
@@ -62,5 +76,12 @@ public class GrupoIndicador {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	@Override
+	public String toString() {
+		return "GrupoIndicador [id=" + id + ", nome=" + nome + ", descricao="
+				+ descricao + "]";
+	}
+	
 
 }

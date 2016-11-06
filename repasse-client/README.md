@@ -1,4 +1,10 @@
 # repasse-client
+
+[![Build Status](https://travis-ci.org/sjcdigital/repasse-server.svg)](https://travis-ci.org/sjcdigital/repasse-server)
+[![Coverage Status](https://coveralls.io/repos/sjcdigital/repasse-server/badge.svg)](https://coveralls.io/r/sjcdigital/repasse-server)
+[![bitHound Score](https://www.bithound.io/github/sjcdigital/repasse-server/badges/score.svg?)](https://www.bithound.io/github/sjcdigital/repasse-server/master)
+[![Dependency Status](https://david-dm.org/sjcdigital/repasse-server.svg "Dependencies Checked & Updated Regularly (Security is Important!)")](https://david-dm.org/sjcdigital/repasse-server)
+
 FrontEnd do projeto repasse.
 
 **In This Documentation**

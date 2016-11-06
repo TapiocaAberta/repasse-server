@@ -117,4 +117,4 @@ The root directory generated for a app with name `gulpAngular` :
 
 ## License
 
-[CC0 1.0 Universal](LICENSE)
+[TODO:UPDATE](TODO:UPDATE)

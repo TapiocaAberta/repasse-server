@@ -1,9 +1,11 @@
+<p align="center"><a href="http://repasse.ufabc.edu.br/"><img src="http://repasse.ufabc.edu.br/imagens/repasse_logo_mini.gif" alt="Repasse Logo" height="50" /></a></p>
+<p align="center">
+<a href="https://travis-ci.org/sjcdigital/repasse-server"><img src="https://travis-ci.org/sjcdigital/repasse-server.svg" alt="Build Status"></a>
+<a href="https://coveralls.io/r/sjcdigital/repasse-server"><img src="https://coveralls.io/repos/sjcdigital/repasse-server/badge.svg" alt="Coverage Status"></a>
+<a href="https://www.bithound.io/github/sjcdigital/repasse-server/master"><img src="https://www.bithound.io/github/sjcdigital/repasse-server/badges/score.svg?" alt="Bithound Score"></a>
+</p>
+___
 # repasse-client
-
-[![Build Status](https://travis-ci.org/sjcdigital/repasse-server.svg)](https://travis-ci.org/sjcdigital/repasse-server)
-[![Coverage Status](https://coveralls.io/repos/sjcdigital/repasse-server/badge.svg)](https://coveralls.io/r/sjcdigital/repasse-server)
-[![bitHound Score](https://www.bithound.io/github/sjcdigital/repasse-server/badges/score.svg?)](https://www.bithound.io/github/sjcdigital/repasse-server/master)
-[![Dependency Status](https://david-dm.org/sjcdigital/repasse-server.svg "Dependencies Checked & Updated Regularly (Security is Important!)")](https://david-dm.org/sjcdigital/repasse-server)
 
 FrontEnd do projeto repasse.
 

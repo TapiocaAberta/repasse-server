@@ -4,8 +4,6 @@ node_js:
 
   - "6.9"
 
-  - "7.0"
-
 before_script:
 
   - npm install -g yo bower grunt-cli gulp

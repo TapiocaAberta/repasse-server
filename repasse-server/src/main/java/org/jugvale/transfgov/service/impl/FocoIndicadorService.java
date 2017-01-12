@@ -1,5 +1,6 @@
 package org.jugvale.transfgov.service.impl;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.ejb.Stateless;
@@ -29,6 +30,14 @@ public class FocoIndicadorService extends Service<FocoIndicador> {
 				.createNamedQuery("FocoIndicador.porNome", FocoIndicador.class);
 		buscaFocoIndicadorPorNome.setParameter("foco", focoIndicador);
 		return buscaFocoIndicadorPorNome.getSingleResult();
+	}
+	
+	public List<FocoIndicador> buscaPorGrupoEIndicador(String nomeGrupo, String indicador) {
+		TypedQuery<FocoIndicador> buscaFocoPorGrupoIndicador = em
+				.createNamedQuery("FocoIndicador.porGrupoEIndicador", FocoIndicador.class);
+		buscaFocoPorGrupoIndicador.setParameter("grupo", nomeGrupo);
+		buscaFocoPorGrupoIndicador.setParameter("indicador", indicador);
+		return buscaFocoPorGrupoIndicador.getResultList();
 	}
 
 }

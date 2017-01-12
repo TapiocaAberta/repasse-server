@@ -31,7 +31,9 @@ import org.jugvale.transfgov.model.base.Area;
 @Cacheable
 @Table(name = "indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
-@NamedQueries({ @NamedQuery(name = "Indicador.porNome", query = "SELECT ind FROM Indicador ind WHERE ind.nome = :nome") })
+@NamedQueries({ @NamedQuery(name = "Indicador.porNome", query = "SELECT ind FROM Indicador ind WHERE ind.nome = :nome"),
+		@NamedQuery(name = "Indicador.porGrupo", query = "SELECT ind FROM Indicador ind WHERE ind.grupoIndicador.nome = :nomeGrupo") })
+
 public class Indicador {
 
 	@Id
@@ -47,7 +49,7 @@ public class Indicador {
 
 	@ManyToOne
 	@JoinColumn(name = "ind_grm_id")
-	private GrupoIndicador grupoMetrica;
+	private GrupoIndicador grupoIndicador;
 
 	@ManyToOne
 	@JoinColumn(name = "ind_area_id")
@@ -57,13 +59,12 @@ public class Indicador {
 	@JoinColumn(name = "ind_fom_id")
 	private FocoIndicador foco;
 
-	
 	public Indicador() {
 	}
 
-	public Indicador(String nome, GrupoIndicador grupoMetrica, Area area) {
+	public Indicador(String nome, GrupoIndicador grupoIndicador, Area area) {
 		this.nome = nome;
-		this.grupoMetrica = grupoMetrica;
+		this.grupoIndicador = grupoIndicador;
 		this.area = area;
 	}
 
@@ -91,12 +92,12 @@ public class Indicador {
 		this.descricao = descricao;
 	}
 
-	public GrupoIndicador getGrupoMetrica() {
-		return grupoMetrica;
+	public GrupoIndicador getGrupoIndicador() {
+		return grupoIndicador;
 	}
 
-	public void setGrupoMetrica(GrupoIndicador grupoMetrica) {
-		this.grupoMetrica = grupoMetrica;
+	public void setGrupoIndicador(GrupoIndicador grupoIndicador) {
+		this.grupoIndicador = grupoIndicador;
 	}
 
 	public Area getArea() {
@@ -117,9 +118,8 @@ public class Indicador {
 
 	@Override
 	public String toString() {
-		return "Indicador [id=" + id + ", nome=" + nome + ", descricao="
-				+ descricao + ", grupoMetrica=" + grupoMetrica + ", area="
-				+ area + ", foco=" + foco + "]";
+		return "Indicador [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", grupoIndicador="
+				+ grupoIndicador + ", area=" + area + ", foco=" + foco + "]";
 	}
 
 }

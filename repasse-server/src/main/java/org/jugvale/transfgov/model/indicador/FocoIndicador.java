@@ -28,7 +28,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cacheable
 @Table(name = "foco_indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
-@NamedQueries({ @NamedQuery(name = "FocoIndicador.porNome", query = "SELECT fom FROM FocoIndicador fom WHERE fom.foco = :foco") })
+@NamedQueries({ 
+	@NamedQuery(name = "FocoIndicador.porNome", query = "SELECT fom FROM FocoIndicador fom WHERE fom.foco = :foco"),
+	@NamedQuery(name = "FocoIndicador.porGrupoEIndicador", query = "SELECT fom FROM FocoIndicador fom WHERE fom.indicador.nome = :indicador AND fom.indicador.grupoIndicador.nome = :grupo")})
 public class FocoIndicador {
 
 	@Id

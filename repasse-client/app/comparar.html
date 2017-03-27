@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url"
+	content="http://repasse.ufabc.edu.br/comparar.html">
+<meta property="og:title"
+	content="Compare repasses monetários do governo federal entre municípios">
+<meta property="og:site_name" content="Repasse Comparar">
+<meta property="og:description"
+	content="Será que o governo está destinando o dinheiro para a área que a sua cidade precisa? Como sabemos se sua cidade recebe o mesmo que outros municípios? Veja nessa aplicação">
+<meta property="og:image"
+	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@apprepasse">
+<meta name="twitter:creator" content="@william_antonio">
+<meta name="twitter:title"
+	content="Repasses monetários do governo federal para municípios">
+<meta name="twitter:description"
+	content="Será que o governo está destinando o dinheiro para a área que a sua cidade precisa? Como sabemos se sua cidade recebe o mesmo que outros municípios? Veja nessa aplicação">
+<meta name="twitter:image"
+	content="http://repasse.ufabc.edu.br/imagens/repasse_logo.jpg">
+
+<link rel="icon" href="/imagens/favicon.ico">
+<title>Repasse - Comparar</title>
+<!-- build:css css/comparar.min.css -->
+<link rel="stylesheet" type="text/css" href="./css/index.css">
+<link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/base/jquery-ui.min.css">
+<!-- endbuild -->
+
+</head>
+
+<body ng-controller="CompararController" ng-app="RepasseApp">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="./index.html"><img
+					style="max-width: 80px; height: 50px; margin-top: -18px"
+					src="/imagens/repasse_logo_mini.gif"></a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="explorar.html">Explorar</a></li>
+					<li class="active"><a href="comparar.html">Comparar</a></li>
+					<li><a href="ranking.html">Ranking</a></li>
+					<li><a href="desenvolvedores.html">Desenvolvedores</a></li>
+					<li><a href="sobre.html">Sobre</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container" style="margin-top: 15px">
+		<div class="page-header">
+			<h1>
+				Repasse Comparar <br /> <small>Verifique os repasses
+					monetários do governo federal para sua cidade e exija melhorias!</small>
+			</h1>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading">Selecione municípios para comparar:</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-2">
+							<div class="input-group">
+								<span id="label-estados" class="input-group-addon">Estado</span>
+								<select id="estados" class="form-control"
+									aria-describedby="label-municipios"
+									ng-model="estadoSelecionado" ng-change="carregaMunicipios()"
+									ng-options="estado.sigla for estado in estados"
+									ng-disabled="!estados">
+								</select>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="input-group">
+								<span class="input-group-addon" id="label-municipios">Município</span>
+								<select id="municipios" class="form-control"
+									aria-describedby="label-municipios"
+									ng-model="municipioSelecionado"
+									ng-disabled="!estadoSelecionado"
+									ng-options="municipio.nome for municipio in municipios">
+								</select>
+							</div>
+						</div>
+						<div class="col-xs-2">
+							<button type="submit" class="btn btn-primary"
+								ng-class="{active: porRegiao, notActive: !porRegiao}"
+								ng-click="selecionaPorRegiao()">Comparar por região?</button>
+						</div>
+						<div class="col-xs-2">
+							<button type="submit" class="btn btn-primary"
+								ng-click="addMunicipio()"
+								ng-disabled="!municipioSelecionado || carregando">
+								<span ng-show="!porRegiao" class="glyphicon glyphicon-plus"></span>
+								<span ng-show="porRegiao" class="glyphicon glyphicon-refresh"></span>
+							</button>
+						</div>
+						<div class="col-xs-1">
+							<button type="submit" class="btn btn-danger" ng-click="limpar()"
+								ng-disabled="carregando">
+								Limpar <span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container" ng-show="municipiosSelecionados.length"
+		ng-disabled="carregando">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Comparação <span ng-show="regiaoSelecionada"> (região
+					{{regiaoSelecionada}})</span> <em ng-show="carregando"
+					style="margin-left: 10px">(aguarde a última requisição para
+					editar os municípios selecionados)</em> <label
+					class="label label-danger" ng-show="carregandoRanking"
+					style="font-size: 15px; margin-left: 15px" id="lblCarregarRanking">Carregando
+					Ranking...</label><label class="label label-danger" ng-show="carregando"
+					style="font-size: 15px; margin-left: 15px" id="lblCarregar">Carregando...</label>
+			</div>
+			<div class="panel-body">
+				<div class="row" ng-disabled="carregando">
+					<div class="col-md-1">
+						<strong> <em>Municípios: </em>
+						</strong>
+					</div>
+					<div class="col-md-11">
+						<span class="label label-success"
+							ng-repeat="m in municipiosSelecionados"
+							style="margin-left: 10px; margin-top: 5px; font-size: smaller; display: inline-block;">
+							{{ m.nome }} - {{ m.estado.sigla }} <span
+							class="glyphicon glyphicon-minus-sign"
+							ng-style="montaCor($index)" style="cursor: pointer"
+							ng-click="removerMunicipio($index)"></span>
+						</span>
+					</div>
+				</div>
+				<hr />
+				<div class="row" style="margin-top: 20px; margin-bottom: 10px">
+					<div class="col-md-12">
+						<div class="input-group">
+							<span class="input-group-addon" id="label-agregacao">Ano
+								para comparar</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
+								<a class="btn btn-primary btn-md"
+									ng-class="{active: ehAnoSelecionado(a), notActive: !ehAnoSelecionado(a)}"
+									ng-click="selecionaAno(a)" ng-repeat="a in anos">{{a.ano}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="graficoRanking"></div>
+				</div>
+				<hr />
+				<div class="row">
+					<div class="col-md-8">
+						<div class="input-group">
+							<span class="input-group-addon" id="label-agregacao">Mostrar
+								dados por</span>
+							<div id="radioBtn" class="btn-group"
+								aria-describedby="label-agregacao">
+								<a class="btn btn-primary btn-md"
+									ng-class="{active: ehAgregacaoSelecionada(a), notActive: !ehAgregacaoSelecionada(a)}"
+									ng-click="selecionaAgregacao(a)"
+									ng-repeat="a in agregacoesSuportadas">{{a.nome}}</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<em class="pull-right"> Mostrando {{todasCategorias.length }}
+							de {{ todasCategorias.length + categoriaRemovidas.length }}
+							categorias
+							<button class="btn btn-primary" ng-click="configurarCategorias()">
+								<span class="glyphicon glyphicon-wrench"></span>
+							</button>
+						</em>
+					</div>
+				</div>
+				<div class="row">
+					<div id="graficoPerCapitaComparacaoAgregacao"></div>
+					<br />
+				</div>
+
+				<!-- 			<div class="row">
+					<div class="panel panel-default">
+						<div class="panel-heading">Comparação em valores totais de
+							cada município</div>
+						<div class="panel-body">
+							<div id="graficoComparacaoAgregacao"></div>
+						</div>
+					</div>
+				</div>
+ -->
+			</div>
+		</div>
+		<div id="dialogoSelecionarCategorias" style="display: none"
+			title="Configurar Categorias">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Categorias Adicionadas</div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="categoriaParaRemover"
+								ng-options="c for c in todasCategorias" size="10" multiple></select>
+							<button class="btn" ng-disabled="!categoriaParaRemover"
+								ng-click="removeCategoria()">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Categorias Removidas</h3>
+						</div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="categoriaParaAdicionar"
+								ng-options="c for c in categoriaRemovidas" size="10" multiple></select>
+							<button class="btn" ng-disabled="!categoriaParaAdicionar"
+								ng-click="adicionaCategoria()">
+								<span class="glyphicon glyphicon-chevron-left"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="container">
+		<hr>
+		<footer>
+			<div class="row">
+				<div class="col-md-2 ">
+					<a href="http://nuvem.ufabc.edu.br/"><img
+						src="./imagens/logo_small.jpg" alt="Nuvem UFABC" width="100"
+						height="80"></a>
+				</div>
+				<div class="col-md-2 col-md-offset-3">
+					<a href="http://www.ufabc.edu.br"><img
+						src="./imagens/logo_ufabc.png" alt="UFABC" width="100" height="80"></a>
+				</div>
+				<div class="col-md-2 col-md-offset-3">
+					<a href="http://www.icmc.usp.br"><img
+						src="./imagens/logousp.jpg" alt="UAB" width="100" height="80"></a>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+<!-- build:js js/comparar.min.js -->	
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script src="../bower_components/angular/angular.min.js"></script>	
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>	
+	<script src="../bower_components/highcharts/highcharts.js"></script>
+	<script src="../bower_components/highcharts/modules/exporting.js"></script>	
+	<script src="js/repasseservice.js"></script>
+	<script src="js/comparar.js"></script>
+<!-- endbuild -->
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-64745535-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

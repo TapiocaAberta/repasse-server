@@ -1,29 +1,64 @@
-/**
- *  Welcome to your gulpfile!
- *  The gulp tasks are splitted in several files in the gulp directory
- *  because putting all here was really too long
- */
-
-'use strict';
-
 var gulp = require('gulp');
-var wrench = require('wrench');
 
-/**
- *  This will load all js or coffee files in the gulp directory
- *  in order to load all gulp tasks
- */
-wrench.readdirSyncRecursive('./gulp').filter(function(file) {
-    return (/\.(js|coffee)$/i).test(file);
-}).map(function(file) {
-    require('./gulp/' + file);
+require('es6-promise').polyfill(); 
+// Include plugins
+var plugins = require("gulp-load-plugins")({
+	pattern: ['gulp-*', 'gulp.*', 'main-bower-files', 'browser-sync', 'jshint-stylish'],
+	replaceString: /\bgulp[\-.]/
 });
 
 
-/**
- *  Default task clean temporaries directories and launch the
- *  main optimization build task
- */
-gulp.task('default', ['clean'], function() {
-    gulp.start('build');
+gulp.task('default', ['copy'], function() {
+    gulp.start('build-img', 'usemin');
+});
+
+gulp.task('copy', ['clean'], function() {
+    return gulp.src('app/**/*')
+        .pipe(gulp.dest('dist'))
+	.pipe(gulp.dest('../repasse-server/src/main/webapp'));
+});
+
+gulp.task('clean', function() {
+    return gulp.src('dist')
+        .pipe(plugins.clean());
+});
+
+gulp.task('build-img', function() {
+  return gulp.src('dist/imagens/**/*')
+    .pipe(plugins.imagemin())
+    .pipe(gulp.dest('dist/imagens'));
+});
+
+gulp.task('usemin', function() {
+  return gulp.src('dist/**/*.html')
+    .pipe(plugins.usemin({
+      js: [plugins.uglify],
+      css: [plugins.autoprefixer,plugins.cssmin]
+    }))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('server', function() {
+    plugins.browserSync.init({
+        server: {
+            baseDir: 'app'
+        }
+    });
+
+    gulp.watch('app/**/*').on('change',  plugins.browserSync.reload);
+
+    gulp.watch('app/js/**/*.js').on('change', function(event) {
+        console.log("Linting " + event.path);
+        gulp.src(event.path)
+            .pipe(plugins.jshint())
+            .pipe(plugins.jshint.reporter('jshint-stylish'));
+    });
+
+    gulp.watch('app/css/**/*.css').on('change', function(event) {
+        console.log("Linting " + event.path);
+        gulp.src(event.path)
+            .pipe(plugins.csslint())
+            .pipe(plugins.csslint.reporter());
+    });
+
 });

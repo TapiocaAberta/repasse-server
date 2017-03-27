@@ -1,5 +1,8 @@
-var appExplorar = angular.module('AppAdmin', [ 'datatables' ]);
-appExplorar.controller('AdminController', ["$scope", "$http", "$interval","repasseService", function($scope, $http, $interval) {
+var appExplorar = angular.module('AppAdmin', []);
+appExplorar.controller('AdminController', ["$scope", "$http", "$interval", function($scope, $http, $interval) {
+    
+    createTableFilter("#tabelaCarga", "#filtroCarga");
+    
 	var respostaCarga = function(msg) {
 		$scope.msgResposta = msg;
 		$scope.fazendoAcao = false;
@@ -58,3 +61,15 @@ appExplorar.controller('AdminController', ["$scope", "$http", "$interval","repas
 	}
 	atualizaCargas();
 }]);
+
+// copying the function here, won't add a whole JS due this function, right?
+function createTableFilter(table, field) {
+    var filter =  $(field);
+    filter.keyup(function () {
+        var rex = new RegExp(filter.val(), 'i');
+        $(table + ' tr').hide();
+        $(table +' tr').filter(function () {
+            return rex.test($(this).text());
+        }).show();
+      });
+}

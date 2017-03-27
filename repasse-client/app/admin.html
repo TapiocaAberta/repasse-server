@@ -85,7 +85,7 @@
 		<hr />
 
 		<div class="row">
-			<h3>Carregar dados base (OBS: Usar somente apenas carregar pelo
+			<h3>Carregar dados base (OBS: Usar somente após carregar pelo
 				menos 1 mês de transferência!)</h3>
 			<div class="col-md-4">
 				<button class="btn btn-primary" ng-click="carregaDadosPop()"
@@ -115,8 +115,11 @@
 					do governo federal</a>
 			</div>
 
-			<table id="tblCargaTransf" datatable="ng"
-				style="text-overflow: ellipsis">
+<div class="input-group"> <span class="input-group-addon">Filtrar tabela</span>
+
+                 <input id="filtroCarga" type="text" class="form-control" placeholder="Digite um filtro">
+                    </div>
+                    <table class="table table-striped" style="background: #FFFFDD">
 				<thead>
 					<tr>
 						<th>Ano</th>
@@ -130,7 +133,7 @@
 						<th>Fim</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="tabelaCarga">
 					<tr ng-repeat="c in infoCargasTransf">
 						<td>{{ c.ano }}</td>
 						<td>{{c.mes }}</td>
@@ -209,10 +212,6 @@
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script src="bower_components/angular/angular.min.js"></script>	
-	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>	
-	<script src="js/jquery.dataTables.min.js"></script>
-	<script src="js/dataTables.jqueryui.js"></script>
-	<script src="js/angular-datatables.min.js"></script>
 	<script src="js/admin.js"></script>		
 <!-- endbuild -->
 	<script>

@@ -1,6 +1,9 @@
-angular.module('RepasseApp', []).factory('repasseService', [ "$http", function($http) {
+var repasseApp = angular.module('RepasseApp', []).factory('repasseService', [ "$http", function($http) {
 	return new RepasseService($http)
-}]).controller('RankingController',["$scope",  "repasseService", function($scope, repasseService) {
+}]);
+
+
+repasseApp.controller('RankingController',["$scope",  "repasseService", function($scope, repasseService) {
 	Highcharts.setOptions({
 		lang : {
 			decimalPoint : ',',

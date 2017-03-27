@@ -388,3 +388,14 @@ function dadosMIQLT(miqlt){
 		return {texto: "MUITO ALTO", cor: "#0000FF"};		
 	};
 }
+
+function createTableFilter(table, field) {
+    var filter =  $(field);
+    filter.keyup(function () {
+        var rex = new RegExp(filter.val(), 'i');
+        $(table + ' tr').hide();
+        $(table +' tr').filter(function () {
+            return rex.test($(this).text());
+        }).show();
+      });
+}

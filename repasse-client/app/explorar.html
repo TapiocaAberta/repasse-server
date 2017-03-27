@@ -205,8 +205,11 @@
 						1]}}/{{anoSelecionado.ano}} para {{municipioBusca.nome}}</em>
 				</h3>
 				<div ng-show="verTodasTransferencias">
-					<table id="tblTransferencias" datatable="ng"
-						class="row-border hover" style="background: #FFFFDD">
+				<div class="input-group"> <span class="input-group-addon">Filtrar tabela</span>
+
+                 <input id="filtroTransferencias" type="text" class="form-control" placeholder="Digite um filtro">
+                    </div>
+                    <table class="table table-striped" style="background: #FFFFDD">
 						<thead>
 							<tr>
 								<th>Programa</th>
@@ -218,14 +221,16 @@
 							</tr>
 
 						</thead>
-						<tr ng-repeat="t in transferenciasMes">
-							<td>{{ t.programa }}</td>
-							<td>{{ t.acao }}</td>
-							<td>{{ t.area }}</td>
-							<td>{{ t.subFuncao }}</td>
-							<td>{{ t.favorecido }}</td>
-							<td>R$ {{ t.valor.toLocaleString() }}</td>
-						</tr>
+						<tbody id="tabelaTransferencias">
+						    <tr ng-repeat="t in transferenciasMes">
+							    <td>{{ t.programa }}</td>
+							    <td>{{ t.acao }}</td>
+							    <td>{{ t.area }}</td>
+							    <td>{{ t.subFuncao }}</td>
+							    <td>{{ t.favorecido }}</td>
+							    <td>R$ {{ t.valor.toLocaleString() }}</td>
+						    </tr>
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -256,10 +261,7 @@
 	<script src="bower_components/angular/angular.min.js"></script>	
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-	<script src="js/jquery.dataTables.min.js"></script>
-	<script src="js/dataTables.jqueryui.js"></script>	
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>	
-	<script src="js/angular-datatables.min.js"></script>	
 	<script src="bower_components/highcharts/highcharts.js"></script>
 	<script src="bower_components/highcharts/modules/exporting.js"></script>	
 	<script src="js/repasseservice.js"></script>

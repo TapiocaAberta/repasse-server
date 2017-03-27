@@ -1,6 +1,6 @@
-angular.module('RepasseApp', []).factory('repasseService', function($http) {
+angular.module('RepasseApp', []).factory('repasseService', [ "$http", function($http) {
 	return new RepasseService($http)
-}).controller('RankingController', function($scope, repasseService) {
+}]).controller('RankingController',["$scope",  "repasseService", function($scope, repasseService) {
 	Highcharts.setOptions({
 		lang : {
 			decimalPoint : ',',
@@ -29,7 +29,7 @@ angular.module('RepasseApp', []).factory('repasseService', function($http) {
 			elem.fadeToggle(600);
 		}, 400);
 	});
-});
+}]);
 
 function montarGraficoRanking(ranking) {
 	var ano = ranking.ano;

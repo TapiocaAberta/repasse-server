@@ -1,7 +1,7 @@
 angular.module('RepasseApp', []).factory('repasseService',
-		function($http) {
+		[ "$http", function($http) {
 			return new RepasseService($http)
-		}).controller('CompararController', function($scope, repasseService) {
+		}]).controller('CompararController', ["$scope", "repasseService", function($scope, repasseService) {
 	Highcharts.setOptions({
 	    lang: {
 	        decimalPoint: ',',
@@ -302,7 +302,7 @@ angular.module('RepasseApp', []).factory('repasseService',
 			elem.fadeToggle(600);
 		}, 400);
 	});
-});
+}]);
 // código copiado do ranking.js
 function montarGraficoRanking(resultados) {
 	var categorias = [], dadosRanking = [], dadosIDH = [];

@@ -1,5 +1,5 @@
 var appExplorar = angular.module('AppAdmin', [ 'datatables' ]);
-appExplorar.controller('AdminController', function($scope, $http, $interval) {
+appExplorar.controller('AdminController', ["$scope", "$http", "$interval","repasseService", function($scope, $http, $interval) {
 	var respostaCarga = function(msg) {
 		$scope.msgResposta = msg;
 		$scope.fazendoAcao = false;
@@ -57,4 +57,4 @@ appExplorar.controller('AdminController', function($scope, $http, $interval) {
 		}
 	}
 	atualizaCargas();
-});
+}]);

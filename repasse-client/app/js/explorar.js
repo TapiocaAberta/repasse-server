@@ -1,14 +1,9 @@
-var appExplorar = angular.module('RepasseApp', [ 'datatables' ]).factory(
-		'repasseService', function($http) {
+angular.module('RepasseApp', [ 'datatables' ]).factory(
+		'repasseService', [ "$http", function($http) {
 			return new RepasseService($http)
-		}).run(function(DTDefaultOptions) {
+		}]).run([ "DTDefaultOptions", function(DTDefaultOptions) {
 	DTDefaultOptions.setDisplayLength(10);
-});
-
-var prefixoMeses = [ "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago",
-		"Set", "Out", "Nov", "Dez" ];
-
-appExplorar.controller('ExplorarController',
+}]).controller('ExplorarController', ["$scope", "repasseService",
 		function($scope, repasseService) {
 			Highcharts.setOptions({
 			    lang: {
@@ -248,7 +243,7 @@ appExplorar.controller('ExplorarController',
 						});				
 				$scope.gerandoGraficoAgregacao = false;
 			}
-		});
+		}]);
 
 function criaGraficoBarra(elemento, titulo, categorias, series) {
 	$(elemento).highcharts(

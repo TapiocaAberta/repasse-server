@@ -14,8 +14,7 @@ gulp.task('default', ['copy'], function() {
 
 gulp.task('copy', ['clean'], function() {
     return gulp.src('app/**/*')
-        .pipe(gulp.dest('dist'))
-	.pipe(gulp.dest('../repasse-server/src/main/webapp'));
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('clean', function() {

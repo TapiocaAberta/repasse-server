@@ -229,6 +229,17 @@ angular.module('RepasseApp', []).factory('repasseService',
 			 
 	};
 	
+	var atualizaTodosGraficos = function () {
+		atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+			$scope.carregandoRanking = true;
+			 repasseService.rankingMunicipiosSelecionados($scope.anoSelecionado.ano,  $scope.ids, function(resultados){
+				 montarGraficoRanking(resultados);
+				 $scope.carregandoRanking = false;
+			 // vamos atualizar só depois que mostrar o ranking, pois ele é o principal agora.
+			 atualizaGraficoAgregacao('#graficoPerCapitaComparacaoAgregacao', 'Total per capita (R$)', $scope.agregacoesPerCapita);
+			 });
+	}
+	
 	var salvaParametrosSelecionados = function() {
 		var params = {};
 		params['ano'] = $scope.anoSelecionado.ano;

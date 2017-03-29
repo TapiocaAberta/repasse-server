@@ -1,0 +1,298 @@
+#%RAML 0.8
+title: transfgov-server
+baseUri: http://repasse.ufabc.edu.br/rest
+schemas:
+  - agregacao: !include schemas/agregacao.xsd
+  - agregacao-jsonschema: !include schemas/agregacao-jsonschema.json
+  - area: !include schemas/area.xsd
+  - area-jsonschema: !include schemas/area-jsonschema.json
+  - acao: !include schemas/acao.xsd
+  - acao-jsonschema: !include schemas/acao-jsonschema.json
+  - favorecido: !include schemas/favorecido.xsd
+  - favorecido-jsonschema: !include schemas/favorecido-jsonschema.json
+  - programa: !include schemas/programa.xsd
+  - programa-jsonschema: !include schemas/programa-jsonschema.json
+  - subfuncao: !include schemas/subfuncao.xsd
+  - subfuncao-jsonschema: !include schemas/subfuncao-jsonschema.json
+  - estado: !include schemas/estado.xsd
+  - estado-jsonschema: !include schemas/estado-jsonschema.json
+  - municipio: !include schemas/municipio.xsd
+  - municipio-jsonschema: !include schemas/municipio-jsonschema.json
+/agregacao: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /MUNICIPIO/{ano}/{mes}/estado/{siglaEstado}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+      mes: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: agregacao-jsonschema
+              example: !include examples/agregacao.json
+  /{tipoAgregacao}/{ano}/{mes}/municipio/{idMunicipio}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+      mes: 
+        type: integer
+        required: true
+      idMunicipio: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: agregacao-jsonschema
+              example: !include examples/agregacao.json
+  /{tipoAgregacao}/{ano}/municipios/{municipioIds}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+  /ANO/{ano}/municipio/{municipioId}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+      municipioId: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+  /{tipoAgregacao}/{ano}/municipio/{idMunicipio}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+      idMunicipio: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: agregacao-jsonschema
+              example: !include examples/agregacao.json
+  /ANO/{ano}/{tipoAgregacao}/municipio/{municipioId}: 
+    uriParameters: 
+      ano: 
+        type: integer
+        required: true
+      municipioId: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+  /AREA/area/{areaId}/{ano}/{mes}/municipio/{idMunicipio}: 
+    uriParameters: 
+      areaId: 
+        type: integer
+        required: true
+      ano: 
+        type: integer
+        required: true
+      mes: 
+        type: integer
+        required: true
+      idMunicipio: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: agregacao-jsonschema
+              example: !include examples/agregacao.json
+/ano: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+/acao: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{id}: 
+    uriParameters: 
+      id: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: acao-jsonschema
+              example: !include examples/acao.json
+/area: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{id}: 
+    uriParameters: 
+      id: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: area-jsonschema
+              example: !include examples/area.json
+    /sub-funcao: 
+      get: 
+        responses: 
+          200: 
+            body: 
+              application/json: 
+/sub-funcao: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{id}: 
+    uriParameters: 
+      id: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: subfuncao-jsonschema
+              example: !include examples/subfuncao.json
+/favorecido: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{id}: 
+    uriParameters: 
+      id: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: favorecido-jsonschema
+              example: !include examples/favorecido.json
+/programa: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{id}: 
+    uriParameters: 
+      id: 
+        type: integer
+        required: true
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: programa-jsonschema
+              example: !include examples/programa.json
+/estado: 
+  get: 
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{sigla}: 
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: estado-jsonschema
+              example: !include examples/estado.json
+    /municipios: 
+      get: 
+        responses: 
+          200: 
+            body: 
+              application/json: 
+/municipio: 
+  get: 
+    queryParameters: 
+      pg: 
+        type: integer
+        required: true
+    responses: 
+      200: 
+        body: 
+          application/json: 
+  /{sigla}/{nome}: 
+    get: 
+      responses: 
+        200: 
+          body: 
+            application/json: 
+              schema: municipio-jsonschema
+              example: !include examples/municipio.json
+/transferencia/{ano}/{mes}: 
+  uriParameters: 
+    ano: 
+      type: integer
+      required: true
+    mes: 
+      type: integer
+      required: true
+  delete: 
+    responses: 
+      200: 
+        body: 
+          "text/plan; charset=utf8": 
+  /municipio/{municipioId}: 
+    uriParameters: 
+      municipioId: 
+        type: integer
+        required: true
+    get: 
+      queryParameters: 
+        pg: 
+          type: integer
+          required: true
+      responses: 
+        200: 
+          body: 
+            application/json: 

@@ -84,6 +84,8 @@ public class CargaIndicadorControllerTest {
 	
 	@Test
 	public void testeCargaIndicadores() {
+		int ANO1 = 2011;
+		int ANO2 = 2012;
 		String ESTADO = "XX";
 		String MUNICIPIO1 = "MUN 1";
 		String MUNICIPIO2 = "MUN 2";
@@ -104,7 +106,8 @@ public class CargaIndicadorControllerTest {
 		municipioService.salvar(m1);
 		municipioService.salvar(m2);
 		municipioService.salvar(m3);
-		areaService.salvar(new Area(1, AREA));
+		Area area = new Area(1, AREA);
+		areaService.salvar(area);
 
 		DadosCargaIndicador dados = new DadosCargaIndicador();
 		
@@ -115,14 +118,14 @@ public class CargaIndicadorControllerTest {
 		
 		List<LinhaCargaIndicador> dadosCarga = new ArrayList<>();
 		
-		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.1f, 2011));
-		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO2_REAL, ESTADO, 0.2f, 2011));
-		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO3, ESTADO, 0.3f, 2011));
+		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.1f, ANO1));
+		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO2_REAL, ESTADO, 0.2f, ANO1));
+		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO3, ESTADO, 0.3f, ANO1));
 		// dados deverão ser sobreescritos
-		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.5f, 2011));
+		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.5f, ANO1));
 		// outro ano
-		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.1f, 2012));
-		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO3, ESTADO, 0.4f, 2012));
+		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.1f, ANO2));
+		dadosCarga.add( new LinhaCargaIndicador(MUNICIPIO3, ESTADO, 0.4f, ANO2));
 		
 		dados.setArea(AREA);
 		dados.setIndicador(INDICADOR);
@@ -142,15 +145,24 @@ public class CargaIndicadorControllerTest {
 		assertNotNull(grupoIndicador);
 		assertNotNull(indicador);
 		
-		List<ValorIndicador> valores2011 = valorIndicadorService.buscaPorIndicadorEAno(indicador, 2011);
-		List<ValorIndicador> valores2012 = valorIndicadorService.buscaPorIndicadorEAno(indicador, 2012);
+		List<ValorIndicador> valores2011 = valorIndicadorService.buscaPorIndicadorEAno(indicador, ANO1);
+		List<ValorIndicador> valores2012 = valorIndicadorService.buscaPorIndicadorEAno(indicador, ANO2);
 		assertEquals(3, valores2011.size());
 		assertEquals(2, valores2012.size());
 		
 		List<ValorIndicador> valoresMUN1 = valorIndicadorService.buscaPorIndicadorEMunicipio(indicador, m1);
 		List<ValorIndicador> valoresMUN2 = valorIndicadorService.buscaPorIndicadorEMunicipio(indicador, m2);
+		List<ValorIndicador> valoresMUNANO = valorIndicadorService.buscaPorAnoMunicipio(ANO1, m1);
+		List<ValorIndicador> valoresMUNAREAANO = valorIndicadorService.buscaPorMuninipioAreaAno(m1, area, ANO1);
+		List<ValorIndicador> valoresMUN = valorIndicadorService.buscaPorMunicipio(m1);
+		List<ValorIndicador> valoresMUNAREA = valorIndicadorService.buscaPorMuninipioArea(m1, area);
 		assertEquals(2, valoresMUN1.size());
 		assertEquals(1, valoresMUN2.size());
+		assertEquals(1, valoresMUNANO.size());
+		assertEquals(1, valoresMUNAREAANO.size());
+		assertEquals(2, valoresMUN.size());
+		assertEquals(2, valoresMUNAREA.size());
+		
 	}
 
 }

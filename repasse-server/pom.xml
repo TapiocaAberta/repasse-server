@@ -136,20 +136,20 @@
 				<version>1.1.0.Alpha1</version>
 			</plugin>
 			<plugin>
-			    <groupId>com.sebastian-daschner</groupId>
-			    <artifactId>jaxrs-analyzer-maven-plugin</artifactId>
-			    <version>0.14</version>
-			    <executions>
-				<execution>
-				    <goals>
-					<goal>analyze-jaxrs</goal>
-				    </goals>
-				    <configuration>
-					<backend>ASCIIDOC</backend>
-					<deployedDomain>repasse.ufabc.edu.br</deployedDomain>
-				    </configuration>
-				</execution>
-			    </executions>
+				<groupId>com.sebastian-daschner</groupId>
+				<artifactId>jaxrs-analyzer-maven-plugin</artifactId>
+				<version>0.14</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>analyze-jaxrs</goal>
+						</goals>
+						<configuration>
+							<backend>ASCIIDOC</backend>
+							<deployedDomain>repasse.ufabc.edu.br</deployedDomain>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -60,7 +60,7 @@ public class ValorIndicadorService extends Service<ValorIndicador> {
 		return buscaPorMunicipio.getResultList();
 	}
 
-	public List<ValorIndicador> buscaPorAnoMunicipio(long ano, Municipio m) {
+	public List<ValorIndicador> buscaPorAnoMunicipio(int ano, Municipio m) {
 		TypedQuery<ValorIndicador> buscaPorAnoMunicipio = em.createNamedQuery(
 				"ValorIndicador.porAnoMunicipio", ValorIndicador.class);
 		buscaPorAnoMunicipio.setParameter("municipio", m);	
@@ -76,7 +76,7 @@ public class ValorIndicadorService extends Service<ValorIndicador> {
 		return buscaPorMunicipioArea.getResultList();
 	}
 
-	public List<ValorIndicador> buscaPorMuninipioAreaAno(Municipio m, Area a, long ano) {
+	public List<ValorIndicador> buscaPorMuninipioAreaAno(Municipio m, Area a, int ano) {
 		TypedQuery<ValorIndicador> buscaPorMunicipioArea = em.createNamedQuery(
 				"ValorIndicador.porMunicipioAreaAno", ValorIndicador.class);
 		buscaPorMunicipioArea.setParameter("municipio", m);	

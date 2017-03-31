@@ -45,7 +45,7 @@ public interface ValorIndicadorResource {
 	 */
 	@GET
 	@Path("/municipio/{idMunicipio}/indicador/{ano}")
-	public List<ValorIndicador> todosValoresIndicadoresPorAno(@PathParam("idMunicipio") long idMunicipio, @PathParam("ano") long ano);
+	public List<ValorIndicador> todosValoresIndicadoresPorAno(@PathParam("idMunicipio") long idMunicipio, @PathParam("ano") int ano);
 	
 	//      
 	/**
@@ -72,7 +72,7 @@ public interface ValorIndicadorResource {
 	 */
 	@GET
 	@Path("/municipio/{idMunicipio}/area/{nomeArea}/indicador/ano/{ano}")
-	public List<ValorIndicador> todosValoresIndicadoresPorMunicipioAreaAno(@PathParam("idMunicipio") long idMunicipio, @PathParam("nomeArea") String area, @PathParam("ano") long ano);
+	public List<ValorIndicador> todosValoresIndicadoresPorMunicipioAreaAno(@PathParam("idMunicipio") long idMunicipio, @PathParam("nomeArea") String area, @PathParam("ano") int ano);
 
 
 }

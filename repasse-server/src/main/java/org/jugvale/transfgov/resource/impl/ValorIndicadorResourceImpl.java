@@ -42,7 +42,7 @@ public class ValorIndicadorResourceImpl implements ValorIndicadorResource {
 	}
 
 	@Override
-	public List<ValorIndicador> todosValoresIndicadoresPorAno(long idMunicipio, long ano) {
+	public List<ValorIndicador> todosValoresIndicadoresPorAno(long idMunicipio, int ano) {
 		Municipio m = municipioService.buscarPorId(idMunicipio);
 		return valorIndicadorService.buscaPorAnoMunicipio(ano, m);
 	}
@@ -55,9 +55,9 @@ public class ValorIndicadorResourceImpl implements ValorIndicadorResource {
 	}
 
 	@Override
-	public List<ValorIndicador> todosValoresIndicadoresPorMunicipioAreaAno(long idMunicipio, String area, long ano) {
+	public List<ValorIndicador> todosValoresIndicadoresPorMunicipioAreaAno(long idMunicipio, String area, int ano) {
 		Municipio m = municipioService.buscarPorId(idMunicipio);
 		Area a = areaService.buscaPorNome(area);
-		return valorIndicadorService.buscaPorMuninipioArea(m, a);
+		return valorIndicadorService.buscaPorMuninipioAreaAno(m, a, ano);
 	}
 }

@@ -145,6 +145,11 @@ public class CargaIndicadorControllerTest {
 		assertNotNull(grupoIndicador);
 		assertNotNull(indicador);
 		
+		List<Indicador> todosIndicadores = indicadorService.todos();
+		List<Indicador> indicadoresPorArea = indicadorService.buscaPorArea(area);
+		assertEquals(1, todosIndicadores.size());	
+		assertEquals(1, indicadoresPorArea.size());
+		
 		List<ValorIndicador> valores2011 = valorIndicadorService.buscaPorIndicadorEAno(indicador, ANO1);
 		List<ValorIndicador> valores2012 = valorIndicadorService.buscaPorIndicadorEAno(indicador, ANO2);
 		assertEquals(3, valores2011.size());

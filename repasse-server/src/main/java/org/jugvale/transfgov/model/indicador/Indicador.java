@@ -32,8 +32,9 @@ import org.jugvale.transfgov.model.base.Area;
 @Table(name = "indicador")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
 @NamedQueries({ @NamedQuery(name = "Indicador.porNome", query = "SELECT ind FROM Indicador ind WHERE ind.nome = :nome"),
-		@NamedQuery(name = "Indicador.porGrupo", query = "SELECT ind FROM Indicador ind WHERE ind.grupoIndicador.nome = :nomeGrupo") })
-
+		@NamedQuery(name = "Indicador.porGrupo", query = "SELECT ind FROM Indicador ind WHERE ind.grupoIndicador.nome = :nomeGrupo"),
+		@NamedQuery(name = "Indicador.porArea", query = "SELECT ind FROM Indicador ind WHERE ind.area = :area") })
+		
 public class Indicador {
 
 	@Id

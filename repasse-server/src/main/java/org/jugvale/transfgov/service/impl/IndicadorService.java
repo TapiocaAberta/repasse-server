@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.indicador.Indicador;
 import org.jugvale.transfgov.service.Service;
 
@@ -38,6 +39,13 @@ public class IndicadorService extends Service<Indicador> {
 					"Indicador.porGrupo", Indicador.class);
 			buscaIndicadorPorNome.setParameter("nomeGrupo", grupo);
 			return buscaIndicadorPorNome.getResultList();
+		}
+
+		public List<Indicador> buscaPorArea(Area a) {
+			TypedQuery<Indicador> buscaIndicadorPorArea = em.createNamedQuery(
+					"Indicador.porArea", Indicador.class);
+			buscaIndicadorPorArea.setParameter("area", a);
+			return buscaIndicadorPorArea.getResultList();
 		}
 
 }

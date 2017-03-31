@@ -8,21 +8,33 @@ import org.jugvale.transfgov.model.indicador.FocoIndicador;
 import org.jugvale.transfgov.model.indicador.GrupoIndicador;
 import org.jugvale.transfgov.model.indicador.Indicador;
 import org.jugvale.transfgov.resource.GrupoIndicadorResource;
+import org.jugvale.transfgov.service.impl.AreaService;
 import org.jugvale.transfgov.service.impl.FocoIndicadorService;
 import org.jugvale.transfgov.service.impl.GrupoIndicadorService;
 import org.jugvale.transfgov.service.impl.IndicadorService;
+import org.jugvale.transfgov.service.impl.MunicipioService;
+import org.jugvale.transfgov.service.impl.ValorIndicadorService;
 
 public class GrupoIndicadorResourceImpl implements GrupoIndicadorResource {
 
 	@Inject
 	GrupoIndicadorService grupoIndicadorService;
-	
+
 	@Inject
 	IndicadorService indicadorService;
-	
+
 	@Inject
 	FocoIndicadorService focoIndicadorService;
-	
+
+	@Inject
+	ValorIndicadorService valorIndicadorService;
+
+	@Inject
+	MunicipioService municipioService;
+
+	@Inject
+	AreaService areaService;
+
 	@Override
 	public List<GrupoIndicador> grupos() {
 		return grupoIndicadorService.todos();

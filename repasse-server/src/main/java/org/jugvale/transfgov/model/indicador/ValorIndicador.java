@@ -29,7 +29,12 @@ import org.jugvale.transfgov.model.base.Municipio;
 		@NamedQuery(name = "ValorIndicador.porAnoMunicipioIndicador", query = "SELECT v FROM ValorIndicador v where v.ano = :ano  AND v.municipio = :municipio AND v.indicador = :indicador", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "ValorIndicador.contaPorAnoMunicipioIndicador", query = "SELECT count(v) FROM ValorIndicador v where v.ano = :ano  AND v.municipio = :municipio AND v.indicador = :indicador", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "ValorIndicador.porIndicadorEAno", query = "SELECT v FROM ValorIndicador v where v.ano = :ano  AND v.indicador = :indicador", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
-		@NamedQuery(name = "ValorIndicador.porIndicadorEMunicipio", query = "SELECT v FROM ValorIndicador v where v.indicador = :indicador  AND v.municipio = :municipio", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }), })
+		@NamedQuery(name = "ValorIndicador.porIndicadorEMunicipio", query = "SELECT v FROM ValorIndicador v where v.indicador = :indicador  AND v.municipio = :municipio", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }), 
+		@NamedQuery(name = "ValorIndicador.porMunicipio", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "ValorIndicador.porAnoMunicipio", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "ValorIndicador.porMunicipioArea", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.indicador.area= :area", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "ValorIndicador.porMunicipioAreaAno", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.indicador.area= :area AND v.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }), })
+
 public class ValorIndicador {
 
 	@Id

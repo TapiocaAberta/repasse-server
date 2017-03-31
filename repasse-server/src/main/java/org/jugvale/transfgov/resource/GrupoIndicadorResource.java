@@ -11,6 +11,12 @@ import org.jugvale.transfgov.model.indicador.FocoIndicador;
 import org.jugvale.transfgov.model.indicador.GrupoIndicador;
 import org.jugvale.transfgov.model.indicador.Indicador;
 
+/**
+ * 
+ * Endpoint que contém as informações relacionadas aos metadados dos indicadores
+ * @author wsiqueir
+ *
+ */
 @Path("grupo_indicador")
 @Produces("application/json; charset=utf8")
 public interface GrupoIndicadorResource {
@@ -30,5 +36,6 @@ public interface GrupoIndicadorResource {
 	@Path("{nomeGrupo}/indicadores/{nomeIndicador}/foco")
 	public List<FocoIndicador> focosParaGrupo(@PathParam("nomeGrupo") String nomeGrupo,
 			@PathParam("nomeIndicador") String nomeIndicador);
+	
 
 }

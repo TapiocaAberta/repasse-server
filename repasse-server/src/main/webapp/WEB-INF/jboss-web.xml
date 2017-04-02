@@ -1,4 +1,4 @@
 <jboss-web>
-    <context-root>/</context-root>
+    <context-root>/rest</context-root>
     <security-domain>other</security-domain>
 </jboss-web>

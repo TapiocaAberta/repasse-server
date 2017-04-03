@@ -9,15 +9,15 @@ import javax.ws.rs.Produces;
 
 import org.jugvale.transfgov.model.indicador.Indicador;
 
-@Path("valor_indicador")
+@Path("indicador")
 @Produces("application/json; charset=utf8")
 public interface IndicadorResource {
 	
 	@GET
 	public List<Indicador> todosIndicadores();
 	
-	@Path("{area}")
 	@GET
+	@Path("{area}")
 	public List<Indicador> indicadoresPorArea(@PathParam("area") String area);
 
 }

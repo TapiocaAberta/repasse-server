@@ -197,11 +197,8 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
 	@Override
 	public Response cargaDadosIndicador(DadosCargaIndicador dadosCargaIndicador) {
 		logger.info("Iniciando carga de dados de Indicador");
-		List<String> carregaIndicadores = cargaIndicadorController.carregaIndicadores(dadosCargaIndicador);
-		String saidaHtml = "<h3>Resultado de carga de indicadores</h3> <div>";
-		saidaHtml += carregaIndicadores.stream().map( l -> "<p>" + l + "</p>").collect(Collectors.joining());
-		saidaHtml += "</div>";
-		return Response.ok(saidaHtml).build();
+		cargaIndicadorController.carregaIndicadores(dadosCargaIndicador);
+		return Response.ok("Carga de dados em andamento. Confira os logs").build();
 	}
 
 }

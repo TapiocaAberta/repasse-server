@@ -1,8 +1,13 @@
 package org.jugvale.transfgov.carga;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -45,6 +50,10 @@ public class CargaIndicadorController {
 
 	@Inject
 	AreaService areaService;
+	
+	@Inject
+	Logger logger;
+
 
 	/**
 	 * 
@@ -57,12 +66,14 @@ public class CargaIndicadorController {
 	 * 
 	 * @return Uma lista de string com textos resumitivos de cada operação
 	 */
-	public List<String> carregaIndicadores(DadosCargaIndicador carga) {
+	@Asynchronous
+	@TransactionAttribute(TransactionAttributeType.NEVER)
+	public void carregaIndicadores(DadosCargaIndicador carga) {
 		String nomeGrupoIndicador = carga.getGrupoIndicador();
 		String nomeIndicador = carga.getIndicador();
 		String focoIndicador = carga.getFocoIndicador();
 		Area area = areaService.buscaPorNome(carga.getArea());
-
+		logger.info("Carregando dados do indicador...");
 		GrupoIndicador grupo = grupoIndicadorService.buscaPorNomeOuCria(
 				nomeGrupoIndicador,
 				() -> new GrupoIndicador(nomeGrupoIndicador));
@@ -73,10 +84,23 @@ public class CargaIndicadorController {
 		FocoIndicador foco = focoIndicadorService.buscaPorNomeOuCria(
 				focoIndicador,
 				() -> new FocoIndicador(focoIndicador, indicador));
-
-		return carga.getLinhas().stream()
+		logger.info("Dados do indicador carregados [" + grupo + ", " + indicador + ", " + foco + "]");
+		long m = System.currentTimeMillis();
+		logger.info("Carregando linhas (pode levar alguns minutos) ");
+		List<String> resultado = carga.getLinhas().stream()
 				.map(l -> carregaLinha(grupo, indicador, foco, area, l))
 				.collect(Collectors.toList());
+		logger.info("Fim da carga em " + (System.currentTimeMillis() -m ) + "ms [" + grupo + ", " + indicador + ", " + foco + "]");
+		try {
+			Path tmpDadosIndicadores = Files.createTempFile("cargaIndicador", "");
+			Files.write(tmpDadosIndicadores, resultado.stream().collect(Collectors.joining("\n")).getBytes());
+			logger.info("Saida salva em " + tmpDadosIndicadores.getFileName());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Relatório:");
+		
+		
 	}
 
 	/**
@@ -98,12 +122,18 @@ public class CargaIndicadorController {
 		ValorIndicador valorIndicador = null;
 		Municipio mun;
 		int ano = linha.getAno();
-
+		logger.fine("Carregando linha para município " + nomeMunicipio);
 		try {
 			mun = municipioService.buscaPorNomeEEstado(linha.getUf(),
 					nomeMunicipio);
-		} catch (NoResultException e) {
-			return "Município " + nomeMunOriginal + "não encontrado.";
+		} catch (Exception e) {
+			if(e instanceof NoResultException) {
+				return "Município " + nomeMunOriginal + "não encontrado.";
+			}
+			else {
+				e.printStackTrace();
+				return "Error inesperado carregando linha" + e.getMessage();
+			}
 		}
 		boolean valorExiste = valorIndicadorService.verificaSeValorExiste(ano,
 				indicador, mun);

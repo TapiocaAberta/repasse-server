@@ -3,6 +3,8 @@ package org.jugvale.transfgov.service.impl;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.TypedQuery;
 
 import org.jugvale.transfgov.model.base.Area;
@@ -12,6 +14,7 @@ import org.jugvale.transfgov.model.indicador.ValorIndicador;
 import org.jugvale.transfgov.service.Service;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class ValorIndicadorService extends Service<ValorIndicador> {
 	
 	public boolean verificaSeValorExiste(int ano, Indicador indicador,

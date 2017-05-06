@@ -98,8 +98,6 @@ public class CargaIndicadorController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		logger.info("Relatório:");
-		
 		
 	}
 

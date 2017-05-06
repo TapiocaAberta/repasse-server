@@ -98,12 +98,18 @@ var MES = "{MES}";
 var AGREGACAO = "{AGREGACAO}";
 var SIGLA = "{SIGLA}";
 var AREA = "{AREA}";
+var GRUPO_INDICADOR = "{GRUPO_INDICADOR}";
+var INDICADOR = "{INDICADOR}";
 
 var URL_BASE = "rest/";
 var URL_ANOS = URL_BASE + "ano";
 var URL_ESTADOS = URL_BASE + "estado";
 var URL_AGREGACAO = URL_BASE + "agregacao";
 var URL_AREAS = URL_BASE + "area";
+var URL_GRUPO_INDICADORES = URL_BASE + "grupo_indicador";
+var URL_INDICADORES_POR_GRUPO = URL_GRUPO_INDICADORES + "/" + GRUPO_INDICADOR + "/indicadores";
+var URL_FOCOS_POR_INDICADOR = URL_INDICADORES_POR_GRUPO + "/" + INDICADOR + "/foco";
+
 var URL_TRANF_POR_MES_MUN = URL_BASE + "transferencia/" + ANO + "/" + MES
 		+ "/municipio/" + MUNICIPIO + "/conciso";
 var URL_AGREGA_ANO_MES_MUN = URL_AGREGACAO + "/" + AGREGACAO + "/" + ANO + "/"
@@ -153,7 +159,21 @@ var RepasseService = function($http) {
 
 	this.areas = function(sucesso) {
 		$http.get(URL_AREAS).success(sucesso);
-	}
+	};
+	
+	this.grupoIndicadores = function(sucesso) {
+		$http.get(URL_GRUPO_INDICADORES).success(sucesso);
+	};
+	
+	this.indicadores = function(nomeGrupo, sucesso) {
+		var url = URL_INDICADORES_POR_GRUPO.replace(GRUPO_INDICADOR, nomeGrupo);
+		$http.get(url).success(sucesso);
+	};
+	
+	this.focosIndicador = function(nomeGrupo, nomeIndicador, sucesso) {
+		var url = URL_FOCOS_POR_INDICADOR.replace(GRUPO_INDICADOR, nomeGrupo).replace(INDICADOR, nomeIndicador);
+		$http.get(url).success(sucesso);
+	};
 
 	this.municipiosPorEstado = function(sigla, sucesso) {
 		var url = URL_MUN_POR_ESTADO.replace(SIGLA, sigla);
@@ -264,6 +284,7 @@ var RepasseService = function($http) {
 		console.log(url);
 		$http.get(url).success(sucesso);
 	}
+	
 	
 	this.localizacao = function(sucesso) {
 		$http.get("http://ipinfo.io/").then(function(loc){

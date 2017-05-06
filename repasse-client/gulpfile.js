@@ -1,5 +1,8 @@
 var gulp = require('gulp');
 
+var DEPLOY_DIR = '/opt/jboss/WILDFLY/wildfly-8.2.0.Final/welcome-content';
+var DEV_DIR = DEPLOY_DIR;
+
 require('es6-promise').polyfill(); 
 // Include plugins
 var plugins = require("gulp-load-plugins")({
@@ -60,4 +63,34 @@ gulp.task('server', function() {
             .pipe(plugins.csslint.reporter());
     });
 
+});
+
+gulp.task('dev', function() {
+    var updateDev =  function (e) {
+        console.log('Updating DEV directory...')
+        gulp.dest(DEV_DIR).pipe(plugins.clean({force: true}));
+        gulp.src('app/**/*').pipe(gulp.dest(DEV_DIR));
+    }
+    gulp.watch('app/**/*').on('change', updateDev);
+
+    gulp.watch('app/js/**/*.js').on('change', function(event) {
+        console.log("Linting " + event.path);
+        gulp.src(event.path)
+            .pipe(plugins.jshint())
+            .pipe(plugins.jshint.reporter('jshint-stylish'));
+    });
+
+    gulp.watch('app/css/**/*.css').on('change', function(event) {
+        console.log("Linting " + event.path);
+        gulp.src(event.path)
+            .pipe(plugins.csslint())
+            .pipe(plugins.csslint.reporter());
+    });
+    updateDev();
+});
+
+gulp.task('deploy', function() {
+    gulp.src(DEPLOY_DIR)
+        .pipe(plugins.clean({force:true}));
+    gulp.src('dist/**/*').pipe(gulp.dest(DEPLOY_DIR));
 });

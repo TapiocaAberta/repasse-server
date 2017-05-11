@@ -133,10 +133,7 @@ public class CargaIndicadorControllerTest {
 		dados.setGrupoIndicador(GRUPO_INDICADOR);
 		dados.setLinhas(dadosCarga);
 		
-		List<String> resultados = cargaIndicadorController.carregaIndicadores(dados);
-		
-		assertEquals(6, resultados.size());
-		resultados.forEach(System.out::println);
+		cargaIndicadorController.carregaIndicadores(dados);
 		
 		FocoIndicador foco = focoIndicadorService.buscaPorNome(FOCO_INDICADOR);
 		GrupoIndicador grupoIndicador = grupoIndicadorService.buscaPorNome(GRUPO_INDICADOR);

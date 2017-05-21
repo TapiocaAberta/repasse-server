@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.PathSegment;
 
 import org.jugvale.transfgov.model.indicador.ValorIndicador;
 
@@ -76,6 +77,19 @@ public interface ValorIndicadorResource {
 	@GET
 	@Path("/municipio/{idMunicipio}/area/{nomeArea}/indicador/ano/{ano}")
 	public List<ValorIndicador> todosValoresIndicadoresPorMunicipioAreaAno(@PathParam("idMunicipio") long idMunicipio, @PathParam("nomeArea") String area, @PathParam("ano") int ano);
-
+	
+	
+	/**
+	 * 
+	 * Todos os ValorIndicador para indicador idIndicador e município idMunicipio e o ano informado
+	 * 
+	 * @param idIndicador
+	 * @param idMunicipio
+	 * @param ano
+	 * @return
+	 */
+	@GET
+	@Path("/ano/{ano}/municipios/{municipioIds}/")
+	public List<ValorIndicador> valoresIndicadoresMunicipiosPorAno(@PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
 
 }

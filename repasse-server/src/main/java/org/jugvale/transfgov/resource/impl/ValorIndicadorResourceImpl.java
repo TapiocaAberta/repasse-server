@@ -1,8 +1,11 @@
 package org.jugvale.transfgov.resource.impl;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.PathSegment;
 
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Municipio;
@@ -59,5 +62,11 @@ public class ValorIndicadorResourceImpl implements ValorIndicadorResource {
 		Municipio m = municipioService.buscarPorId(idMunicipio);
 		Area a = areaService.buscaPorNome(area);
 		return valorIndicadorService.buscaPorMuninipioAreaAno(m, a, ano);
+	}
+
+	@Override
+	public List<ValorIndicador> valoresIndicadoresMunicipiosPorAno(int ano, PathSegment pathSegment) {
+		Set<Long> ids = pathSegment.getMatrixParameters().keySet().stream().map(Long::parseLong).collect(Collectors.toSet());
+		return valorIndicadorService.buscaPorAnoMunicipios(ano, ids);
 	}
 }

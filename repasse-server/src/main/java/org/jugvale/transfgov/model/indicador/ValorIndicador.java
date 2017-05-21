@@ -33,6 +33,7 @@ import org.jugvale.transfgov.model.base.Municipio;
 		@NamedQuery(name = "ValorIndicador.porMunicipio", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "ValorIndicador.porAnoMunicipio", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "ValorIndicador.porMunicipioArea", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.indicador.area= :area", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
+		@NamedQuery(name = "ValorIndicador.porAnoMunicipios", query = "SELECT v FROM ValorIndicador v where v.municipio.id IN (:municipios) AND v.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }),
 		@NamedQuery(name = "ValorIndicador.porMunicipioAreaAno", query = "SELECT v FROM ValorIndicador v where v.municipio = :municipio AND v.indicador.area= :area AND v.ano = :ano", hints = { @QueryHint(name = "org.hibernate.cacheable", value = "true") }), })
 
 public class ValorIndicador {

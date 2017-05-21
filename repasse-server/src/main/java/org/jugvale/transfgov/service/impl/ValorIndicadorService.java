@@ -1,6 +1,7 @@
 package org.jugvale.transfgov.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -20,31 +21,39 @@ public class ValorIndicadorService extends Service<ValorIndicador> {
 	public boolean verificaSeValorExiste(int ano, Indicador indicador,
 			Municipio mun) {
 		// há razões para contar antes...
-		TypedQuery<Long> buscaFocoIndicadorPorNome = em
+		TypedQuery<Long> contaPorAnoIndMun = em
 				.createNamedQuery("ValorIndicador.contaPorAnoMunicipioIndicador", Long.class);
-		buscaFocoIndicadorPorNome.setParameter("ano", ano);
-		buscaFocoIndicadorPorNome.setParameter("indicador", indicador);
-		buscaFocoIndicadorPorNome.setParameter("municipio", mun);
-		return buscaFocoIndicadorPorNome.getSingleResult() > 0;
+		contaPorAnoIndMun.setParameter("ano", ano);
+		contaPorAnoIndMun.setParameter("indicador", indicador);
+		contaPorAnoIndMun.setParameter("municipio", mun);
+		return contaPorAnoIndMun.getSingleResult() > 0;
 	}
 	
 	public ValorIndicador buscaPorAnoMunicipioIndicador(int ano, Indicador indicador,
 			Municipio mun) {
-		TypedQuery<ValorIndicador> buscaFocoIndicadorPorNome = em
+		TypedQuery<ValorIndicador> buscaValorIndicadorPorAnoMunInd = em
 				.createNamedQuery("ValorIndicador.porAnoMunicipioIndicador", ValorIndicador.class);
+		buscaValorIndicadorPorAnoMunInd.setParameter("ano", ano);
+		buscaValorIndicadorPorAnoMunInd.setParameter("indicador", indicador);
+		buscaValorIndicadorPorAnoMunInd.setParameter("municipio", mun);
+		return buscaValorIndicadorPorAnoMunInd.getSingleResult();
+	}
+	
+	public List<ValorIndicador> buscaPorAnoMunicipios(int ano, Set<Long> municipioIds) {
+		TypedQuery<ValorIndicador> buscaFocoIndicadorPorNome = em
+				.createNamedQuery("ValorIndicador.porAnoMunicipios", ValorIndicador.class);
 		buscaFocoIndicadorPorNome.setParameter("ano", ano);
-		buscaFocoIndicadorPorNome.setParameter("indicador", indicador);
-		buscaFocoIndicadorPorNome.setParameter("municipio", mun);
-		return buscaFocoIndicadorPorNome.getSingleResult();
+		buscaFocoIndicadorPorNome.setParameter("municipios", municipioIds);
+		return buscaFocoIndicadorPorNome.getResultList();
 	}
 	
 	
 	public List<ValorIndicador> buscaPorIndicadorEAno(Indicador indicador, int ano) {
-		TypedQuery<ValorIndicador> buscaIndicadorPorNome = em.createNamedQuery(
+		TypedQuery<ValorIndicador> buscaValorIndicadorPorIndAno = em.createNamedQuery(
 				"ValorIndicador.porIndicadorEAno", ValorIndicador.class);
-		buscaIndicadorPorNome.setParameter("indicador", indicador);
-		buscaIndicadorPorNome.setParameter("ano", ano);
-		return buscaIndicadorPorNome.getResultList();
+		buscaValorIndicadorPorIndAno.setParameter("indicador", indicador);
+		buscaValorIndicadorPorIndAno.setParameter("ano", ano);
+		return buscaValorIndicadorPorIndAno.getResultList();
 	}
 
 	public List<ValorIndicador> buscaPorIndicadorEMunicipio(

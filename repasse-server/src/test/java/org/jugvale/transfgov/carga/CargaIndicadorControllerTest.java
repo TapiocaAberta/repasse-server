@@ -1,7 +1,10 @@
 package org.jugvale.transfgov.carga;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -82,21 +85,24 @@ public class CargaIndicadorControllerTest {
 	@Inject
 	ValorIndicadorService valorIndicadorService;
 	
+	final int ANO1 = 2011;
+	final int ANO2 = 2012;
+	final String ESTADO = "XX";
+	final String MUNICIPIO1 = "MUN 1";
+	final String MUNICIPIO2 = "MUN 2";
+	final String MUNICIPIO3 = "MUN 3";
+	// simulando um valor da vida real que deverá ser ajustado pela app
+	final String MUNICIPIO2_REAL = "mún 2";
+	
+	final String AREA = "Educação";
+	final String FOCO_INDICADOR = "Ensino Básico";
+	final String GRUPO_INDICADOR = "Prova Nacional";
+	final String INDICADOR = "Média geral";
+	
+	
 	@Test
-	public void testeCargaIndicadores() {
-		int ANO1 = 2011;
-		int ANO2 = 2012;
-		String ESTADO = "XX";
-		String MUNICIPIO1 = "MUN 1";
-		String MUNICIPIO2 = "MUN 2";
-		String MUNICIPIO3 = "MUN 3";
-		// simulando um valor da vida real que deverá ser ajustado pela app
-		String MUNICIPIO2_REAL = "mún 2";
-		
-		String AREA = "Educação";
-		String FOCO_INDICADOR = "Ensino Básico";
-		String GRUPO_INDICADOR = "Prova Nacional";
-		String INDICADOR = "Média geral";
+	public void testeCargaIndicadores() throws InterruptedException {
+
 		
 		Estado e = new Estado(ESTADO);
 		estadoService.salvar(e);
@@ -117,7 +123,7 @@ public class CargaIndicadorControllerTest {
 		dados.setIndicador(INDICADOR);
 		
 		List<LinhaCargaIndicador> dadosCarga = new ArrayList<>();
-		
+
 		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO1, ESTADO, 0.1f, ANO1));
 		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO2_REAL, ESTADO, 0.2f, ANO1));
 		dadosCarga.add(new LinhaCargaIndicador(MUNICIPIO3, ESTADO, 0.3f, ANO1));
@@ -134,6 +140,8 @@ public class CargaIndicadorControllerTest {
 		dados.setLinhas(dadosCarga);
 		
 		cargaIndicadorController.carregaIndicadores(dados);
+		// give some time because the method is async
+		Thread.sleep(1000);
 		
 		FocoIndicador foco = focoIndicadorService.buscaPorNome(FOCO_INDICADOR);
 		GrupoIndicador grupoIndicador = grupoIndicadorService.buscaPorNome(GRUPO_INDICADOR);
@@ -165,6 +173,11 @@ public class CargaIndicadorControllerTest {
 		assertEquals(2, valoresMUN.size());
 		assertEquals(2, valoresMUNAREA.size());
 		
+		List<Long> municipioIds = Arrays.asList(m1.getId(), m2.getId()); 
+		Set<Long> municipioIdsSet = new HashSet<>(municipioIds);
+		List<ValorIndicador> valoresPorMunAno = valorIndicadorService.buscaPorAnoMunicipios(ANO1, municipioIdsSet);
+		valoresPorMunAno.forEach(System.out::println);
+		assertEquals(2, valoresPorMunAno.size());
 	}
 
 }

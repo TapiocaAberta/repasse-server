@@ -20,8 +20,8 @@
 	<!-- Example configuration for a remote JBoss EAP 6 instance -->
 	<container qualifier="jboss" default="true">
 		<configuration>
-			<property name="javaHome">/opt/java/jdk1.8.0/</property>
-			<property name="jbossHome">/opt/jboss/WILDFLY/wildfly-8.2.0.Final</property>
+			<property name="javaHome">/opt/java/jdk1.8.0_131/</property>
+			<property name="jbossHome">/opt/jboss/WILDFLY/wildfly-8.2.1.Final</property>
 			<property name="outputToConsole">true</property>
 			<property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m -Djboss.bind.address=localhost</property>
 			<property name="allowConnectingToRunningServer">true</property>

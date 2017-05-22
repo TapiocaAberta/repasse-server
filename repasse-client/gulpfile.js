@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 
-var DEPLOY_DIR = '/opt/jboss/WILDFLY/wildfly-8.2.0.Final/welcome-content';
+var DEPLOY_DIR = '/opt/jboss/WILDFLY/wildfly-8.2.1.Final/welcome-content/';
 var DEV_DIR = DEPLOY_DIR;
 
 require('es6-promise').polyfill(); 

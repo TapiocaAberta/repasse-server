@@ -56,9 +56,6 @@ public class Indicador {
 	@JoinColumn(name = "ind_area_id")
 	private Area area;
 
-	@ManyToOne
-	@JoinColumn(name = "ind_fom_id")
-	private FocoIndicador foco;
 
 	public Indicador() {
 	}
@@ -93,6 +90,7 @@ public class Indicador {
 		this.descricao = descricao;
 	}
 
+
 	public GrupoIndicador getGrupoIndicador() {
 		return grupoIndicador;
 	}
@@ -109,18 +107,59 @@ public class Indicador {
 		this.area = area;
 	}
 
-	public FocoIndicador getFoco() {
-		return foco;
-	}
-
-	public void setFoco(FocoIndicador foco) {
-		this.foco = foco;
-	}
 
 	@Override
 	public String toString() {
 		return "Indicador [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", grupoIndicador="
-				+ grupoIndicador + ", area=" + area + ", foco=" + foco + "]";
+				+ grupoIndicador + ", area=" + area + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((area == null) ? 0 : area.hashCode());
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + ((grupoIndicador == null) ? 0 : grupoIndicador.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Indicador other = (Indicador) obj;
+		if (area == null) {
+			if (other.area != null)
+				return false;
+		} else if (!area.equals(other.area))
+			return false;
+		if (descricao == null) {
+			if (other.descricao != null)
+				return false;
+		} else if (!descricao.equals(other.descricao))
+			return false;
+		if (grupoIndicador == null) {
+			if (other.grupoIndicador != null)
+				return false;
+		} else if (!grupoIndicador.equals(other.grupoIndicador))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		return true;
+	}
+
+	
+	
 }

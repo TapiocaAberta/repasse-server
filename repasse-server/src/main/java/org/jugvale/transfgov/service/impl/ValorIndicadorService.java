@@ -1,11 +1,14 @@
 package org.jugvale.transfgov.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jugvale.transfgov.model.base.Area;
@@ -95,6 +98,15 @@ public class ValorIndicadorService extends Service<ValorIndicador> {
 		buscaPorMunicipioArea.setParameter("area", a);
 		buscaPorMunicipioArea.setParameter("ano", ano);
 		return buscaPorMunicipioArea.getResultList();
+	}
+
+	public Map<Indicador, Double> mediaPorAno(int ano) {
+		Query buscaMedias = em.createNamedQuery(
+				"ValorIndicador.mediaPorAno");
+		buscaMedias.setParameter("ano", ano);
+		@SuppressWarnings("unchecked")
+		List<Object[]> results = buscaMedias.getResultList();
+		return results.stream().collect(Collectors.toMap(o -> (Indicador) o[0], o -> (Double) o[1]));
 	}
 	
 }

@@ -8,8 +8,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.PathSegment;
 
+import org.jugvale.transfgov.model.indicador.ResumoValorIndicador;
 import org.jugvale.transfgov.model.indicador.ValorIndicador;
 
+/**
+ * @author william
+ *
+ */
+/**
+ * @author william
+ *
+ */
 @Path("valor_indicador")
 @Produces("application/json; charset=utf8")
 public interface ValorIndicadorResource {
@@ -91,5 +100,18 @@ public interface ValorIndicadorResource {
 	@GET
 	@Path("/ano/{ano}/municipios/{municipioIds}/")
 	public List<ValorIndicador> valoresIndicadoresMunicipiosPorAno(@PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
+	
+	
+
+	/**
+	 * Resumo dos dados juntamente com as informacoes dos municipios
+	 * 
+	 * @param ano
+	 * @param pathSegment
+	 * @return
+	 */
+	@GET
+	@Path("/ano/{ano}/municipios/{municipioIds}/resumo")
+	public ResumoValorIndicador resumoValoresIndicadoresMunicipiosPorAno(@PathParam("ano") int ano, @PathParam("municipioIds") PathSegment pathSegment);
 
 }

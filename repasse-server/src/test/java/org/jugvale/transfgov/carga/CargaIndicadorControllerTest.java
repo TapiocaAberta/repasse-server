@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -141,7 +142,7 @@ public class CargaIndicadorControllerTest {
 		
 		cargaIndicadorController.carregaIndicadores(dados);
 		// give some time because the method is async
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		
 		FocoIndicador foco = focoIndicadorService.buscaPorNome(FOCO_INDICADOR);
 		GrupoIndicador grupoIndicador = grupoIndicadorService.buscaPorNome(GRUPO_INDICADOR);
@@ -178,6 +179,11 @@ public class CargaIndicadorControllerTest {
 		List<ValorIndicador> valoresPorMunAno = valorIndicadorService.buscaPorAnoMunicipios(ANO1, municipioIdsSet);
 		valoresPorMunAno.forEach(System.out::println);
 		assertEquals(2, valoresPorMunAno.size());
+		
+		Map<Indicador, Double> mediaPorAno = valorIndicadorService.mediaPorAno(ANO2);
+		Double media = mediaPorAno.entrySet().stream().filter(en -> en.getKey().getId() == indicador.getId()).findFirst().get().getValue();
+		assertEquals(0.25, media, 0.00001);
+		
 	}
 
 }

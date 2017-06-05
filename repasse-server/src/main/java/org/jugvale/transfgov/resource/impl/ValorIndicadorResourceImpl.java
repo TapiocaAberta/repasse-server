@@ -10,6 +10,7 @@ import javax.ws.rs.core.PathSegment;
 import org.jugvale.transfgov.model.base.Area;
 import org.jugvale.transfgov.model.base.Municipio;
 import org.jugvale.transfgov.model.indicador.Indicador;
+import org.jugvale.transfgov.model.indicador.ResumoValorIndicador;
 import org.jugvale.transfgov.model.indicador.ValorIndicador;
 import org.jugvale.transfgov.resource.ValorIndicadorResource;
 import org.jugvale.transfgov.service.impl.AreaService;
@@ -69,4 +70,14 @@ public class ValorIndicadorResourceImpl implements ValorIndicadorResource {
 		Set<Long> ids = pathSegment.getMatrixParameters().keySet().stream().map(Long::parseLong).collect(Collectors.toSet());
 		return valorIndicadorService.buscaPorAnoMunicipios(ano, ids);
 	}
+
+	@Override
+	public ResumoValorIndicador resumoValoresIndicadoresMunicipiosPorAno(int ano, PathSegment pathSegment) {
+		ResumoValorIndicador resumo = new ResumoValorIndicador();
+		resumo.setAno(ano);
+		resumo.setMediaIndicadores(valorIndicadorService.mediaPorAno(ano));
+		resumo.setValoresMunicipiosSelecionados(valoresIndicadoresMunicipiosPorAno(ano, pathSegment));
+		return resumo;
+	}
+	
 }

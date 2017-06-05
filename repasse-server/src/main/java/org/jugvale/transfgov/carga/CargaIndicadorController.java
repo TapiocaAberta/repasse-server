@@ -77,10 +77,8 @@ public class CargaIndicadorController {
 		GrupoIndicador grupo = grupoIndicadorService.buscaPorNomeOuCria(
 				nomeGrupoIndicador,
 				() -> new GrupoIndicador(nomeGrupoIndicador));
-
 		Indicador indicador = indicadorService.buscaPorNomeOuCria(
 				nomeIndicador, () -> new Indicador(nomeIndicador, grupo, area));
-
 		FocoIndicador foco = focoIndicadorService.buscaPorNomeOuCria(
 				focoIndicador,
 				() -> new FocoIndicador(focoIndicador, indicador));

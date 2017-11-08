@@ -36,6 +36,7 @@ repasseApp.controller('ExplorarController', ["$scope", "repasseService",
 		
 		repasseService.anos(function(anos) {
 			$scope.anos = anos;
+			$scope.anoSelecionado = anos[anos.length - 1];
 			$.each(anos, function(i, ano) { 
 				if(ano.ano == paramsUrl['ano']){
 					$scope.anoSelecionado = ano;

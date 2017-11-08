@@ -71,10 +71,13 @@ var CORES_COLUNAS = {
 // Isso é temporário até fazermos toda a carga dos dados, assim não fica limpando o cache e deixando o server lerdo em prd
 var ANOS = [
 	{	
-		ano: 2016, meses: [ 1, 2, 3, 4, 5, 6 ],
+		ano: 2017, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+	},
+	{	
+		ano: 2016, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
 	},            
 	{	
-		ano: 2015, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+		ano: 2015, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
 	},
 	{	
 		ano: 2014, meses: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]

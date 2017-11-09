@@ -62,4 +62,4 @@ Você pode também acessar a página de administração em `http://localhost:808
 
 ## Usuário e senha
 
-O sistema exige um usuário para realizar a carga e acessar a página de administraço (admin.html). Para criar esse usuário utilize o script `{WILDFLY_HOME}/bin/add-user.sh` para o Linux. Para windows utilize o .bat. Adicione o usuário utilizando a opção *Application User* e não se esqueça de dar o role *admin* para ele. PAra mais informaçes sobre o usuário veja a [documentação do Wildfly](https://docs.jboss.org/author/display/WFLY8/add-user+utility).
+O sistema exige um usuário para realizar a carga e acessar a página de administraço (admin.html). Para criar esse usuário utilize o script `{WILDFLY_HOME}/bin/add-user.sh` para o Linux. Para windows utilize o .bat. Adicione o usuário utilizando a opção *Application User* e não se esqueça de dar o role *admin* para ele. Para mais informaçes sobre o usuário veja a [documentação do Wildfly](https://docs.jboss.org/author/display/WFLY8/add-user+utility).

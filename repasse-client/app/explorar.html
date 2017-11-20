@@ -130,7 +130,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Repasses anuais para <strong>{{municipioBusca.nome}} -
-					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <a style="margin: 10px" ng-click="irParaCaixaBusca()"><em>Nova Busca</em> <span class="glyphicon glyphicon-search"></span> </a><br /> <br />
+					{{estadoBusca.sigla}}</strong> em <strong>{{anoBusca}}</strong>. <a style="margin: 10px" ng-click="irParaCaixaBusca()"><em>Nova Busca</em> <span class="glyphicon glyphicon-search"></span> </a> <br /> <br />
 				<em ng-show="ranking">{{municipioBusca.nome}} está em
 					{{ranking.posicao}}º no <a href="ranking.html">ranking</a> com
 					repasse per capita de R$ {{ranking.valorPerCapita.toLocaleString()
@@ -143,6 +143,8 @@
 						style="background-color: gray; color: {{ranking.dadosMIQLT.cor">{{ranking.dadosMIQLT.texto}}</strong> 
 				</span>
 				</em>
+				<br /> <br />
+				<em> Compartilhar pesquisa: <a style="margin-left: 2px; margin-right: 5px" href="javascript:shareCurrentPageOnFacebook()" target="_blank" alt="Compartilhar no Facebook">Facebook</a> <a style="margin-left: 2px; margin-right: 5px" href="javascript:tweetCurrentPage()" target="_blank" alt="Compartilhar no Twitter">Twitter</a></em>
 			</div>
 			<div class="panel-body">
 				<div class="row">

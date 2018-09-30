@@ -8,3 +8,4 @@ dist/
 .publish
 .jshintrc
 .yo-rc.json
+dist.zip

@@ -18,26 +18,11 @@ import javax.persistence.PersistenceContext;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jugvale.transfgov.model.base.Area;
-import org.jugvale.transfgov.model.base.Estado;
-import org.jugvale.transfgov.model.base.Municipio;
-import org.jugvale.transfgov.model.transferencia.Acao;
+import org.jugvale.transfgov.carga.transferencia.LinhaTransferenciaTransformer;
+import org.jugvale.transfgov.carga.transferencia.qualifiers.TransferenciaTransformer2018;
 import org.jugvale.transfgov.model.transferencia.CargaTransfInfo;
-import org.jugvale.transfgov.model.transferencia.Favorecido;
-import org.jugvale.transfgov.model.transferencia.Programa;
-import org.jugvale.transfgov.model.transferencia.SubFuncao;
-import org.jugvale.transfgov.model.transferencia.Transferencia;
-import org.jugvale.transfgov.service.impl.AcaoService;
-import org.jugvale.transfgov.service.impl.AreaService;
 import org.jugvale.transfgov.service.impl.CargaTransfInfoService;
-import org.jugvale.transfgov.service.impl.EstadoService;
-import org.jugvale.transfgov.service.impl.FavorecidoService;
-import org.jugvale.transfgov.service.impl.FonteFinalidadeService;
-import org.jugvale.transfgov.service.impl.MunicipioService;
-import org.jugvale.transfgov.service.impl.ProgramaService;
-import org.jugvale.transfgov.service.impl.SubFuncaoService;
 import org.jugvale.transfgov.service.impl.TransferenciaService;
-import org.jugvale.transfgov.utils.TextoUtils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -52,32 +37,14 @@ public class CargaDadosTransfController {
 	@Inject
 	TransferenciaService transferenciaService;
 
+	
 	@Inject
-	MunicipioService municipioService;
-
-	@Inject
-	AcaoService acaoService;
-
-	@Inject
-	EstadoService estadoService;
-
-	@Inject
-	AreaService areaService;
-
-	@Inject
-	SubFuncaoService subFuncaoService;
-
-	@Inject
-	ProgramaService programaService;
-
-	@Inject
-	FonteFinalidadeService fonteFinalidadeService;
-
-	@Inject
-	FavorecidoService favorecidoService;
+	@TransferenciaTransformer2018
+	LinhaTransferenciaTransformer transfTransformer;
 
 	@PersistenceContext
 	private EntityManager em;
+	
 	
 	/**
 	 * Irá carregar o arquivo passado no banco de dados. Linha a linha será
@@ -105,25 +72,9 @@ public class CargaDadosTransfController {
 		cargaTransfInfoService.atualizar(cargaTransfInfo);
 		Files.lines(arquivoCSV, StandardCharsets.UTF_8)
 				.skip(1)
-				.forEach(
-						linha -> {
-							try {
-								if (!salvarLinha(ano, mes, linha)) {
-									totalNaoProcessada.incrementAndGet();
-								} else {
-									totalSucesso.incrementAndGet();
-								}
-							} catch (Exception e) {
-								totalFalha.incrementAndGet();
-								e.printStackTrace();
-							}
-							cargaTransfInfo
-									.setQtdeNaoProcessada(totalNaoProcessada
-											.get());
-							cargaTransfInfo.setQtdeFalhas(totalFalha.get());
-							cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
-							cargaTransfInfoService.atualizar(cargaTransfInfo);
-						});
+				.forEach( linha -> 
+						    processarLinha(ano, mes, totalSucesso, totalFalha, totalNaoProcessada, cargaTransfInfo, linha)
+						);
 		Files.delete(arquivoCSV);
 		cargaTransfInfo.setFim(new Date());
 		cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
@@ -132,73 +83,26 @@ public class CargaDadosTransfController {
 		limpaCacheHibernate();
 	}
 
-	/**
-	 * 
-	 * Irá pegar cada dado do CSV e salvar no banco de dados. Campos do CSV: --
-	 * Sigla Unidade Federação Codigo SIAFI Municipio Nome Municipio Codigo
-	 * Funcao Nome Funcao Codigo Sub Funcao Nome Sub Funcao Codigo Programa Nome
-	 * Programa Codigo Acao Nome Acao Linguagem Cidadã Codigo Favorecido Nome
-	 * Favorecido Fonte-Finalidade Modalidade Aplicação Número Convênio Valor
-	 * Parcela --
-	 * 
-	 * @param linha
-	 * @throws Exception
-	 * @return Se a linha foi processada ou não
-	 *
-	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public boolean salvarLinha(int ano, int mes, String linha) throws Exception {
-		String[] campos = linha.split("\\t");
-		if (campos.length != 18) {
-			return false;
-		}
-		String siglaEstado = campos[0];
-		String siafiMunicipio = campos[1];
-		String nomeMunicipio = campos[2];
-		// move transferências do FUNDEB(nome popular da ação) para a área de educação (ID 12 até a data de JUL/2015)
-		long codigoFuncao = campos[11].equals("FUNDEB")? 12 :Long.parseLong(campos[3]);
-		// renomear area de "Encargos Especiais" para "Uso Geral"
-		String nomeFuncao = campos[4].equals("Encargos Especiais")? "Uso Geral" : campos[4];
-		long codigoSubFuncao = Long.parseLong(campos[5]);
-		String nomeSubFuncao = campos[6];
-		long codigoPrograma = Long.parseLong(campos[7]);
-		String nomePrograma = campos[8];
-		String codigoAcao = campos[9];
-		String nomeAcao = campos[10];
-		String nomePopular = campos[11];
-		String codigoFavorecido = campos[12];
-		String nomeFavorecido = campos[13];
-		float valor = TextoUtils.ptBrFloat(campos[17]);
-		Estado estado = estadoService.buscaEstadoPorSiglaOuCria(siglaEstado,
-				() -> new Estado(siglaEstado));
-		Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(
-				estado, nomeMunicipio, siafiMunicipio, () -> new Municipio(
-						siafiMunicipio, nomeMunicipio, estado));
-		Area area = areaService.buscaPorIdOuCria(codigoFuncao, () -> new Area(
-				codigoFuncao, nomeFuncao));
-		SubFuncao subFuncao = subFuncaoService.buscaPorIdOuCria(
-				codigoSubFuncao, () -> new SubFuncao(codigoSubFuncao,
-						nomeSubFuncao));
-		Programa programa = programaService.buscaPorIdOuCria(codigoPrograma,
-				() -> new Programa(codigoPrograma, nomePrograma));
-		Acao acao = acaoService.buscaPorCodigoOuCria(codigoAcao,
-				() -> new Acao(codigoAcao, nomeAcao, nomePopular));
-		Favorecido favorecido = favorecidoService.buscaPorCodigoOuCria(
-				codigoFavorecido, () -> new Favorecido(nomeFavorecido,
-						codigoFavorecido));
-		Transferencia transferencia = new Transferencia();
-		transferencia.setAno(ano);
-		transferencia.setMes(mes);
-		transferencia.setAcao(acao);
-		transferencia.setFavorecido(favorecido);
-		transferencia.setArea(area);
-		transferencia.setMunicipio(municipio);
-		transferencia.setPrograma(programa);
-		transferencia.setSubFuncao(subFuncao);
-		transferencia.setValor(valor);
-		transferenciaService.salvar(transferencia);
-		return true;
-	}
+    private void processarLinha(int ano, int mes, AtomicInteger totalSucesso, AtomicInteger totalFalha,
+            AtomicInteger totalNaoProcessada, CargaTransfInfo cargaTransfInfo, String linha) {
+        try {
+            if(transfTransformer.transformaLinha(ano, mes, linha).isPresent()) {
+                totalSucesso.incrementAndGet();
+            } else {
+                totalNaoProcessada.incrementAndGet();
+            }
+        } catch (Exception e) {
+        	totalFalha.incrementAndGet();
+        	logger.fine("Error: " + e.getMessage());
+        	e.printStackTrace();
+        }
+        cargaTransfInfo
+        		.setQtdeNaoProcessada(totalNaoProcessada
+        				.get());
+        cargaTransfInfo.setQtdeFalhas(totalFalha.get());
+        cargaTransfInfo.setQtdeSucesso(totalSucesso.get());
+        cargaTransfInfoService.atualizar(cargaTransfInfo);
+    }
 
 	public void limpaCacheHibernate() {
 		Session s = (Session) em.getDelegate();

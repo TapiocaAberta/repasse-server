@@ -16,64 +16,69 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @XmlRootElement
 @Entity
 @Table(name = "estado")
-@NamedQueries({ @NamedQuery(name = "Estado.porSigla", query = "SELECT e from Estado e WHERE e.sigla = :sigla") })
+@NamedQueries({@NamedQuery(name = "Estado.porSigla", query = "SELECT e from Estado e WHERE e.sigla = :sigla")})
 @Cacheable
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="cache-classes-basicas")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")
 public class Estado {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "est_id")
-	private long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "est_id")
+    private long id;
 
-	@Column(name = "est_nome")
-	private String nome;
+    @Column(name = "est_nome")
+    private String nome;
 
-	@Column(name = "est_sigla")
-	private String sigla;
+    @Column(name = "est_sigla")
+    private String sigla;
 
-	@Column(name = "est_regiao")
-	private String regiao;
-	
-	public Estado() {
-		super();
-	}
+    @Column(name = "est_regiao")
+    private String regiao;
 
-	public Estado(String sigla) {
-		super();
-		this.sigla = sigla;
-	}
+    public Estado() {
+        super();
+    }
 
-	public long getId() {
-		return id;
-	}
+    public Estado(String sigla) {
+        super();
+        this.sigla = sigla;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public String getSigla() {
-		return sigla;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setSigla(String sigla) {
-		this.sigla = sigla;
-	}
+    public String getSigla() {
+        return sigla;
+    }
 
-	public String getRegiao() {
-		return regiao;
-	}
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
+    }
 
-	public void setRegiao(String regiao) {
-		this.regiao = regiao;
-	}
+    public String getRegiao() {
+        return regiao;
+    }
+
+    public void setRegiao(String regiao) {
+        this.regiao = regiao;
+    }
+
+    @Override
+    public String toString() {
+        return "Estado [id=" + id + ", nome=" + nome + ", sigla=" + sigla + ", regiao=" + regiao + "]";
+    }
 
 }

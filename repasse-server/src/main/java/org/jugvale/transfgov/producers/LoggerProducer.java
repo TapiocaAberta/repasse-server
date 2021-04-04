@@ -1,4 +1,4 @@
-package org.jugvale.transfgov.producer;
+package org.jugvale.transfgov.producers;
 
 import java.util.logging.Logger;
 

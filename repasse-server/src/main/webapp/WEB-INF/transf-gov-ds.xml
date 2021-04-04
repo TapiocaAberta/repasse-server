@@ -2,9 +2,9 @@
 <datasources xmlns="http://www.jboss.org/ironjacamar/schema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
-	<datasource jta="true" jndi-name="java:jboss/datasources/JUGCall4PapersDS"
+	<datasource jta="true" jndi-name="java:jboss/datasources/TransfGovDS"
 		pool-name="transfGov" enabled="true" use-java-context="true" use-ccm="true">
-		<connection-url>jdbc:mysql://localhost:3306/call4papers</connection-url>
+		<connection-url>jdbc:mysql://localhost:3306/repasse</connection-url>
 		<driver>mysql</driver>
 		<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
 		<pool>
@@ -13,8 +13,8 @@
 			<prefill>true</prefill>
 		</pool>
 		<security>
-			<user-name>root</user-name>
-			<password></password>
+			<user-name>repasse</user-name>
+			<password>repasse</password>
 		</security>
 		<statement>
 			<prepared-statement-cache-size>32</prepared-statement-cache-size>

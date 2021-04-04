@@ -105,10 +105,8 @@ public class LinhaTransferenciaTransformerAntigo implements LinhaTransferenciaTr
             e.printStackTrace();
             return Optional.empty();
         }
-        Estado estado = estadoService.buscaEstadoPorSiglaOuCria(siglaEstado,
-                () -> new Estado(siglaEstado));
-        Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(
-                estado, nomeMunicipio, siafiMunicipio, () -> new Municipio(
+        Estado estado = estadoService.buscaEstadoPorSiglaOuCria(new Estado(siglaEstado));
+        Municipio municipio = municipioService.porEstadoNomeESIAFIOuCria(new Municipio(
                         siafiMunicipio, nomeMunicipio, estado));
         Area area = areaService.buscaPorIdOuCria(codigoFuncao, () -> new Area(
                 codigoFuncao, nomeFuncao));

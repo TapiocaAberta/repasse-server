@@ -36,7 +36,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-@RunWith(Arquillian.class)
+// DISABLED
+//@RunWith(Arquillian.class)
 public class CargaIndicadorControllerTest {
 
 	@Deployment
@@ -101,7 +102,6 @@ public class CargaIndicadorControllerTest {
 	final String INDICADOR = "Média geral";
 	
 	
-	@Test
 	public void testeCargaIndicadores() throws InterruptedException {
 
 		

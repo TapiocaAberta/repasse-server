@@ -1,6 +1,7 @@
 package org.jugvale.transfgov.model.base;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,7 +58,7 @@ public class Municipio {
 	@JsonView(MunicipioCompletoView.class)
 	private float longitude;
 
-	@ManyToOne
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "estado_est_id")
 	@JsonView(MunicipioCompletoView.class)
 	private Estado estado;

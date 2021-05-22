@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.sjcdigital.repasse.carga.transferencia.qualifiers.TransferenciaTransformer2018;
+import org.sjcdigital.repasse.carga.transferencia.qualifiers.TransferenciaTransformer2021;
 import org.sjcdigital.repasse.model.base.Area;
 import org.sjcdigital.repasse.model.base.Estado;
 import org.sjcdigital.repasse.model.base.Municipio;
@@ -19,28 +19,29 @@ import org.sjcdigital.repasse.model.transferencia.Transferencia;
 import org.sjcdigital.repasse.utils.TextoUtils;
 
 /**
- * Transformer para dados de CSVs atualizados em 2018.
+ * Transformer para dados de CSVs atualizado em 2021. Novos campos foram criados e o esquema do repasse pode ser atualizado para suportar.
  */
 @RequestScoped
-@TransferenciaTransformer2018
-public class LinhaTransferenciaTransformer2018 implements LinhaTransferenciaTransformer {
+@TransferenciaTransformer2021
+public class LinhaTransferenciaTransformer2021 implements LinhaTransferenciaTransformer {
 
-    private static final int TOTAL_COLUMNS = 26;
-    private static final int VALOR_POS = 25;
-    private static final int NOME_FAVORECIDO_POS = 24;
-    private static final int COD_FAVORECIDO_POS = 23;
-    private static final int CODIGO_ACAO_POS = 14;
-    private static final int NOME_ACAO_POS = 15;
-    private static final int NOME_POP_ACAO_POS = 16;
-    private static final int NOME_PROGRAMA_POS = 13;
-    private static final int COD_PROGRAMA_POS = 12;
-    private static final int NOME_SUB_FUNCAO_POS = 11;
-    private static final int COD_SUB_FUNCAO_POS = 10;
-    private static final int NOME_FUNCAO_POS = 9;
-    private static final int COD_FUNCAO_POS = 8;
-    private static final int NOME_MUN_POS = 5;
-    private static final int SIAFI_MUN_POS = 4;
+    private static final int TOTAL_COLUNAS = 36;
+
     private static final int SIGLA_ESTADO_POS = 3;
+    private static final int SIAFI_MUN_POS = 4;
+    private static final int NOME_MUN_POS = 5;
+    private static final int COD_FUNCAO_POS = 10;
+    private static final int NOME_FUNCAO_POS = 11;
+    private static final int COD_SUB_FUNCAO_POS = 12;
+    private static final int NOME_SUB_FUNCAO_POS = 13;
+    private static final int COD_PROGRAMA_POS = 14;
+    private static final int NOME_PROGRAMA_POS = 15;
+    private static final int CODIGO_ACAO_POS = 16;
+    private static final int NOME_ACAO_POS = 17;
+    private static final int NOME_POP_ACAO_POS = 18;
+    private static final int COD_FAVORECIDO_POS = 33;
+    private static final int NOME_FAVORECIDO_POS = 34;
+    private static final int VALOR_POS = 35;
 
     // Precisa ser ajustado para colocar o FUNDEB sob Educação
     private static final int CODIGO_FUNCAO_EDUCACAO = 12;
@@ -55,8 +56,8 @@ public class LinhaTransferenciaTransformer2018 implements LinhaTransferenciaTran
     @Override
     public Optional<Transferencia> transformaLinha(int ano, int mes, String linha) {
         String[] campos = linha.split(DIVISOR_CSV);
-        if (campos.length != TOTAL_COLUMNS) {
-            logger.fine("Ignoring bad row with " + campos.length + " columns, expected is " + TOTAL_COLUMNS);
+        if (campos.length != TOTAL_COLUNAS) {
+            logger.fine("Ignoring bad row with " + campos.length + " columns, expected is " + TOTAL_COLUNAS);
             return Optional.empty();
         }
         for (int i = 0; i < campos.length; i++) {

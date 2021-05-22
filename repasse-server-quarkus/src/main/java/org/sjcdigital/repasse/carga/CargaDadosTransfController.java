@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.sjcdigital.repasse.carga.transferencia.LinhaTransferenciaTransformer;
-import org.sjcdigital.repasse.carga.transferencia.qualifiers.TransferenciaTransformer2018;
+import org.sjcdigital.repasse.carga.transferencia.qualifiers.TransferenciaTransformer2021;
 import org.sjcdigital.repasse.model.transferencia.CargaTransfInfo;
 import org.sjcdigital.repasse.model.transferencia.Transferencia;
 import org.sjcdigital.repasse.service.impl.CargaTransfInfoService;
@@ -41,7 +41,7 @@ public class CargaDadosTransfController {
     TransferenciaService transferenciaService;
 
     @Inject
-    @TransferenciaTransformer2018
+    @TransferenciaTransformer2021
     LinhaTransferenciaTransformer transfTransformer;
 
     @Inject
@@ -67,9 +67,9 @@ public class CargaDadosTransfController {
         var totalFalha = new AtomicInteger(0);
         var totalNaoProcessada = new AtomicInteger(0);
         logger.warning("Contando linhas de transferência para data " + mes + "/" + ano);
-        long qtdeLinhas = Files.lines(arquivoCSV).count() - 1;
-
-        logger.warning("Iniciando carga para data " + mes + "/" + ano);
+        var qtdeLinhas = Files.lines(arquivoCSV).count() - 1;
+        var inicioCargaMsg = String.format("Iniciando carga de %d transferencias para %02d/%d\n", qtdeLinhas, mes, ano); 
+        logger.warning(inicioCargaMsg);
         CargaTransfInfo cargaTransfInfo = cargaTransfInfoService
                                                                 .porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));
         cargaTransfInfo.setInicio(new Date());

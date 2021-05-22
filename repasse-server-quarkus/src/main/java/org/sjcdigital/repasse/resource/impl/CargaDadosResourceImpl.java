@@ -33,6 +33,7 @@ import org.sjcdigital.repasse.service.impl.TransferenciaService;
 import org.sjcdigital.repasse.utils.ArquivoTransfUtils;
 
 import static javax.transaction.Transactional.TxType.NEVER;
+import static org.sjcdigital.repasse.utils.ArquivoTransfUtils.deszipaECriaCSV;
 
 /**
  * 
@@ -78,6 +79,7 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
     Event<RequisicaoCarga> requisicaoCargaEvent;
 
     public Response baixaECarrega(int ano, int mes) throws IOException {
+        System.out.println("BAIXANDO");
         verificaSeJaFoiCarregado(ano, mes);
         java.nio.file.Path arquivoCSV = null;
         try {
@@ -112,9 +114,8 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
             }
         }
         Objects.requireNonNull(conteudoZip, "Você deve enviar um anexo");
-        java.nio.file.Path arquivoCSV = ArquivoTransfUtils
-                                                          .deszipaECriaCSV(conteudoZip.getBody(byte[].class, null));
-        String dadosData = arquivoCSV.toFile().getName().substring(0, 6);
+        var arquivoCSV = deszipaECriaCSV(conteudoZip.getBody(byte[].class, null));
+        var dadosData = arquivoCSV.toFile().getName().substring(0, 6);
         ano = Integer.parseInt(dadosData.substring(0, 4));
         mes = Integer.parseInt(dadosData.substring(4, 6));
         verificaSeJaFoiCarregado(ano, mes);

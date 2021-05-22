@@ -55,9 +55,9 @@ public class CargaDadosPopController {
     @Transactional(NEVER)
 	public String fazCargaDadosPopulacao() throws IOException {
 		logger.info("Iniciando carga de dados para população"); 
-		StringBuffer relatorioFinal = new StringBuffer("Carga iniciada em: " + new Date());
-		LinkedList<String> naoEncontrados = new LinkedList<>();
-		Set<Integer> anos = new HashSet<>();
+		var relatorioFinal = new StringBuffer("Carga iniciada em: " + new Date());
+		var naoEncontrados = new HashSet<String>();
+		var anos = new HashSet<Integer>();
 		for (int i = 0; i < ARQUIVOS_POP.length; i++) {	
 			InputStream is = getClass().getResourceAsStream(ARQUIVOS_POP[i]);
 			Path arquivo = Files.createTempFile("pop", "");

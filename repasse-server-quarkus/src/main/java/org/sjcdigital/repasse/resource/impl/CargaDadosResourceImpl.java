@@ -1,6 +1,7 @@
 package org.sjcdigital.repasse.resource.impl;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,9 +79,10 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
     @Inject
     Event<RequisicaoCarga> requisicaoCargaEvent;
 
-    public Response baixaECarrega(int ano, int mes) throws IOException {
-        System.out.println("BAIXANDO");
-        verificaSeJaFoiCarregado(ano, mes);
+    public Response baixaECarrega(int ano, int mes, boolean override) throws IOException {
+        if (!override) {
+            verificaSeJaFoiCarregado(ano, mes);
+        }
         java.nio.file.Path arquivoCSV = null;
         try {
             logger.info(String.format(MSG_BAIXANDO_INICIO, ano, mes));
@@ -91,7 +93,7 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
                            .entity(MSG_ERRO_BAIXAR).build();
         }
         logger.info(String.format(MSG_SUCESSO_AO_BAIXAR, ano, mes));
-        requisicaoCargaEvent.fireAsync(new RequisicaoCarga(ano, mes, arquivoCSV));
+        requisicaoCargaEvent.fireAsync(new RequisicaoCarga(ano, mes, arquivoCSV, override));
         return Response.ok(String.format(MSG_SUCESSO, ano, mes, ano, mes))
                        .build();
     }
@@ -104,7 +106,7 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
      * @return
      * @throws IOException
      */
-    public Response recebeCarga(MultipartInput conteudo) throws IOException {
+    public Response recebeCarga(MultipartInput conteudo, boolean override) throws IOException {
         int ano = 0, mes = 0;
         InputPart conteudoZip = null;
         for (InputPart p : conteudo.getParts()) {
@@ -118,8 +120,14 @@ public class CargaDadosResourceImpl implements CargaDadosResource {
         var dadosData = arquivoCSV.toFile().getName().substring(0, 6);
         ano = Integer.parseInt(dadosData.substring(0, 4));
         mes = Integer.parseInt(dadosData.substring(4, 6));
-        verificaSeJaFoiCarregado(ano, mes);
-        requisicaoCargaEvent.fireAsync(new RequisicaoCarga(ano, mes, arquivoCSV));
+        if (!override) {
+            verificaSeJaFoiCarregado(ano, mes);
+        }
+        return disparaCarga(ano, mes, arquivoCSV, override);
+    }
+
+    private Response disparaCarga(int ano, int mes, Path arquivoCSV, boolean override) {
+        requisicaoCargaEvent.fireAsync(new RequisicaoCarga(ano, mes, arquivoCSV, override));
         return Response.ok(String.format(MSG_SUCESSO, ano, mes, ano, mes))
                        .build();
     }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Date;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -16,11 +15,9 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.sjcdigital.repasse.carga.transferencia.LinhaTransferenciaTransformer;
 import org.sjcdigital.repasse.carga.transferencia.qualifiers.TransferenciaTransformer2021;
 import org.sjcdigital.repasse.model.transferencia.CargaTransfInfo;
-import org.sjcdigital.repasse.model.transferencia.Transferencia;
 import org.sjcdigital.repasse.service.impl.CargaTransfInfoService;
 import org.sjcdigital.repasse.service.impl.TransferenciaService;
 
@@ -68,14 +65,17 @@ public class CargaDadosTransfController {
         var totalNaoProcessada = new AtomicInteger(0);
         logger.warning("Contando linhas de transferência para data " + mes + "/" + ano);
         var qtdeLinhas = Files.lines(arquivoCSV).count() - 1;
-        var inicioCargaMsg = String.format("Iniciando carga de %d transferencias para %02d/%d\n", qtdeLinhas, mes, ano); 
+        var inicioCargaMsg = String.format("Iniciando carga de %d transferencias para %02d/%d\n", qtdeLinhas, mes, ano);
         logger.warning(inicioCargaMsg);
-        CargaTransfInfo cargaTransfInfo = cargaTransfInfoService
-                                                                .porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));
+        var cargaTransfInfo = cargaTransfInfoService
+                                                    .porAnoMesOuCria(ano, mes, () -> new CargaTransfInfo(ano, mes));
         cargaTransfInfo.setInicio(new Date());
         cargaTransfInfo.setFim(null);
         cargaTransfInfo.setQtdeLinhas((int) qtdeLinhas);
         cargaTransfInfoService.atualizar(cargaTransfInfo);
+        if (requisicao.isOverride()) {
+            transferenciaService.apagaTransferencias(ano, mes);
+        }
         Files.lines(arquivoCSV, StandardCharsets.UTF_8)
              .skip(1)
              .forEach(linha -> processarLinha(ano, mes, totalSucesso, totalFalha, totalNaoProcessada, cargaTransfInfo, linha));
@@ -95,15 +95,16 @@ public class CargaDadosTransfController {
                                 CargaTransfInfo cargaTransfInfo,
                                 String linha) {
         try {
-            Optional<Transferencia> transferenciaOp = transfTransformer.transformaLinha(ano, mes, linha);
+            var transferenciaOp = transfTransformer.transformaLinha(ano, mes, linha);
             if (transferenciaOp.isPresent()) {
                 totalSucesso.incrementAndGet();
-                novaTransferenciaEvent.fireAsync(new NovaTransferenciaEvent(transferenciaOp.get()));
+                novaTransferenciaEvent.fire(new NovaTransferenciaEvent(transferenciaOp.get()));
             } else {
                 totalNaoProcessada.incrementAndGet();
             }
         } catch (Exception e) {
             totalFalha.incrementAndGet();
+            // TODO: Persitir falha para revisão
             logger.fine("Error: " + e.getMessage());
         }
         cargaTransfInfo
@@ -115,8 +116,8 @@ public class CargaDadosTransfController {
     }
 
     public void limpaCacheHibernate() {
-        Session s = (Session) em.getDelegate();
-        SessionFactory sf = s.getSessionFactory();
+        var s = (Session) em.getDelegate();
+        var sf = s.getSessionFactory();
         sf.getCache().evictAllRegions();
     }
 

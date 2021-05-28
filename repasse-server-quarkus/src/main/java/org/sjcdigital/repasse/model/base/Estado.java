@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Cache;
@@ -15,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @XmlRootElement
 @Entity
-@Table(name = "estado")
+@Table(name = "estado", uniqueConstraints = {@UniqueConstraint(columnNames = {"est_sigla", "est_nome"})})
 @NamedQueries({@NamedQuery(name = "Estado.porSigla", query = "SELECT e from Estado e WHERE e.sigla = :sigla")})
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "cache-classes-basicas")

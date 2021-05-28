@@ -1,7 +1,7 @@
 package org.sjcdigital.repasse.carga;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -52,7 +52,7 @@ public class NovaTransferenciaListener {
     TransferenciaService transferenciaService;
 
     @Transactional(REQUIRES_NEW)
-    public void salva(@ObservesAsync NovaTransferenciaEvent novaTransferencia) {
+    public void salva(@Observes NovaTransferenciaEvent novaTransferencia) {
         var transferencia = novaTransferencia.getNovaTransferencia();
         var estado = transferencia.getMunicipio().getEstado();
         var municipio = transferencia.getMunicipio();

@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
 
 import org.sjcdigital.repasse.model.agregacao.TipoAgregacao;
 import org.sjcdigital.repasse.model.base.Area;
@@ -18,7 +17,7 @@ import org.sjcdigital.repasse.model.base.Municipio;
 import org.sjcdigital.repasse.model.transferencia.Transferencia;
 import org.sjcdigital.repasse.service.Service;
 
-@RequestScoped
+@Dependent
 public class TransferenciaService extends Service<Transferencia> {
 	
 	@Inject

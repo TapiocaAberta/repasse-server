@@ -2,7 +2,7 @@ package org.sjcdigital.repasse.service.impl;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -12,8 +12,7 @@ import org.sjcdigital.repasse.model.base.Estado;
 import org.sjcdigital.repasse.model.base.Municipio;
 import org.sjcdigital.repasse.service.Service;
 
-@RequestScoped
-@Transactional(Transactional.TxType.REQUIRES_NEW)
+@Dependent
 public class MunicipioService extends Service<Municipio> {
 
     public Municipio porEstadoNomeESIAFI(Estado estado, String nome, String siafi) {
@@ -24,10 +23,11 @@ public class MunicipioService extends Service<Municipio> {
         return buscaMunicipios.getSingleResult();
     }
 
+    @Transactional
     public Municipio porEstadoNomeESIAFIOuCria(Municipio municipio) {
         try {
-            return porEstadoNomeESIAFI(municipio.getEstado(), 
-                                       municipio.getNome(), 
+            return porEstadoNomeESIAFI(municipio.getEstado(),
+                                       municipio.getNome(),
                                        municipio.getCodigoSIAFI());
         } catch (NoResultException e) {
             this.salvar(municipio);

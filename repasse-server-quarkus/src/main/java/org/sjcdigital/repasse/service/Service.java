@@ -32,7 +32,7 @@ public abstract class Service<T> {
     @Inject
     protected EntityManager em;
 
-    @Transactional(value = REQUIRED)
+    @Transactional
     public void salvar(T entidade) {
         em.persist(entidade);
     }
@@ -71,12 +71,12 @@ public abstract class Service<T> {
     }
 
     
-    @Transactional(value = REQUIRED)
+    @Transactional
     public T atualizar(T entidade) {
         return em.merge(entidade);
     }
 
-    @Transactional(value = REQUIRED)
+    @Transactional
     public T buscaPorIdOuCria(long id, Supplier<T> entity) {
         T obj = buscarPorId(id);
         if (Objects.isNull(obj)) {
@@ -86,7 +86,7 @@ public abstract class Service<T> {
         return obj;
     }
 
-    @Transactional(value = REQUIRED)
+    @Transactional
     public T buscaPorIdOuCria(long id, T entity) {
         return buscaPorIdOuCria(id, () -> entity);
     }

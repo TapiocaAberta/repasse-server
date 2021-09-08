@@ -24,6 +24,8 @@ public class ArquivoTransfUtils {
      */
     private static final Map<String, Long> cacheContagemLinhas;
 
+    private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
+
     static {
         cacheContagemLinhas = new HashMap<>();
     }
@@ -56,7 +58,7 @@ public class ArquivoTransfUtils {
     public static Path pegaCSV(ZipFile arquivoZip) throws IOException {
         ZipEntry entryCSV = arquivoZip.entries().nextElement();
         String dadosData = entryCSV.toString().substring(0, 6);
-        Path arquivoCSV = Files.createTempFile(dadosData, ".csv");
+        Path arquivoCSV = createTempFile("repasses" + dadosData + ".csv");
         IOUtils.copy(arquivoZip.getInputStream(entryCSV), new FileWriter(
                                                                          arquivoCSV.toFile()), StandardCharsets.ISO_8859_1);
         return arquivoCSV;
@@ -92,8 +94,15 @@ public class ArquivoTransfUtils {
     public static Path baixaDeszipaECriaCSV(int ano, int mes) throws IOException {
         var urlArquivoZip = new URL(String.format(URL_TRANSFERENCIA_BASE, ano,
                                                   mes));
-        var tempZip = Files.createTempFile("carga", ".zip").toFile();
-        IOUtils.copy(urlArquivoZip.openStream(), new FileOutputStream(tempZip));
+        var tempZip = createTempFile("carga_" + ano + "_" + mes + ".zip").toFile();
+        var stream = urlArquivoZip.openStream();
+        IOUtils.copy(stream, new FileOutputStream(tempZip));
+        try {
+            stream.close();
+        } catch (IOException e) {
+            System.out.println("ERROR AO FECHAR CONEXÃO: " + e.getMessage());
+            throw e;
+        }
         var arquivoCSV = pegaCSV(new ZipFile(tempZip));
         Files.delete(Paths.get(tempZip.getPath()));
         return arquivoCSV;
@@ -123,6 +132,15 @@ public class ArquivoTransfUtils {
         cacheContagemLinhas.put(chave, totalLinhas);
         return totalLinhas;
 
+    }
+
+    private static Path createTempFile(String name) throws IOException {
+        var path = Paths.get(TEMP_DIR, name);
+        if (path.toFile().exists()) {
+            Files.delete(path);
+        }
+        Files.createFile(path);
+        return path;
     }
 
 }
